@@ -1,5 +1,3 @@
 Hello. 
 
-x = 5
-
-y = 10
+My name is Jade and I'm a fourth year BioEngineering major. 
