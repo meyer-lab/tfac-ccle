@@ -5,7 +5,7 @@ import pandas as pd
 from synapseclient import Synapse
 
 
-def importData(username, password, data):
+def importData(username, password, data=None):
     '''Data Import from synapse
     ----------------------------------------------
     Parameters:
@@ -22,7 +22,7 @@ def importData(username, password, data):
     '''
 
     ## Input Checking
-    if data == None:
+    if data is None:
         print('Try Again')
         print('Enter:', 'Copy Number', 'Methylation', 'or Gene Expression')
         return

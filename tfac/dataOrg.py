@@ -2,10 +2,11 @@
 import numpy as np
 import pandas as pd
 
-def extractData(filename, columns = None, row = 0, col = None):
-    return pd.read_excel(filename, header = row, index_col = col, usecols = columns)
+def extractData(filename, columns=None, row=0, col=None):
+    '''Pullling Data from excel file on server'''
+    return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
-def extractCopy(dupes = False):
+def extractCopy(dupes=False):
     ''' 
     Extracts out all duplicates data using excel file of gene names
 
