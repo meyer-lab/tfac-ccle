@@ -22,8 +22,8 @@ def importData(username, password, data=None):
 
     ## Input Checking
     if data is None:
-        print('Try Again')
-        print('Enter:', 'Copy Number', 'Methylation', 'or Gene Expression')
+        print('Invalid Data Set')
+        print('Enter:', 'Copy Number,', 'Methylation,', 'or Gene Expression')
         return
     syn = Synapse()
     try:
@@ -40,4 +40,6 @@ def importData(username, password, data=None):
     elif data == 'Gene Expression':
         data = syn.get('syn21033805')
 
-    return pd.read_excel(data.path)
+    df = pd.read_excel(data.path)
+    syn.logout()
+    return df
