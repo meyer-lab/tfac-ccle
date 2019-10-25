@@ -19,7 +19,7 @@ def extractCopy(dupes=False):
     data = extractData('data/GeneData_All.xlsx', 'A:C')
     data = data.to_numpy()
 
-    methylation = np.append(data[:12158,0], data[12159:21338,0])
+    methylation = np.append(data[:12158, 0], data[12159:21338, 0])
     geneExp = data[:, 1]
     copyNum = data[:23316, 2]
     data = [methylation.astype(str), geneExp.astype(str), copyNum.astype(str)]
@@ -29,7 +29,7 @@ def extractCopy(dupes=False):
 
     returnVal = [] #creates list of 3 2D numpy arrays containing names and indices
     for i in range(len(data)):
-        uData = np.unique(data[i], return_index = True, return_counts = True)
+        uData = np.unique(data[i], return_index=True, return_counts=True)
 
         if dupes:
             duplicates[i] = data[i].size - uData[0].size
@@ -46,5 +46,4 @@ def extractCopy(dupes=False):
 
     if dupes:
         return returnVal, duplicates
-    else:
-        return returnVal
+    return returnVal

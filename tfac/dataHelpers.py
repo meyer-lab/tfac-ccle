@@ -1,6 +1,5 @@
 '''Contains function for importing data from and sending data to synapse'''
 
-import numpy as np
 import pandas as pd
 from synapseclient import Synapse
 
