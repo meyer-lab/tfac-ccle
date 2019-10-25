@@ -24,13 +24,13 @@ def importData(username, password, data=None):
     if data is None:
         print('Invalid Data Set')
         print('Enter:', 'Copy Number,', 'Methylation,', 'or Gene Expression')
-        return
+        return None
     syn = Synapse()
     try:
         syn.login(username, password)
     except:
         print('Bad Username or Password')
-        return
+        return None
 
     ## Find Data
     if data == 'Copy Number':
