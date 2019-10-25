@@ -15,12 +15,12 @@ def importData(username, password, data):
             Synapse password
         data: string
             'Copy Number', 'Methylation', or 'Gene Expression'
-    
+
     Returns:
         df: DataFrame
             Data from the CCLE in data frame format
     '''
-    
+
     ## Input Checking
     if data == None:
         print('Try Again')
@@ -40,5 +40,5 @@ def importData(username, password, data):
         data = syn.get('syn21033929')
     elif data == 'Gene Expression':
         data = syn.get('syn21033805')
-    
+
     return pd.read_excel(data.path)
