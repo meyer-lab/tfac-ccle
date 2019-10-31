@@ -23,7 +23,7 @@ def importData(username, password, data=None):
     ## Input Checking
     if dataType is None:
         print('Invalid Data Set')
-        print('Enter:', 'Copy Number,', 'Methylation,', 'or Gene Expression')
+        print('Enter:', 'Copy Number All,', 'Methylation All,', 'or Gene Expression All')
         return None
     syn = Synapse()
     try:
