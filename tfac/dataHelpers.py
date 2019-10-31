@@ -21,7 +21,7 @@ def importData(username, password, data=None):
     '''
 
     ## Input Checking
-    if data is None:
+    if dataType is None:
         print('Invalid Data Set')
         print('Enter:', 'Copy Number,', 'Methylation,', 'or Gene Expression')
         return None
@@ -33,11 +33,11 @@ def importData(username, password, data=None):
         return None
 
     ## Find Data
-    if data == 'Copy Number All':
+    if dataType == 'Copy Number All':
         data = syn.get('syn21080087')
-    elif data == 'Methylation All':
+    elif dataType == 'Methylation All':
         data = syn.get('syn21080130')
-    elif data == 'Gene Expression All':
+    elif dataType == 'Gene Expression All':
         data = syn.get('syn21080124')
 
     df = pd.read_excel(data.path)

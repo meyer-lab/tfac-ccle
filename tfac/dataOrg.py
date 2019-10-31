@@ -17,24 +17,45 @@ def findCommonGenes():
     commonGenes = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
     return commonGenes
 
+def findCommonCellLines():
+    '''
+    Finds the set of unique cell lines from the copy number, methylation, and gene expression dataset
+    
+    Returns:
+            Numpy array of unique common cell lines
+    '''
+    methylation, geneExp, copyNum = extractCellLines()    
+    commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
+    return commonCellLines
+
 def filterData():
     '''
     Pushes the filtered data to synapse :D
     '''
-    methFull = np.array(importData('micah.bryant', '369DamnSheFine', 'Methylation All').values)
-    copyFull = np.array(importData('micah.bryant', '369DamnSheFine', 'Copy Number All').values)
-    geneFull = np.array(importData('micah.bryant', '369DamnSheFine', 'Gene Expression All').values)
-    methylation, geneExp, copyNum = extractGeneNames()
-    commmonGenes = findCommonGenes()
+    methFull = np.array(importData('NilayShah', 'nilayisthebest', 'Methylation All').values)
+    geneFull = np.array(importData('NilayShah', 'nilayisthebest', 'Gene Expression All').values)
+    copyFull = np.array(importData('NilayShah', 'nilayisthebest', 'Copy Number All').values)
     
-    methIndices = np.where(np.in1d(methylation, commonGenes))[0]
-    copyIndices = np.where(np.in1d(copyNum, commonGenes))[0]
-    geneIndices = np.where(np.in1d(geneExp, commonGenes))[0]
+    methG, geneG, copyG = extractGeneNames()
+    methCL, geneCL, copyCL = extractCellLines()
+    commonG = findCommonGenes()
+    commonCL = findCommonCellLines()
     
-    methFiltered = methFull[methIndices, :]
-    copyFiltered = copyFull[copyIndices, :]
-    geneFiltered = geneFull[geneIndices, :]
+    # Find indices of common genes in full dataset
+    methGIndices = np.where(np.in1d(methFull, commonG))[0]
+    geneGIndices = np.where(np.in1d(geneFull, commonG))[0]
+    copyGIndices = np.where(np.in1d(copyFull, commonG))[0]
     
+    # Find indices of common cell lines in full dataset
+    methCLIndices = np.where(np.in1d(methFull, commonCL))[0]
+    geneCLIndices = np.where(np.in1d(geneFull, commonCL))[0]
+    copyCLIndices = np.where(np.in1d(copyFull, commonCL))[0]
+    
+    
+    methFiltered = methFull[methGIndices, methCLIndices]
+    geneFiltered = geneFull[geneGIndices, geneCLIndices]
+    copyFiltered = copyFull[copyGIndices, copyCLIndices]
+       
     # Use synapse.store with file and activity functions to upload filtered data to synapse
     return
     
@@ -55,6 +76,22 @@ def extractGeneNames():
     
     return methylation, geneExp, copyNum
 
+def extractCellLines():
+    ''' 
+    Extracts sorted cell lines from all data sets
+    
+    Returns:
+            Order: Methylation, Gene Expression, Copy Number
+            Returns three numpy arrays with cell lines from aforementioned datasets
+    '''
+    data = extractData('data/CellLines_All.xlsx', 'A:C')
+    data = data.to_numpy()
+    
+    methylation = data[:843,0].astype(str)
+    geneExp = data[:1019,1].astype(str)
+    copyNum = data[:,2].astype(str)
+    
+    return methylation, geneExp, copyNum
 
 def extractCopy(dupes = False):
     ''' 
@@ -66,13 +103,8 @@ def extractCopy(dupes = False):
             duplicate gene names, indices, and # of dupes corresponding to each name
             Also returns # of duplicates in each data set
     '''
-    data = extractData('data/GeneData_All.xlsx', 'A:C')
-    data = data.to_numpy()
-    
-    methylation = np.append(data[:12158,0],data[12159:21338,0])
-    geneExp = data[:,1]
-    copyNum = data[:23316,2]
-    data = [methylation.astype(str),geneExp.astype(str),copyNum.astype(str)]
+    methylation, geneExp, copyNum = extractGeneNames()
+    data = [methylation,geneExp,copyNum]
     
     if dupes:
         duplicates = np.zeros(3)
