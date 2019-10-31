@@ -33,11 +33,11 @@ def importData(username, password, data=None):
         return None
 
     ## Find Data
-    if data == 'Copy Number':
+    if data == 'Copy Number All':
         data = syn.get('syn21033823')
-    elif data == 'Methylation':
+    elif data == 'Methylation All':
         data = syn.get('syn21033929')
-    elif data == 'Gene Expression':
+    elif data == 'Gene Expression All':
         data = syn.get('syn21033805')
 
     df = pd.read_excel(data.path)
