@@ -14,7 +14,6 @@ def importData(username, password, dataType=None):
             Synapse password
         data: string
             'Copy Number', 'Methylation', or 'Gene Expression'
-
     Returns:
         df: DataFrame
             Data from the CCLE in data frame format
@@ -41,13 +40,6 @@ def importData(username, password, dataType=None):
         data = syn.get('syn21089539')
 
     df = pd.read_excel(data.path, index_col=0)
-        data = syn.get('syn21033823')
-    elif data == 'Methylation All':
-        data = syn.get('syn21033929')
-    elif data == 'Gene Expression All':
-        data = syn.get('syn21033805')
-
-    df = pd.read_excel(data.path)
     syn.logout()
     return df
 
