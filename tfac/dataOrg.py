@@ -17,7 +17,10 @@ def findCommonGenes():
     commonGenes = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
     return commonGenes
 
-def filterData(filetype):
+def filterData():
+    '''
+    Pushes the filtered data to synapse :D
+    '''
     methFull = np.array(importData('NilayShah', 'nilayisthebest', 'Methylation All').values)
     copyFull = np.array(importData('NilayShah', 'nilayisthebest', 'Copy Number All').values)
     geneFull = np.array(importData('NilayShah', 'nilayisthebest', 'Gene Expression All').values)
