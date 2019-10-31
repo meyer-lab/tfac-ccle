@@ -9,6 +9,7 @@ def extractData(filename, columns=None, row=0, col=None):
 
 def extractCopy(dupes=False):
     '''
+    
     Extracts out all duplicates data using excel file of gene names
 
     Returns:
@@ -52,4 +53,4 @@ def extractCopy(dupes=False):
     else:
         return returnVal
         
-#want to slice into array to create new datafile using indices stored
+
