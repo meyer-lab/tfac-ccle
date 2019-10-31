@@ -21,9 +21,9 @@ def filterData():
     '''
     Pushes the filtered data to synapse :D
     '''
-    methFull = np.array(importData('NilayShah', 'nilayisthebest', 'Methylation All').values)
-    copyFull = np.array(importData('NilayShah', 'nilayisthebest', 'Copy Number All').values)
-    geneFull = np.array(importData('NilayShah', 'nilayisthebest', 'Gene Expression All').values)
+    methFull = np.array(importData('micah.bryant', '369DamnSheFine', 'Methylation All').values)
+    copyFull = np.array(importData('micah.bryant', '369DamnSheFine', 'Copy Number All').values)
+    geneFull = np.array(importData('micah.bryant', '369DamnSheFine', 'Gene Expression All').values)
     methylation, geneExp, copyNum = extractGeneNames()
     commmonGenes = findCommonGenes()
     
