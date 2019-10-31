@@ -3,8 +3,9 @@ import numpy as np
 import pandas as pd
 
 def extractData(filename, columns=None, row=0, col=None):
-    '''Pullling Data from excel file on server'''
+    '''Pulling Data from excel file on server'''
     return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
+
 
 def extractCopy(dupes=False):
     '''
@@ -16,6 +17,7 @@ def extractCopy(dupes=False):
             duplicate gene names, indices, and # of dupes corresponding to each name
             Also returns # of duplicates in each data set
     '''
+    
     data = extractData('data/GeneData_All.xlsx', 'A:C')
     data = data.to_numpy()
 
@@ -46,4 +48,8 @@ def extractCopy(dupes=False):
 
     if dupes:
         return returnVal, duplicates
-    return returnVal
+
+    else:
+        return returnVal
+        
+#want to slice into array to create new datafile using indices stored
