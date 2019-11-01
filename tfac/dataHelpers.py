@@ -4,7 +4,7 @@ import pandas as pd
 from synapseclient import Synapse
 
 
-def importData(username, password, data=None):
+def importData(username, password, dataType=None):
     '''Data Import from synapse
     ----------------------------------------------
     Parameters:
@@ -21,9 +21,9 @@ def importData(username, password, data=None):
     '''
 
     ## Input Checking
-    if data is None:
+    if dataType is None:
         print('Invalid Data Set')
-        print('Enter:', 'Copy Number,', 'Methylation,', 'or Gene Expression')
+        print('Enter:', 'Copy Number All,', 'Methylation All,', 'or Gene Expression All')
         return None
     syn = Synapse()
     try:
@@ -40,6 +40,6 @@ def importData(username, password, data=None):
     elif data == 'Gene Expression All':
         data = syn.get('syn21089539')
 
-    df = pd.read_excel(data.path)
+    df = pd.read_excel(data.path, index_col = 0)
     syn.logout()
     return df
