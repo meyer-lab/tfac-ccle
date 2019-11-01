@@ -4,7 +4,7 @@ import pandas as pd
 from synapseclient import Synapse
 
 
-def importData(username, password, data=None):
+def importData(username, password, dataType=None):
     '''Data Import from synapse
     ----------------------------------------------
     Parameters:
@@ -40,6 +40,6 @@ def importData(username, password, data=None):
     elif dataType == 'Gene Expression All':
         data = syn.get('syn21080124')
 
-    df = pd.read_excel(data.path)
+    df = pd.read_excel(data.path, index_col = 0)
     syn.logout()
     return df
