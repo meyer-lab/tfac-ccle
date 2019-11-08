@@ -1,7 +1,7 @@
 '''Contains function for importing data from and sending data to synapse'''
 
 import pandas as pd
-from synapseclient import Synapse
+from synapseclient import Synapse, Project, Folder, File, Link
 
 
 def importData(username, password, dataType=None):
@@ -43,3 +43,25 @@ def importData(username, password, dataType=None):
     df = pd.read_excel(data.path, index_col = 0)
     syn.logout()
     return df
+
+def exportData(username, password, data, nm):
+    '''Pandas Data Frame to upload back to synapse as an excel file
+    ---------------------------------------------------------------
+    Parameters:
+        username: String
+            Your synapse username
+        password: String
+            You synapse password
+        data: Data Frame
+            Pandas object containing the data to upload to synapse as an excel file
+        name: String
+            A name for the file in synapse
+    
+    '''
+    syn = Synapse()
+    syn.login(username, password)
+    proj = syn.get('syn21032722')
+    data.to_csv('data/file.csv')
+    syn.store(File(path='file.csv', name=nm, parent=proj))
+    syn.logout()
+    return
