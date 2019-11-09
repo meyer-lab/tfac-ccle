@@ -1,6 +1,7 @@
 """
 This file contains functions that are used in multiple figures.
 """
+from string import ascii_lowercase
 import seaborn as sns
 import matplotlib
 import svgutils.transform as st
