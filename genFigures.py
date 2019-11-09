@@ -14,7 +14,7 @@ if __name__ == '__main__':
     start = time.time()
     nameOut = 'figure' + sys.argv[1]
 
-    exec('from ckine.figures import ' + nameOut)
+    exec('from tfac.figures import ' + nameOut)
     ff = eval(nameOut + '.makeFigure()')
     ff.savefig(fdir + nameOut + '.svg', dpi=ff.dpi, bbox_inches='tight', pad_inches=0)
 
