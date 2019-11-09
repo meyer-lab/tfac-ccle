@@ -13,7 +13,7 @@ pipeline {
     stage('Test/Build/Lint') {
       steps {
         sh 'make all -j 2'
-        archiveArtifacts artifacts: 'output/manuscript.pdf, output/*.svg', onlyIfSuccessful: true
+        archiveArtifacts artifacts: 'output/*.svg', onlyIfSuccessful: true
         //cobertura coberturaReportFile: 'coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
         recordIssues qualityGates: [[threshold: 40, type: 'TOTAL', unstable: true]], tools: [pyLint(pattern: 'pylint.log')]
       }
