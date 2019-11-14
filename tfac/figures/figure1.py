@@ -3,7 +3,7 @@ This creates Figure 1.
 """
 import numpy as np
 import matplotlib as plt
-import tensorly as t1
+import tensorly as tl
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import calc_R2X_parafac
 
