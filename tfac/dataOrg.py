@@ -66,8 +66,8 @@ def filterData():
     '''
     Pushes the filtered data to synapse :D
     '''
-    methData = importData('NilayShah', 'nilayisthebest', 'Methylation All')
-    geneData = importData('NilayShah', 'nilayisthebest', 'Gene Expression All')
+    methData = importData('micah.bryant', '369DamnSheFine', 'Methylation All')
+    geneData = importData('micah.bryant', '369DamnSheFine', 'Gene Expression All')
     copyData = importData('NilayShah', 'nilayisthebest', 'Copy Number All')
     
     methValues = np.array(methData.values)
