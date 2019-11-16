@@ -16,7 +16,7 @@ factors = perform_parafac(tensor, 4)
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((7.5, 6), (3, 4))
+    ax, f = getSetup((7, 6), (3, 3))
 
     ax[0].axis('off')  # blank out first axis for cartoon
     ax[1].axis('off')
@@ -31,6 +31,10 @@ def makeFigure():
     ## Gene Factor Plots
     genePlot(ax[5], factors[1], 1, 2)
     genePlot(ax[9], factors[1], 3, 4)
+    
+    ## Genetic Characteristic Plots
+    characPlot(ax[6], factors[2], 1, 2)
+    characPlot(ax[10], factors[2], 3, 4)
 
     # Add subplot labels
     subplotLabel(ax)
@@ -49,17 +53,24 @@ def R2X_figure(ax, tens):
     ax.set_title('PARAFAC')
     ax.set_yticks([0, .2, .4, .6, .8, 1.0])
     ax.set_xticks(x_axis)
-    
+
 def cellLinePlot(ax, factors, r1, r2):
     '''Plot Cell Lines (tensor axis 0) in factorization component space'''
     sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Cell Line Factors')
-    
+
 def genePlot(ax, factors, r1, r2):
     '''Plot genes (tensor axis 1) in factorization component space'''
     sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Gene Factors')
+
+def characPlot(ax, factors, r1, r2):
+    '''Plot the measured genetic characteristics (tensor axis 2) in component space'''
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
+    ax.set_xlabel('Component ' + str(r1))
+    ax.set_ylabel('Component ' + str(r2))
+    ax.set_title('Genetic Characteristic Factors')
