@@ -1,10 +1,11 @@
+'''Contains functions used in data preprocessing'''
 import numpy as np
 import pandas as pd
 from functools import reduce
 from dataHelpers import importData
 
-def extractData(filename, columns = None, row = 0, col = None):
-    return pd.read_excel(filename, header = row, index_col = col, usecols = columns)
+def extractData(filename, columns=None, row=0, col=None):
+    return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
 def extractGeneNames():
     ''' 
@@ -98,16 +99,16 @@ def filterData():
     geneFiltered = geneValues[geneGIndices, geneCLIndices]
     copyFiltered = copyValues[copyGIndices, copyCLIndices]
 
-    methDF = pd.DataFrame(data = methFiltered, index = methIdx[methGIndices], columns = commonCL)
-    geneDF = pd.DataFrame(data = geneFiltered, index = geneIdx[geneGIndices], columns = commonCL)
-    copyDF = pd.DataFrame(data = copyFiltered, index = copyIdx[copyGIndices], columns = commonCL)
+    methDF = pd.DataFrame(data=methFiltered, index=methIdx[methGIndices], columns=commonCL)
+    geneDF = pd.DataFrame(data=geneFiltered, index=geneIdx[geneGIndices], columns=commonCL)
+    copyDF = pd.DataFrame(data=copyFiltered, index=copyIdx[copyGIndices], columns=commonCL)
 
 
 
     # Use synapse.store with file and activity functions to upload filtered data to synapse
 
 
-def extractCopy(dupes = False, cellLines = False):
+def extractCopy(dupes=False, cellLines=False):
     ''' 
     Extracts out all duplicates data using excel file of gene names
 
@@ -122,7 +123,7 @@ def extractCopy(dupes = False, cellLines = False):
     else:
         methylation, geneExp, copyNum = extractGeneNames()
 
-    data = [methylation,geneExp,copyNum]
+    data = [methylation, geneExp, copyNum]
 
     if dupes:
         duplicates = np.zeros(3)
