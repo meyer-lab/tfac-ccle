@@ -1,14 +1,14 @@
 '''Contains functions used in data preprocessing'''
+from functools import reduce
 import numpy as np
 import pandas as pd
-from functools import reduce
 from dataHelpers import importData
 
 def extractData(filename, columns=None, row=0, col=None):
     return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
 def extractGeneNames():
-    ''' 
+    '''
     Extracts sorted gene names from all data sets
 
     Returns:
@@ -18,7 +18,7 @@ def extractGeneNames():
     data = extractData('data/GeneData_All.xlsx', 'A:C')
     data = data.to_numpy()
 
-    methylation = np.append(data[:12158, 0],data[12159:21338, 0]).astype(str)
+    methylation = np.append(data[:12158, 0], data[12159:21338, 0]).astype(str)
     geneExp = data[:, 1].astype(str)
     copyNum = data[:23316, 2].astype(str)
 

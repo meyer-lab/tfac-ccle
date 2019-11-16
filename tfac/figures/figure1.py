@@ -44,7 +44,7 @@ def R2X_figure(ax, tens):
     '''Create Parafac R2X Figure'''
     x_axis = np.arange(9)
     R2X = np.zeros(9)
-    for i in range (1, 9):
+    for i in range(1, 9):
         R2X[i] = calc_R2X_parafac(tens, i)
     ax.scatter(x_axis, R2X)
     ax.set_xlabel('Decomposition Rank')

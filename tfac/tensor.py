@@ -1,9 +1,6 @@
 '''
 Contains functions having to do wth tensor decomposition
 '''
-
-import numpy as np
-import pandas as pd
 import tensorly as tl
 from tensorly.decomposition import parafac, tucker
 from tensorly.metrics.regression import variance as tl_var
