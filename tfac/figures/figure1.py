@@ -25,16 +25,16 @@ def makeFigure():
     R2X_figure(ax[2], tensor)
     
     ## Cell Line Factor Plots
-    cellLinePlot(ax[4], factors[0], 1, 2)
-    cellLinePlot(ax[8], factors[0], 3, 4)
+    cellLinePlot(ax[3], factors[0], 1, 2)
+    cellLinePlot(ax[6], factors[0], 3, 4)
     
     ## Gene Factor Plots
-    genePlot(ax[5], factors[1], 1, 2)
-    genePlot(ax[9], factors[1], 3, 4)
+    genePlot(ax[4], factors[1], 1, 2)
+    genePlot(ax[7], factors[1], 3, 4)
     
     ## Genetic Characteristic Plots
-    characPlot(ax[6], factors[2], 1, 2)
-    characPlot(ax[10], factors[2], 3, 4)
+    characPlot(ax[5], factors[2], 1, 2)
+    characPlot(ax[8], factors[2], 3, 4)
 
     # Add subplot labels
     subplotLabel(ax)
