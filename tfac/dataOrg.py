@@ -18,14 +18,14 @@ def extractGeneNames():
     data = extractData('data/GeneData_All.xlsx', 'A:C')
     data = data.to_numpy()
 
-    methylation = np.append(data[:12158,0],data[12159:21338,0]).astype(str)
-    geneExp = data[:,1].astype(str)
-    copyNum = data[:23316,2].astype(str)
+    methylation = np.append(data[:12158, 0],data[12159:21338, 0]).astype(str)
+    geneExp = data[:, 1].astype(str)
+    copyNum = data[:23316, 2].astype(str)
 
     return methylation, geneExp, copyNum
 
 def extractCellLines():
-    ''' 
+    '''
     Extracts sorted cell lines from all data sets
 
     Returns:
@@ -48,8 +48,8 @@ def findCommonGenes():
     Returns:
             Numpy array of unique common gene names
     '''
-    methylation, geneExp, copyNum = extractGeneNames()    
-    commonGenes = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
+    methylation, geneExp, copyNum = extractGeneNames()
+    commonGenes = reduce(np.intersect1d, (methylation, geneExp, copyNum))
     return commonGenes
 
 def findCommonCellLines():
@@ -59,8 +59,8 @@ def findCommonCellLines():
     Returns:
             Numpy array of unique common cell lines
     '''
-    methylation, geneExp, copyNum = extractCellLines()    
-    commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
+    methylation, geneExp, copyNum = extractCellLines()
+    commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))
     return commonCellLines
 
 def filterData():
@@ -109,12 +109,12 @@ def filterData():
 
 
 def extractCopy(dupes=False, cellLines=False):
-    ''' 
+    '''
     Extracts out all duplicates data using excel file of gene names
 
     Returns:
             Order: Methylation, Gene Expression, Copy Number
-            List of length 3 containing 3D arrays with 
+            List of length 3 containing 3D arrays with
             duplicate gene names, indices, and # of dupes corresponding to each name
             Also returns # of duplicates in each data set
     '''
@@ -143,7 +143,7 @@ def extractCopy(dupes=False, cellLines=False):
                 copyData.append(uData[0][j])
                 idxData.append(uData[1][j])
                 count.append(uData[2][j])
-        returnVal.append(np.array([copyData,idxData,count]))
+        returnVal.append(np.array([copyData, idxData, count]))
 
     if dupes:
         return returnVal, duplicates
