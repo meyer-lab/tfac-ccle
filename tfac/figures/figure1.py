@@ -20,9 +20,17 @@ def makeFigure():
 
     ax[0].axis('off')  # blank out first axis for cartoon
     ax[1].axis('off')
+
+    ## R2X Plot
     R2X_figure(ax[2], tensor)
+    
+    ## Cell Line Factor Plots
     cellLinePlot(ax[4], factors[0], 1, 2)
-    cellLinePlot(ax[5], factors[0], 3, 4)
+    cellLinePlot(ax[8], factors[0], 3, 4)
+    
+    ## Gene Factor Plots
+    genePlot(ax[5], factors[1], 1, 2)
+    genePlot(ax[9], factors[1], 3, 4)
 
     # Add subplot labels
     subplotLabel(ax)
