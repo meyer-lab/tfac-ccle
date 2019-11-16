@@ -1,8 +1,6 @@
 """
 This creates Figure 1.
 """
-import numpy as np
-import matplotlib as plt
 import tensorly as tl
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
@@ -10,7 +8,7 @@ from ..tensor import calc_R2X_parafac, perform_parafac
 
 ### Data Tensor Variable Gets Declared Here
 tensor = tl.random.random_kruskal((50, 50, 50), rank=20, full=True)
-factors = perform_parafac(tensor, 4)
+global_factors = perform_parafac(tensor, 4)
 
 
 def makeFigure():
@@ -25,16 +23,16 @@ def makeFigure():
     R2X_figure(ax[2], tensor)
 
     ## Cell Line Factor Plots
-    cellLinePlot(ax[3], factors[0], 1, 2)
-    cellLinePlot(ax[6], factors[0], 3, 4)
+    cellLinePlot(ax[3], global_factors[0], 1, 2)
+    cellLinePlot(ax[6], global_factors[0], 3, 4)
 
     ## Gene Factor Plots
-    genePlot(ax[4], factors[1], 1, 2)
-    genePlot(ax[7], factors[1], 3, 4)
+    genePlot(ax[4], global_factors[1], 1, 2)
+    genePlot(ax[7], global_factors[1], 3, 4)
 
     ## Genetic Characteristic Plots
-    characPlot(ax[5], factors[2], 1, 2)
-    characPlot(ax[8], factors[2], 3, 4)
+    characPlot(ax[5], global_factors[2], 1, 2)
+    characPlot(ax[8], global_factors[2], 3, 4)
 
     # Add subplot labels
     subplotLabel(ax)

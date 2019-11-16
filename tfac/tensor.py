@@ -18,17 +18,17 @@ def perform_parafac(tens, rank):
             Data tensor with which to perform factorization
         rank: int
             Number of component vectors desired along each axis during factorization
-    
+
     Returns:
         factors: list of numpy arrays (length: dimensionality of the tensor)
             List of arrays containing the components for each axis (i.e. Factors[0] is the array containing the components for the first axis)
-            
+
     '''
-    weights, factors = parafac(tens, rank)
+    _, factors = parafac(tens, rank)
     return factors
 
 def calc_R2X_parafac(tens, rank):
-    '''Calculate R2X of the decomposition of a tensor '''
+    '''Calculate R2X of the decomposition of a tensor'''
     output = parafac(tens, rank)
     reconstructed = tl.kruskal_to_tensor(output)
     R2X = 1.0 - tl_var(reconstructed - tens)/tl_var(tens)
