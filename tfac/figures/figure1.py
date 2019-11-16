@@ -79,9 +79,12 @@ def characPlot(ax, factors, r1, r2):
     setPlotLimits(ax, factors, r1, r2)
 
 def setPlotLimits(axis, factors, r1, r2):
+    '''Set appropriate limits for the borders of each component plot'''
     x = np.absolute(factors[:, r1 - 1])
     y = np.absolute(factors[:, r2 - 1])
     xlim = 1.1 * np.max(x)
     ylim = 1.1 * np.max(y)
     axis.set_xlim((-xlim, xlim))
     axis.set_ylim((-ylim, ylim))
+    axis.axvline()
+    axis.axhline()
