@@ -86,5 +86,5 @@ def setPlotLimits(axis, factors, r1, r2):
     ylim = 1.1 * np.max(y)
     axis.set_xlim((-xlim, xlim))
     axis.set_ylim((-ylim, ylim))
-    axis.axvline()
-    axis.axhline()
+    axis.axvline(color='black')
+    axis.axhline(color='black')
