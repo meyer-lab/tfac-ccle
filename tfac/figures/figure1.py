@@ -1,6 +1,7 @@
 """
 This creates Figure 1.
 """
+import numpy as np
 import tensorly as tl
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
