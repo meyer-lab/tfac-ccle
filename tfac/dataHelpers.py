@@ -2,7 +2,9 @@
 
 import pandas as pd
 from synapseclient import Synapse, File
+from pybiomart.dataset import Dataset
 
+dataset = Dataset(name='hsapiens_gene_ensembl', host='http://www.ensembl.org')
 
 def importData(username, password, dataType=None):
     '''Data Import from synapse
@@ -64,4 +66,17 @@ def exportData(username, password, data, nm):
     syn.logout()
     
 def convertID():
+    '''converts all ids to EGID and returns an excel file'''
+    data = extractData('data/geneIdentifiers.xlsx', 'A:D')
+    data = data.to_numpy()
+    ranges = np.array([21338, 56202, 23316])
+
+    methylation = np.append(data[:12158,0:2],data[12159:21338,0:2], axis = 0).astype(str)
+    geneExp = data[:,2].astype(str)
+    copyNum = data[:23316,3].astype(str)
+    
+    geneID = [methylation, geneExp, copyNum]
+    
+    for count, r in enumerate(ranges):
+        
     

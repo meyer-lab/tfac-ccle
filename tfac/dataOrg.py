@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from functools import reduce
-from dataHelpers import importData
+from .dataHelpers import importData
 
 def extractData(filename, columns = None, row = 0, col = None):
     return pd.read_excel(filename, header = row, index_col = col, usecols = columns)
