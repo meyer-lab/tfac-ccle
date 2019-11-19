@@ -77,6 +77,4 @@ def convertID():
     
     geneID = [methylation, geneExp, copyNum]
     
-    for count, r in enumerate(ranges):
-        
     
