@@ -8,7 +8,7 @@ def extractData(filename, columns=None, row=0, col=None):
     return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
 def extractGeneNames():
-    ''' 
+    '''
     Extracts sorted gene names from all data sets
 
     Returns:
@@ -18,14 +18,14 @@ def extractGeneNames():
     data = extractData('data/GeneData_All.xlsx', 'A:C')
     data = data.to_numpy()
 
-    methylation = np.append(data[:12158,0],data[12159:21338,0]).astype(str)
-    geneExp = data[:,1].astype(str)
-    copyNum = data[:23316,2].astype(str)
+    methylation=np.append(data[:12158,0],data[12159:21338,0]).astype(str)
+    geneExp=data[:,1].astype(str)
+    copyNum=data[:23316,2].astype(str)
 
     return methylation, geneExp, copyNum
 
 def extractCellLines():
-    ''' 
+    '''
     Extracts sorted cell lines from all data sets
 
     Returns:
@@ -48,8 +48,8 @@ def findCommonGenes():
     Returns:
             Numpy array of unique common gene names
     '''
-    methylation, geneExp, copyNum = extractGeneNames()    
-    commonGenes = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
+    methylation, geneExp, copyNum = extractGeneNames()
+    commonGenes = reduce(np.intersect1d, (methylation, geneExp, copyNum))
     return commonGenes
 
 def findCommonCellLines():
@@ -59,8 +59,8 @@ def findCommonCellLines():
     Returns:
             Numpy array of unique common cell lines
     '''
-    methylation, geneExp, copyNum = extractCellLines()    
-    commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))    
+    methylation, geneExp, copyNum = extractCellLines()
+    commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))
     return commonCellLines
 
 def filterData():
