@@ -5,8 +5,6 @@ import tensorly as tl
 from tensorly.decomposition import parafac, tucker
 from tensorly.metrics.regression import variance as tl_var
 
-tl.set_backend('numpy')
-
 def perform_parafac(tens, rank):
     '''Run Canonical Polyadic Decomposition on a tensor
     ---------------------------------------------------------
