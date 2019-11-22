@@ -74,6 +74,7 @@ def exportData(username, password, data, nm):
     syn.logout()
 
 
+
 def makeTensor(username, password):
     '''Generate correctly aligned tensor for factorization'''
     syn = Synapse()
