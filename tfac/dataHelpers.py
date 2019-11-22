@@ -65,16 +65,3 @@ def exportData(username, password, data, nm):
     syn.store(File(path='file.csv', name=nm, parent=proj))
     syn.logout()
     
-def convertID():
-    '''converts all ids to EGID and returns an excel file'''
-    data = extractData('data/geneIdentifiers.xlsx', 'A:D')
-    data = data.to_numpy()
-    ranges = np.array([21338, 56202, 23316])
-
-    methylation = np.append(data[:12158,0:2],data[12159:21338,0:2], axis = 0).astype(str)
-    geneExp = data[:,2].astype(str)
-    copyNum = data[:23316,3].astype(str)
-    
-    geneID = [methylation, geneExp, copyNum]
-    
-    
