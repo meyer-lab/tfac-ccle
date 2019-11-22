@@ -150,4 +150,15 @@ def extractCopy(dupes=False, cellLines=False):
     else:
         return returnVal
 
+def createTensor():
+    '''
+    Creates a 3D tensor of methylation, gene, copy data in that order
+    '''
+    methData = importData('NilayShah', 'nilayisthebest', 'Methylation Aligned')
+    geneData = importData('NilayShah', 'nilayisthebest', 'Gene Aligned')
+    copyData = importData('NilayShah', 'nilayisthebest', 'Copy Aligned')
+
+    tensor = np.array([methData.values, geneData.values, copyData.values])
+    return tensor
+
 #want to slice into array to create new datafile using indices

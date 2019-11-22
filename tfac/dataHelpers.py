@@ -33,12 +33,18 @@ def importData(username, password, dataType=None):
         return None
 
     ## Find Data
-    if data == 'Copy Number All':
+    if dataType == 'Copy Number All':
         data = syn.get('syn21089502')
-    elif data == 'Methylation All':
+    elif dataType == 'Methylation All':
         data = syn.get('syn21089540')
-    elif data == 'Gene Expression All':
+    elif dataType == 'Gene Expression All':
         data = syn.get('syn21089539')
+    elif dataType == 'Methylation Aligned':
+        data = syn.get('syn21300200')
+    elif dataType == 'Copy Aligned':
+        data = syn.get('syn21300202')
+    elif dataType == 'Gene Aligned':
+        data = syn.get('syn21300201')
 
     df = pd.read_excel(data.path, index_col=0)
     syn.logout()
