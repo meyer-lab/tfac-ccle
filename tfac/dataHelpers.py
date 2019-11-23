@@ -63,3 +63,16 @@ def exportData(username, password, data, nm):
     data.to_csv('data/file.csv')
     syn.store(File(path='file.csv', name=nm, parent=proj))
     syn.logout()
+
+def makeTensor(username, password):
+    '''Generate correctly aligned tensor for factorization'''
+    syn = Synapse()
+    syn.login(username, password)
+
+    ## Get Data
+    cpy_num = pd.read_excel(syn.get('syn21300202').path)
+    meth = pd.read_excel(syn.get('syn21300200').path)
+    expr = pd.read_excel(syn.get('syn21300201').path)
+
+    ## Create final tensor
+    return np.stack([meth.values, expr.values, cpy_number.values])
