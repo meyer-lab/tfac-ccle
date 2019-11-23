@@ -1,6 +1,7 @@
 '''Contains function for importing data from and sending data to synapse'''
-
+import numpy as np
 import pandas as pd
+import tqdm
 from synapseclient import Synapse, File
 
 
@@ -68,11 +69,20 @@ def makeTensor(username, password):
     '''Generate correctly aligned tensor for factorization'''
     syn = Synapse()
     syn.login(username, password)
+    
+    ## Setup Data Carriers
+    copy_number = pd.DataFrame()
+    methylation = pd.DataFrame()
+    gene_expression = pd.DataFrame()
 
     ## Get Data
-    cpy_num = pd.read_excel(syn.get('syn21300202').path)
-    meth = pd.read_excel(syn.get('syn21300200').path)
-    expr = pd.read_excel(syn.get('syn21300201').path)
+    for chunk in tqdm.tqdm(pd.read_csv(syn.get('syn21303730').path, chunksize=150), ncols=100, total=87):
+        copy_number = pd.concat((copy_number, chunk))
+    for chunk in tqdm.tqdm(pd.read_csv(syn.get('syn21303732').path, chunksize=150), ncols=100, total=87):
+        methylation = pd.concat((copy_number, chunk))
+    for chunk in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
+        gene_expression = pd.concat((copy_number, chunk))
 
     ## Create final tensor
-    return np.stack([meth.values, expr.values, cpy_number.values])
+    syn.logout()
+    return gene_expression, copy_number, methylation
