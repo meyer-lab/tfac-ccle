@@ -158,7 +158,6 @@ def createTensor():
     geneData = importData('NilayShah', 'nilayisthebest', 'Gene Aligned')
     copyData = importData('NilayShah', 'nilayisthebest', 'Copy Aligned')
 
-    tensor = np.array([methData.values, geneData.values, copyData.values])
-    return tensor
+    return np.array([methData.values, geneData.values, copyData.values])
 
 #want to slice into array to create new datafile using indices
