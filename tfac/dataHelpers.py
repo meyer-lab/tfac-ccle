@@ -76,13 +76,13 @@ def makeTensor(username, password):
     gene_expression = pd.DataFrame()
 
     ## Get Data
-    for chunk in tqdm.tqdm(pd.read_csv(syn.get('syn21303730').path, chunksize=150), ncols=100, total=87):
-        copy_number = pd.concat((copy_number, chunk))
-    for chunk in tqdm.tqdm(pd.read_csv(syn.get('syn21303732').path, chunksize=150), ncols=100, total=87):
-        methylation = pd.concat((copy_number, chunk))
-    for chunk in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
-        gene_expression = pd.concat((copy_number, chunk))
+    for chunk1 in tqdm.tqdm(pd.read_csv(syn.get('syn21303730').path, chunksize=150), ncols=100, total=87):
+        copy_number = pd.concat((copy_number, chunk1))
+    for chunk2 in tqdm.tqdm(pd.read_csv(syn.get('syn21303732').path, chunksize=150), ncols=100, total=87):
+        methylation = pd.concat((methylation, chunk2))
+    for chunk3 in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
+        gene_expression = pd.concat((gene_expression, chunk3))
 
     ## Create final tensor
     syn.logout()
-    return gene_expression, copy_number, methylation
+    return np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:]))
