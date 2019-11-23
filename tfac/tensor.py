@@ -2,8 +2,11 @@
 Contains functions having to do wth tensor decomposition
 '''
 import tensorly as tl
+from .dataHelpers import makeTensor
 from tensorly.decomposition import parafac, tucker
 from tensorly.metrics.regression import variance as tl_var
+
+#tens = makeTensor('robertt', 'LukeKuechly59!')
 
 tl.set_backend('numpy')
 
