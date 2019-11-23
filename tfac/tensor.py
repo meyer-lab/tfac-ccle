@@ -6,8 +6,6 @@ from .dataHelpers import makeTensor
 from tensorly.decomposition import parafac, tucker
 from tensorly.metrics.regression import variance as tl_var
 
-#tens = makeTensor('robertt', 'LukeKuechly59!')
-
 tl.set_backend('numpy')
 
 def perform_parafac(tens, rank):
