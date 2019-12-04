@@ -51,6 +51,6 @@ def cutMissingValues(data, threshold):
         if count >= limit_cols:
             freshlyChopped = np.delete(freshlyChopped, cut_col_count, 1)
             cut_col_count -= 1
-        cut_col_count += 1    
+        cut_col_count += 1
 
     return (freshlyChopped)
