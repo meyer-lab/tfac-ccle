@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from dataHelpers import importData
 
+
 def extractData(filename, columns=None, row=0, col=None):
     return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
@@ -67,6 +68,7 @@ def findCommonCellLines():
     commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))
     return commonCellLines
 
+
 def filterData(methData, geneData, copyData):
     '''
     Pushes the filtered data to synapse :D
@@ -97,7 +99,7 @@ def filterData(methData, geneData, copyData):
 
     methFiltered = methValues[methGIndices, :]
     methFiltered = methFiltered[:, methCLIndices]
-    
+
     geneFiltered = geneValues[geneGIndices, :]
     geneFiltered = geneFiltered[:, geneCLIndices]
 
@@ -107,13 +109,12 @@ def filterData(methData, geneData, copyData):
     methDF = pd.DataFrame(data=methFiltered, index=methIdx[methGIndices], columns=commonCL)
     geneDF = pd.DataFrame(data=geneFiltered, index=geneIdx[geneGIndices], columns=commonCL)
     copyDF = pd.DataFrame(data=copyFiltered, index=copyIdx[copyGIndices], columns=commonCL)
-    
+
 #     exportData('NilayShah', 'nilayisthebest', methDF, 'MethAligned')
 #     exportData('NilayShah', 'nilayisthebest', geneDF, 'GeneAligned')
 #     exportData('NilayShah', 'nilayisthebest', copyDF, 'CopyAligned')
-    
-    return methDF, geneDF, copyDF
 
+    return methDF, geneDF, copyDF
 
 
 def extractCopy(dupes=False, cellLines=False):

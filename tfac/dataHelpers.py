@@ -33,7 +33,7 @@ def importData(username, password, dataType=None):
         print('Bad Username or Password')
         return None
 
-    ## Find Data
+    # Find Data
     if dataType == 'Copy Number All':
         data = syn.get('syn21089502')
     elif dataType == 'Methylation All':
@@ -46,7 +46,6 @@ def importData(username, password, dataType=None):
         data = syn.get('syn21299983')
     elif dataType == 'Gene Expression':
         data = syn.get('syn21299979')
-    
 
     df = pd.read_excel(data.path, index_col=0)
     syn.logout()
@@ -72,7 +71,6 @@ def exportData(username, password, data, nm):
     data.to_csv('data/file.csv')
     syn.store(File(path='file.csv', name=nm, parent=proj))
     syn.logout()
-
 
 
 def makeTensor(username, password):
