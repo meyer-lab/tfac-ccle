@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 from dataHelpers import importData
 
-
 def extractData(filename, columns=None, row=0, col=None):
     return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
@@ -68,7 +67,6 @@ def findCommonCellLines():
     commonCellLines = reduce(np.intersect1d, (methylation, geneExp, copyNum))
     return commonCellLines
 
-
 def filterData(methData, geneData, copyData):
     '''
     Pushes the filtered data to synapse :D
@@ -116,7 +114,6 @@ def filterData(methData, geneData, copyData):
     
     return methDF, geneDF, copyDF
 
-    # Use synapse.store with file and activity functions to upload filtered data to synapse
 
 
 def extractCopy(dupes=False, cellLines=False):
