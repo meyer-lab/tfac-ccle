@@ -71,6 +71,7 @@ def exportData(username, password, data, nm):
     data.to_csv('data/file.csv')
     syn.store(File(path='file.csv', name=nm, parent=proj))
     syn.logout()
+    
 
 
 def makeTensor(username, password):
