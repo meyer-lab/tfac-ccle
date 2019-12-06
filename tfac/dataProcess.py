@@ -56,8 +56,8 @@ def cutMissingValues(data, threshold):
 
     return (freshlyChopped)
 
+
 def normalize(data):
-    data_1 = scale(data[0,:,:])
-    data_2 = scale(data[1,:,:])
-    data_3 = scale(data[0,:,:])
-    
+    data_1 = scale(data[0, :, :])
+    data_2 = scale(data[1, :, :])
+    data_3 = scale(data[0, :, :])
