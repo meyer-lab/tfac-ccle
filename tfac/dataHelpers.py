@@ -33,8 +33,16 @@ def importData(username, password, dataType=None):
         print('Bad Username or Password')
         return None
 
+<<<<<<< HEAD
     # Find Data
     if dataType == 'Copy Number All':
+||||||| merged common ancestors
+    ## Find Data
+    if data == 'Copy Number All':
+=======
+    ## Find Data
+    if dataType == 'Copy Number All':
+>>>>>>> bedcab902ff3ea3e77c04c6569bead4d324b5b36
         data = syn.get('syn21089502')
     elif dataType == 'Methylation All':
         data = syn.get('syn21089540')
