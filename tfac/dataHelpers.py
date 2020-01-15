@@ -85,11 +85,11 @@ def makeTensor(username, password):
     gene_expression = pd.DataFrame()
 
     # Get Data
-    for chunk1 in tqdm.tqdm(pd.read_csv(syn.get('syn21392225').path, chunksize=150), ncols=100, total=87):
+    for chunk1 in tqdm.tqdm(pd.read_csv(syn.get('syn21303730').path, chunksize=150), ncols=100, total=87):
         copy_number = pd.concat((copy_number, chunk1))
-    for chunk2 in tqdm.tqdm(pd.read_csv(syn.get('syn21392197').path, chunksize=150), ncols=100, total=87):
+    for chunk2 in tqdm.tqdm(pd.read_csv(syn.get('syn21303732').path, chunksize=150), ncols=100, total=87):
         methylation = pd.concat((methylation, chunk2))
-    for chunk3 in tqdm.tqdm(pd.read_csv(syn.get('syn21392230').path, chunksize=150), ncols=100, total=87):
+    for chunk3 in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
         gene_expression = pd.concat((gene_expression, chunk3))
 
     # FIX: This replaces nans with zeros -- we need to either cut them or justifiably impute them
