@@ -10,6 +10,19 @@ def extractData(filename, columns=None, row=0, col=None):
     return pd.read_excel(filename, header=row, index_col=col, usecols=columns)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 def extractGeneNames():
     '''
     Extracts sorted gene names from all data sets
