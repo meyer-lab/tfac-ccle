@@ -24,7 +24,7 @@ output/figure%.svg: venv genFigures.py tfac/figures/figure%.py
 
 output/manuscript.md: venv manuscript/*.md
 	mkdir -p ./output/%
-	. venv/bin/activate && manubot process --content-directory=manuscripts/$*/ --output-directory=output/$*/ --log-level=WARNING
+	. venv/bin/activate && manubot process --content-directory=manuscript/ --output-directory=output/ --log-level=WARNING
 
 output/manuscript.html: venv output/manuscript.md style.csl $(flistFull)
 	. venv/bin/activate && pandoc \
@@ -45,7 +45,7 @@ output/manuscript.html: venv output/manuscript.md style.csl $(flistFull)
 		--variable math="" \
 		--include-after-body=common/templates/manubot/plugins/math.html \
 		--include-after-body=common/templates/manubot/plugins/hypothesis.html \
-		--output=output/$*/manuscript.html output/$*/manuscript.md
+		--output=output/manuscript.html output/manuscript.md
 
 output/manuscript.pdf: venv output/manuscript.md $(flistFull) style.csl
 	. venv/bin/activate && pandoc -t html5 $(pandocCommon) \
