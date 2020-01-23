@@ -2,7 +2,6 @@
 from functools import reduce
 import numpy as np
 import pandas as pd
-from .dataHelpers import pullData
 
 
 def extractData(filename, columns=None, row=0, col=None):
