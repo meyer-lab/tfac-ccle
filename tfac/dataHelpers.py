@@ -92,11 +92,6 @@ def makeTensor(username, password):
     for chunk3 in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
         gene_expression = pd.concat((gene_expression, chunk3))
 
-    # FIX: This replaces nans with zeros -- we need to either cut them or justifiably impute them
-    methyl = methylation.values[:, 1:]
-    mk = np.isnan(methyl, where=True)
-    methyl[mk] = 0
-
     # Create final tensor
     syn.logout()
-    return normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methyl)))
+    return normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
