@@ -6,7 +6,7 @@ from synapseclient import Synapse, File
 from .dataProcess import normalize
 
 
-def importData(username, password, dataType=None):
+def pullData(username, password, dataType=None):
     '''Data Import from synapse
     ----------------------------------------------
     Parameters:
