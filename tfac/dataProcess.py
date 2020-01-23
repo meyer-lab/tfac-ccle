@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import scale
 import tqdm
 from synapseclient import Synapse, File
-from dataOrg import filterData
+from .dataOrg import filterData
 from fixCutDataScript import cutMissingValues
 
 
