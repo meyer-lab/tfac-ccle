@@ -1,8 +1,8 @@
 """Container for the entire data preprocessing procedure"""
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import scale
 from synapseclient import Synapse
+from sklearn.preprocessing import scale
 from dataOrg import filterData
 from .fixCutDataScript import cutMissingValues
 
