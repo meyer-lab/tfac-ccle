@@ -4,6 +4,7 @@ This creates Figure 1.
 import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
+from ..tensor import calc_R2X_parafac
 
 
 def makeFigure():

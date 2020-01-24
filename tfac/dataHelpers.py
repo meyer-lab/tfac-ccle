@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import tqdm
 from synapseclient import Synapse, File
+from .dataProcess import normalize
 
 
 def importData(username, password, dataType=None):
@@ -93,4 +94,12 @@ def makeTensor(username, password):
 
     # Create final tensor
     syn.logout()
-    return np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:]))
+    return normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+
+def getCellLineComps():
+    with h5py.File("tfac/data/HDF5/cell_comps_20.hdf5", 'r') as f:
+        data = f["comps"][:]
+        f.close()
+    if np.shape(data) != (807, 20):
+        data = data.T
+    return data
