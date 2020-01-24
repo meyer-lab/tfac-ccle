@@ -2,12 +2,8 @@
 This creates Figure 1.
 """
 import numpy as np
-import tensorly as tl
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import makeTensor
-from ..tensor import calc_R2X_parafac, perform_parafac
-
 
 
 def makeFigure():

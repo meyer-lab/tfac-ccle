@@ -8,7 +8,7 @@ from .fixCutDataScript import cutMissingValues
 
 
 def DataWorkFlow(username, password, threshold):
-"""Contain the full preprocessing procedure in one function"""
+    """Contain the full preprocessing procedure in one function"""
     #import data from synapse
     syn = Synapse()
     syn.login(username, password)
