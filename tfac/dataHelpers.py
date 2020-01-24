@@ -95,3 +95,11 @@ def makeTensor(username, password):
     # Create final tensor
     syn.logout()
     return normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+
+def getCellLineComps():
+    with h5py.File("tfac/data/HDF5/cell_comps_20.hdf5", 'r') as f:
+        data = f["comps"][:]
+        f.close()
+    if np.shape(data) != (807, 20):
+        data = data.T
+    return data
