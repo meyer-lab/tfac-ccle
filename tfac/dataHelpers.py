@@ -98,4 +98,4 @@ def makeTensor(username, password):
 
     # Create final tensor
     syn.logout()
-    return np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methyl))
+    return np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation[:, 1:]))
