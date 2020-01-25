@@ -6,7 +6,9 @@ import tqdm
 import h5py
 from synapseclient import Synapse, File
 from .dataProcess import normalize
+
 path = os.path.dirname(os.path.abspath(__file__))
+
 
 def importData(username, password, dataType=None):
     '''Data Import from synapse

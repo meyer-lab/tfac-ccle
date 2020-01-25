@@ -16,13 +16,13 @@ def DataWorkFlow(username, password, threshold):
     copy0 = pd.read_csv(syn.get('syn21533091').path, index_col=0)
     gene0 = pd.read_csv(syn.get('syn21533090').path, index_col=0)
 
-    # run filter - aligns all 3 data sets to the same size
+    #run filter - aligns all 3 data sets to the same size
     meth1, gene1, copy1 = filterData(meth0, gene0, copy0)
 
-    # cut missing values from methylation data
+    #cut missing values from methylation data
     meth1_5 = cutMissingValues(meth1, threshold)
 
-    # redo filter to make the data sets the same size again
+    #redo filter to make the data sets the same size again
     meth2, gene2, copy2 = filterData(meth1_5, gene1, copy1)
 
     return meth2, gene2, copy2
