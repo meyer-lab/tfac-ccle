@@ -16,7 +16,12 @@ def importDrugs():
     return drugArr
 
 def tempFilter(drugData):
-    '''temporarily uses known cell lines and factors for initial regression testing'''
+    '''temporarily uses known cell lines and factors for initial regression testing
+    Inputs: one compound (e.g. drugArr[0]) from the drugArr (a 2d numpy array)
+    
+    Outputs:
+    two 2d numpy arrays containing the drugArr and factors with common cell lines
+    '''
     factCells = pd.read_csv('data/cellLines(aligned,precut).csv', header=None, index_col=False).values
     factors = getCellLineComps()
     factFiltered, drugFiltered = filterCells(factCells, factors, drugData)
