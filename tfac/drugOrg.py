@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+from dataHelpers import getCellLineComps
+from functools import reduce
 
 
 def importDrugs():
