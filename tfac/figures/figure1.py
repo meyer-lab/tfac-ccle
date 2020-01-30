@@ -5,6 +5,11 @@ import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import calc_R2X_parafac
+from ..dataHelpers import getCellLineComps, getGeneComps, getCharacteristicComps, cellLineNames
+
+cell_comps = getCellLineComps()
+gene_comps = getGeneComps()
+characteristic_comps = getCharacteristicComps()
 
 
 def makeFigure():
@@ -16,6 +21,7 @@ def makeFigure():
     ax[1].axis('off')
     
     R2X_figure(ax[2])
+    cellLinePlot(ax[3], getCellLineComps(), 1, 2)
 
     # Add subplot labels
     subplotLabel(ax)
@@ -36,7 +42,7 @@ def R2X_figure(ax):
 
 def cellLinePlot(ax, factors, r1, r2):
     '''Plot Cell Lines (tensor axis 0) in factorization component space'''
-    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=cellLineNames, legend=False)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Cell Line Factors')
