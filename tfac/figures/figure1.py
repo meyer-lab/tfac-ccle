@@ -14,6 +14,8 @@ def makeFigure():
 
     ax[0].axis('off')  # blank out first axis for cartoon
     ax[1].axis('off')
+    
+    R2X_figure(ax[2])
 
     # Add subplot labels
     subplotLabel(ax)
@@ -21,18 +23,15 @@ def makeFigure():
     return f
 
 
-def R2X_figure(ax, tens):
+def R2X_figure(ax):
     '''Create Parafac R2X Figure'''
-    x_axis = np.arange(4)
-    R2X = np.zeros(4)
-    for i in range(1, 4):
-        R2X[i] = calc_R2X_parafac(tens, i)
-    ax.scatter(x_axis, R2X)
-    ax.set_xlabel('Decomposition Rank')
-    ax.set_ylabel('R2X')
-    ax.set_title('PARAFAC')
-    ax.set_yticks([0, .2, .4, .6, .8, 1.0])
-    ax.set_xticks(x_axis)
+    ### THIS DATA COMES FROM MATLAB ###
+    nComps = [1, 2, 3, 4, 5, 10, 15, 20, 25]
+    R2X = [.681, .744, .787, .805, .819, .861, .887, .904, .916]
+    ax = sns.scatterplot(nComps, R2X, ax=ax)
+    ax.set_xlabel("Rank Decomposition")
+    ax.set_ylabel("R2X")
+    ax.set_title("CP Decomposition")
 
 
 def cellLinePlot(ax, factors, r1, r2):
