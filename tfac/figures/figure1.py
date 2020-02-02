@@ -32,11 +32,12 @@ def makeFigure():
 def R2X_figure(ax):
     '''Create Parafac R2X Figure'''
     ### THIS DATA COMES FROM MATLAB ###
-    nComps = [1, 2, 3, 4, 5, 10, 15, 20, 25]
-    R2X = [.681, .744, .787, .805, .819, .861, .887, .904, .916]
+    nComps = [0, 1, 2, 3, 4, 5, 10, 15, 20, 25]
+    R2X = [0, .681, .744, .787, .805, .819, .861, .887, .904, .916]
     ax = sns.scatterplot(nComps, R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
+    ax.set_xticks(nComps)
     ax.set_title("CP Decomposition")
 
 
