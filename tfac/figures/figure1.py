@@ -24,6 +24,10 @@ def makeFigure():
     cellLinePlot(ax[3], getCellLineComps(), 1, 2)
     cellLinePlot(ax[4], getCellLineComps(), 2, 4)
     cellLinePlot(ax[5], getCellLineComps(), 6, 7)
+    cellLinePlot(ax[6], getCellLineComps(), 12, 2)
+    cellLinePlot(ax[7], getCellLineComps(), 19, 6)
+    cellLinePlot(ax[8], getCellLineComps(), 22, 6)
+
 
     # Add subplot labels
     subplotLabel(ax)
@@ -39,7 +43,7 @@ def R2X_figure(ax):
     ax = sns.scatterplot(nComps, R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
-    ax.set_xticks(nComps)
+    ax.set_xticks([0, 5, 10, 15, 20])
     ax.set_title("CP Decomposition")
 
 
