@@ -1,26 +1,27 @@
+"""Performs regression on the drug data and cell line factors"""
 import numpy as np
-import xgboost as xgb
 import matplotlib.pyplot as plt
-from xgboost import XGBRegressor
 from sklearn.metrics import mean_squared_error, r2_score
+import xgboost as xgb
+from xgboost import XGBRegressor
 
 
 def xgbPred(xTrain, yTrain, xTest):
     '''
     Makes a prediction after fitting the model to the training data
-    
+
     Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array
-    
+
     Outputs: 1D Numpy Array
     '''
-    
-    xgb_model = XGBRegressor(objective = 'reg:squarederror', n_estimators = 1000, seed = 24, 
-                             subsample = 0.1, colsample_bytree = 0.1)
+
+    xgb_model = XGBRegressor(objective='reg:squarederror', n_estimators=1000, seed=24,
+                             subsample=0.1, colsample_bytree=0.1)
     xgb_model.fit(X_train, y_train)
     yPred = xgb_model.predict(xTest)
     return yPred
 
-def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree = False):#could potentially generalize to all regressions
+def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree=False):#could potentially generalize to all regressions
     '''
     Plots and saves the Predicted vs. Actual plot and the tree plot if desired
 
@@ -28,8 +29,8 @@ def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree = False):#could potentiall
 
     Outputs: Saves plots for the xgBoost
     '''
-    xgb_model = XGBRegressor(objective = 'reg:squarederror', n_estimators = 1000, seed = 24, 
-                             subsample = 0.1, colsample_bytree = 0.1)
+    xgb_model = XGBRegressor(objective='reg:squarederror', n_estimators=1000, seed=24,
+                             subsample=0.1, colsample_bytree=0.1)
     xgb_model.fit(X_train, y_train)
     yPred = xgb_model.predict(xTest)
 
@@ -43,7 +44,7 @@ def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree = False):#could potentiall
     if tree:
         plt.figure
         xgb.plot_tree(xgb_model)
-        plt.savefig('tree.png',dpi = 1000)
+        plt.savefig('tree.png', dpi=1000)
 
 def errMetric(y_test, y_pred):
     '''
@@ -54,4 +55,3 @@ def errMetric(y_test, y_pred):
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
     return rmse, r2
-    
