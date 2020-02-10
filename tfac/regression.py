@@ -7,6 +7,7 @@ import xgboost as xgb
 from xgboost import XGBRegressor
 from sklearn.ensemble import RandomForestRegressor
 
+
 def errMetric(y_test, y_pred):
     '''
     Determines error values based off of predicted and actual values
@@ -21,6 +22,8 @@ def errMetric(y_test, y_pred):
     return rmse, r2
 
 # XGBoost Model
+
+
 def xgbPred(xTrain, yTrain, xTest, yTest):
     '''
     Makes a prediction after fitting the model to the training data
@@ -37,7 +40,8 @@ def xgbPred(xTrain, yTrain, xTest, yTest):
     rmse, r2 = errMetric(yTest, yPred)
     return yPred, rmse, r2
 
-def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree=False):#could potentially generalize to all regressions
+
+def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree=False):  # could potentially generalize to all regressions
     '''
     Plots and saves the Predicted vs. Actual plot and the tree plot if desired
 
@@ -63,6 +67,8 @@ def xgbPlot(xTrain, yTrain, xTest, yTest, title, tree=False):#could potentially 
         plt.savefig('tree.png', dpi=1000)
 
 # Random Forest Model
+
+
 def rfPred(xTrain, yTrain, xTest, yTest):
     '''
     Makes a prediction after fitting the model to the training data
@@ -72,7 +78,7 @@ def rfPred(xTrain, yTrain, xTest, yTest):
     Outputs: 1D Numpy Array, float64, float64
     '''
 
-    rf = RandomForestRegressor(random_state = 42, n_estimators = 2000)
+    rf = RandomForestRegressor(random_state=42, n_estimators=2000)
     rf.fit(X_train, y_train)
     yPred = rf.predict(xTest)
     rmse, r2 = errMetric(yTest, yPred)
