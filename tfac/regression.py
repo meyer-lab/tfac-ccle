@@ -2,10 +2,13 @@
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error, r2_score
 import xgboost as xgb
 from xgboost import XGBRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
+
+sns.set()
 
 def errMetric(y_test, y_pred):
     '''
@@ -19,6 +22,22 @@ def errMetric(y_test, y_pred):
     print('Root Mean Squared Error: {:0.4f}'.format(rmse))
     print('R2 Score = {:0.4f}'.format(r2))
     return rmse, r2
+
+# Decision Tree Model
+def dTreePred(xTrain, yTrain, xTest, yTest):
+    '''
+    Makes a prediction after fitting the model to the training data
+
+    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
+
+    Outputs: 1D Numpy Array, float64, float64
+    '''
+
+    dTree = DecisionTreeRegressor(random_state = 42)
+    dTree.fit(X_train, y_train)
+    yPred = dTree.predict(xTest)
+    rmse, r2 = errMetric(yTest, yPred)
+    return yPred, rmse, r2
 
 # XGBoost Model
 def xgbPred(xTrain, yTrain, xTest, yTest):
