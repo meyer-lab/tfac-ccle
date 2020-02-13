@@ -78,7 +78,7 @@ def exportData(username, password, data, nm):
     syn.logout()
 
 
-def makeTensor(username, password):
+def makeTensor(username, password, impute=False):
     '''Generate correctly aligned tensor for factorization'''
     syn = Synapse()
     syn.login(username, password)
@@ -95,10 +95,14 @@ def makeTensor(username, password):
         methylation = pd.concat((methylation, chunk2))
     for chunk3 in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
         gene_expression = pd.concat((gene_expression, chunk3))
+        
+    arr = normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+    if impute:
+        arr = np.nan_to_num(arr)
 
     # Create final tensor
     syn.logout()
-    return normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+    return arr
 
 
 def getCellLineComps():
