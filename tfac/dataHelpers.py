@@ -105,12 +105,18 @@ def makeTensor(username, password, impute=False):
     return arr
 
 
-def getCellLineComps():
-    '''Import cell line components --- rank 25 cp'''
-    filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
-    with h5py.File(filename, 'r') as f:
-        data = f["comps"][:]
-        f.close()
+def getCellLineComps(imputed=False):
+    '''Import cell line components'''
+    if imputed:
+        filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["Cell_Line_Comps"][:]
+            f.close()
+    else:
+        filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["c"][:]
+            f.close()
     return data.T
 
 
