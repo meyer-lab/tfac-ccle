@@ -115,7 +115,7 @@ def getCellLineComps(imputed=False):
     else:
         filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
-            data = f["c"][:]
+            data = f["comps"][:]
             f.close()
     return data.T
 
