@@ -112,21 +112,29 @@ def getCellLineComps(imputed=False):
         with h5py.File(filename, 'r') as f:
             data = f["Cell_Line_Comps"][:]
             f.close()
+        return data
     else:
         filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["comps"][:]
             f.close()
-    return data.T
+        return data.T
 
 
-def getGeneComps():
+def getGeneComps(imputed=False):
     '''Import gene components --- rank 25 cp'''
-    filename = os.path.join(path, './data/HDF5/gene_comps_25.hdf5')
-    with h5py.File(filename, 'r') as f:
-        data = f["comps"][:]
-        f.close()
-    return data.T
+    if imputed:
+        filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["Gene_Comps"][:]
+            f.close()
+        return data
+    else:
+        filename = os.path.join(path, './data/HDF5/gene_comps_25.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["comps"][:]
+            f.close()
+        return data.T
 
 
 def getCharacteristicComps():
@@ -136,3 +144,14 @@ def getCharacteristicComps():
         data = f["comps"][:]
         f.close()
     return data.T
+
+def cellLineNames():
+    """Get a Full List of Cell Lines for a plot legend
+    ------------------------------------------------------------
+    ***Calling np.unique(ls) yields the 23 different cancer types***
+    """
+    filename = os.path.join(path, "./data/cellLines(aligned,precut).csv")
+    df = pd.read_csv(filename)
+    names = np.insert(df.values, 0, "22RV1_PROSTATE")
+    ls = [x.split('_', maxsplit=1)[1] for x in names]
+    return ls
