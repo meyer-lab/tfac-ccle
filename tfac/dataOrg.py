@@ -37,8 +37,6 @@ def extractCellLines():
     '''
     data = extractData('data/CellLines_All.xlsx', 'A:C')
     data = data.to_numpy()
-    if cut:
-        methylation
     methylation = data[:843, 0].astype(str)
     geneExp = data[:1019, 1].astype(str)
     copyNum = data[:, 2].astype(str)

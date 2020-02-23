@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import xgboost as xgb
 from xgboost import XGBRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import mean_squared_error, mean_absolute_error r2_score
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
 
 
