@@ -160,5 +160,3 @@ def extractCopy(dupes=False, cellLines=False):
         return returnVal, duplicates
     else:
         return returnVal
-
-# want to slice into array to create new datafile using indices
