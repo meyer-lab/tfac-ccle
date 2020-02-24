@@ -137,13 +137,20 @@ def getGeneComps(imputed=False):
         return data.T
 
 
-def getCharacteristicComps():
+def getCharacteristicComps(imputed=False):
     '''Import characteristic components --- rank 25 cp'''
-    filename = os.path.join(path, './data/HDF5/measurement_comps_25.hdf5')
-    with h5py.File(filename, 'r') as f:
-        data = f["comps"][:]
-        f.close()
-    return data.T
+    if imputed:
+        filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["Characteristic_Comps"][:]
+            f.close()
+        return data
+    else:
+        filename = os.path.join(path, './data/HDF5/characteristic_comps_25.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["comps"][:]
+            f.close()
+        return data.T
 
 
 def cellLineNames():
