@@ -146,7 +146,7 @@ def getCharacteristicComps(imputed=False):
             f.close()
         return data
     else:
-        filename = os.path.join(path, './data/HDF5/characteristic_comps_25.hdf5')
+        filename = os.path.join(path, './data/HDF5/measurement_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["comps"][:]
             f.close()
