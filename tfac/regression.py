@@ -148,11 +148,13 @@ def LASSOPred(xTrain, yTrain, xTest):
     return yPred
 
 
-def KFoldCV(X, Y, reg, n_splits=5):
+def KFoldCV(X, y, reg, n_splits=5):
     '''Performs KFold Cross Validation on data'''
     kfold = KFold(n_splits, True, 19)
     y_pred = 0
     r2_scores = np.zeros(n_splits)
+    yPredicted = []
+    yActual = []
     for rep, indices in enumerate(kfold.split(X)):
         X_train, X_test = X[indices[0]], X[indices[1]]
         y_train, y_test = y[indices[0]], y[indices[1]]
@@ -162,5 +164,11 @@ def KFoldCV(X, Y, reg, n_splits=5):
             y_pred = rfPred(X_train, y_train, X_test)
         elif reg == 'DT':
             y_pred = dTreePred(X_train, y_train, X_test)
+        elif reg == 'OLS':
+            y_pred = OLSPred(X_train, y_train, X_test)
+        elif reg == 'LASSO':
+            y_pred = LASSOPred(X_train, y_train, X_test)
+        yPredicted.append(y_pred)
+        yActual.append(y_test)
         r2_scores[rep] = r2_score(y_test, y_pred)
-    return np.mean(r2_scores)
+    return np.mean(r2_scores), np.std(r2_scores), np.array(yPredicted), np.array(yActual)
