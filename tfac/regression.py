@@ -177,7 +177,5 @@ def KFoldCV(X, Y, reg, n_splits=5):
             y_pred = dTreePred(X_train, y_train, X_test)
         elif reg == 'SVR':
             y_pred = svrPred(X_train, y_train, X_test)
-        elif reg == 'SVR':
-            y_pred = svrPred(X_train, y_train, X_test)
         r2_scores[rep] = r2_score(y_test, y_pred)
     return np.mean(r2_scores)
