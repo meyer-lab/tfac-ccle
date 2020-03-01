@@ -147,6 +147,7 @@ def LASSOPred(xTrain, yTrain, xTest):
     yPred = LASSO.predict(xTest)
     return yPred
 
+
 def svrPred(xTrain, yTrain, xTest):
     '''
     Makes a prediction after fitting the model to the training data

@@ -1,7 +1,9 @@
+'''Imports, Organizes, and Filters Drug Data'''
+from functools import reduce
 import numpy as np
 import pandas as pd
-from dataHelpers import getCellLineComps
-from functools import reduce
+from .dataHelpers import getCellLineComps
+
 
 
 def importDrugs():
@@ -27,7 +29,7 @@ def tempFilter(drugData):
     two 2d numpy arrays containing the drugArr and factors with common cell lines
     '''
     factCells = pd.read_csv('data/cellLines(aligned,precut).csv', header=None, index_col=False).values
-    factors = getCellLineComps()
+    factors = getCellLineComps(imputed=True)
     factFiltered, drugFiltered = filterCells(factCells, factors, drugData)
     return factFiltered, drugFiltered
 

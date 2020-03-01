@@ -1,11 +1,11 @@
 '''Contains function for importing data from and sending data to synapse'''
+import os
 import numpy as np
 import pandas as pd
-import os
 import tqdm
 import h5py
 from synapseclient import Synapse, File
-from dataProcess import normalize
+from .dataProcess import normalize
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -78,7 +78,7 @@ def exportData(username, password, data, nm):
     syn.logout()
 
 
-def makeTensor(username, password):
+def makeTensor(username, password, impute=False):
     '''Generate correctly aligned tensor for factorization'''
     syn = Synapse()
     syn.login(username, password)
@@ -96,27 +96,45 @@ def makeTensor(username, password):
     for chunk3 in tqdm.tqdm(pd.read_csv(syn.get('syn21303731').path, chunksize=150), ncols=100, total=87):
         gene_expression = pd.concat((gene_expression, chunk3))
 
+    arr = normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+    if impute:
+        arr = np.nan_to_num(arr)
+
     # Create final tensor
     syn.logout()
-    return normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+    return arr
 
 
-def getCellLineComps():
-    '''Import cell line components --- rank 25 cp'''
-    filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
-    with h5py.File(filename, 'r') as f:
-        data = f["comps"][:]
-        f.close()
-    return data.T
+def getCellLineComps(imputed=False):
+    '''Import cell line components'''
+    if imputed:
+        filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["Cell_Line_Comps"][:]
+            f.close()
+        return data
+    else:
+        filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["comps"][:]
+            f.close()
+        return data.T
 
 
-def getGeneComps():
+def getGeneComps(imputed=False):
     '''Import gene components --- rank 25 cp'''
-    filename = os.path.join(path, './data/HDF5/gene_comps_25.hdf5')
-    with h5py.File(filename, 'r') as f:
-        data = f["comps"][:]
-        f.close()
-    return data.T
+    if imputed:
+        filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["Gene_Comps"][:]
+            f.close()
+        return data
+    else:
+        filename = os.path.join(path, './data/HDF5/gene_comps_25.hdf5')
+        with h5py.File(filename, 'r') as f:
+            data = f["comps"][:]
+            f.close()
+        return data.T
 
 
 def getCharacteristicComps():
@@ -126,3 +144,15 @@ def getCharacteristicComps():
         data = f["comps"][:]
         f.close()
     return data.T
+
+
+def cellLineNames():
+    """Get a Full List of Cell Lines for a plot legend
+    ------------------------------------------------------------
+    ***Calling np.unique(ls) yields the 23 different cancer types***
+    """
+    filename = os.path.join(path, "./data/cellLines(aligned,precut).csv")
+    df = pd.read_csv(filename)
+    names = np.insert(df.values, 0, "22RV1_PROSTATE")
+    ls = [x.split('_', maxsplit=1)[1] for x in names]
+    return ls
