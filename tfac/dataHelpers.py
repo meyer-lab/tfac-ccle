@@ -127,7 +127,7 @@ def getCellLineComps(imputed=False, rank=100):
 def getGeneComps(imputed=False, rank=100):
     '''Import gene components'''
     if imputed:
-        if rank == 100
+        if rank == 100:
             filename = os.path.join(path, './data/Imputed_Components_100.hdf5')
         else:
             filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
@@ -146,7 +146,7 @@ def getGeneComps(imputed=False, rank=100):
 def getCharacteristicComps(imputed=False, rank=100):
     '''Import characteristic components'''
     if imputed:
-        if rank == 100
+        if rank == 100:
             filename = os.path.join(path, './data/Imputed_Components_100.hdf5')
         else:
             filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
