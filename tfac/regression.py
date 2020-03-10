@@ -144,7 +144,7 @@ def LASSOPred(xTrain, yTrain, xTest):
     Outputs: 1D Numpy Array, 1D Numpy Array
     '''
 
-    LASSO = Lasso(alpha = 0.075)
+    LASSO = Lasso(alpha=0.075, random_state=42)
     LASSO.fit(xTrain, yTrain)
     yPred = LASSO.predict(xTest)
     return yPred
@@ -186,6 +186,7 @@ def svrPred(xTrain, yTrain, xTest):
     clf.fit(xTrain, yTrain)
     yPred = clf.predict(xTest)
     return yPred
+
 
 
 def KFoldCV(X, y, reg, n_splits=5):

@@ -10,7 +10,6 @@ path = os.path.dirname(os.path.abspath(__file__))
 def importDrugs():
     '''
     Imports Drug Data and separates it by compound
-
     Returns:
             List of length 24 where each element defines a single compound as a 2D numpy array
     '''

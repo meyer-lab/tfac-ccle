@@ -43,18 +43,6 @@ def barPlot(ax):
     ax.set_xticklabels(regMethods)
     ax.set_title('Comparison of R2 Scores Across Different Models')
 
-"""
-def barPlot(ax):
-    average = np.array([-0.216, -0.124, 0.178, 0.28, 0.29, 0.305, 0.306, 0.309])
-    std = np.array([0.175, 0.178, 0.0985, 0.0735, 0.0743, 0.0717, 0.0623, 0.0519])
-    regMethods = ["Decision Tree", "XGBoost", "OLS", "Random Forest", "LASSO", "SVR", "Elastic Net", "Ridge"]
-    x_pos = np.arange(len(average))
-    ax.bar(x_pos, average, yerr=std, align='center', alpha=0.5, ecolor='black', capsize=10, tick_label = regMethods)
-    ax.set_ylabel('Average R2 Score')
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels(regMethods)
-    ax.set_title('Comparison of R2 Scores Across Different Models')
-"""
 
 def predVsActual(ax, x, y, reg):
     _, predicted, actual = KFoldCV(x, y, reg)
