@@ -1,16 +1,18 @@
 """Performs regression on the drug data and cell line factors"""
+import os
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import xgboost as xgb
-from xgboost import XGBRegressor
+#from xgboost import XGBRegressor
+from sklearn import svm
 from sklearn.model_selection import KFold
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 
 
+path = os.path.dirname(os.path.abspath(__file__))
 sns.set()
 
 
@@ -148,13 +150,51 @@ def LASSOPred(xTrain, yTrain, xTest):
     return yPred
 
 
+def RidgePred(xTrain, yTrain, xTest):
+    '''
+    Makes a prediction after fitting the model to the training data
+    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
+    Outputs: 1D Numpy Array, 1D Numpy Array
+    '''
+
+    ridge = Ridge(alpha=122.358, random_state=42)
+    ridge.fit(xTrain, yTrain)
+    yPred = ridge.predict(xTest)
+    return yPred
+
+
+def ElasticNetPred(xTrain, yTrain, xTest):
+    '''
+    Makes a prediction after fitting the model to the training data
+    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
+    Outputs: 1D Numpy Array, 1D Numpy Array
+    '''
+
+    elasticNet = ElasticNet(alpha=0.59, l1_ratio=0.031)
+    elasticNet.fit(xTrain, yTrain)
+    yPred = elasticNet.predict(xTest)
+    return yPred
+
+
+def svrPred(xTrain, yTrain, xTest):
+    '''
+    Makes a prediction after fitting the model to the training data
+    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
+    Outputs: 1D Numpy Array, 1D Numpy Array
+    '''
+    clf = svm.SVR()
+    clf.fit(xTrain, yTrain)
+    yPred = clf.predict(xTest)
+    return yPred
+
+
 def KFoldCV(X, y, reg, n_splits=5):
     '''Performs KFold Cross Validation on data'''
     kfold = KFold(n_splits, True, 19)
     y_pred = 0
     r2_scores = np.zeros(n_splits)
-    yPredicted = []
-    yActual = []
+    yPredicted = 0
+    yActual = 0
     for rep, indices in enumerate(kfold.split(X)):
         X_train, X_test = X[indices[0]], X[indices[1]]
         y_train, y_test = y[indices[0]], y[indices[1]]
@@ -168,7 +208,18 @@ def KFoldCV(X, y, reg, n_splits=5):
             y_pred = OLSPred(X_train, y_train, X_test)
         elif reg == 'LASSO':
             y_pred = LASSOPred(X_train, y_train, X_test)
-        yPredicted.append(y_pred)
-        yActual.append(y_test)
-        r2_scores[rep] = r2_score(y_test, y_pred)
-    return np.mean(r2_scores), np.std(r2_scores), np.array(yPredicted), np.array(yActual)
+        elif reg == 'SVR':
+            y_pred = svrPred(X_train, y_train, X_test)
+        elif reg == 'Ridge':
+            y_pred = RidgePred(X_train, y_train, X_test)
+        elif reg == 'ENet':
+            y_pred = ElasticNetPred(X_train, y_train, X_test)
+
+        if rep == 0:
+            yPredicted = y_pred
+            yActual = y_test
+        else:
+            yPredicted = np.concatenate((yPredicted, y_pred))
+            yActual = np.concatenate((yActual, y_test))
+        r2 = r2_score(yActual, yPredicted)
+    return r2, yPredicted, yActual
