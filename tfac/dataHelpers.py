@@ -1,5 +1,5 @@
 '''Contains function for importing data from and sending data to synapse'''
-import os
+from os.path import join, dirname
 import numpy as np
 import pandas as pd
 import tqdm
@@ -7,7 +7,20 @@ import h5py
 from synapseclient import Synapse, File
 from .dataProcess import normalize
 
-path = os.path.dirname(os.path.abspath(__file__))
+path_here = dirname(dirname(__file__))
+
+
+def importLINCSprotein():
+    """ Import protein characterization from LINCS. """
+    dataA = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
+    dataB = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
+    dataC = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
+
+    dataA["File"] = "A"
+    dataA["File"] = "A"
+    dataA["File"] = "A"
+
+    return pd.concat([dataA, dataB, dataC])
 
 
 def importData(username, password, dataType=None):
