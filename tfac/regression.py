@@ -15,12 +15,6 @@ def errorMetrics(y_test, y_pred):
     Inputs: 1D Numpy Arrays
     Outputs: Prints rmse and r2  and returns them as Float64
     '''
-    weightedRes = (y_pred - y_test) / y_test
-    absError = abs(weightedRes) * 100
-    sqError = (weightedRes**2) * 100
-
-    mape = np.round(np.mean(absError), 2)
-    mspe = np.round(np.mean(sqError), 2)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
@@ -28,10 +22,8 @@ def errorMetrics(y_test, y_pred):
     print('Model Performance')
     print('Root Mean Squared Error: {:0.4f}'.format(rmse))
     print('Mean Absolute Error: {:0.4f}'.format(mae))
-    print('Accuracy (MSPE): {:0.2f}'.format(100 - mspe))
-    print('Accuracy (MAPE): {:0.2f}'.format(100 - mape))
     print('R2 Score: {:0.4f}'.format(r2))
-    metrics = np.array([rmse, mae, mspe, mape, r2])
+    metrics = np.array([rmse, mae, r2])
     return metrics
 
 
@@ -59,20 +51,20 @@ def LASSOPred(xTrain, yTrain, xTest):
     Outputs: 1D Numpy Array, 1D Numpy Array
     '''
 
-    LASSO = Lasso(alpha=0.075, random_state=42)
+    LASSO = Lasso(alpha = 0.075)
     LASSO.fit(xTrain, yTrain)
     yPred = LASSO.predict(xTest)
     return yPred
 
 
-def RidgePred(xTrain, yTrain, xTest):
+def RidgePred(xTrain, yTrain, xTest, idx):
     '''
     Makes a prediction after fitting the model to the training data
     Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
     Outputs: 1D Numpy Array, 1D Numpy Array
     '''
-
-    ridge = Ridge(alpha=122.358, random_state=42)
+    alphas = np.array([192.7, 548.3, 122.3, 61.1, 128.3, 128.4, 306.5, 2000.0, 177.6, 381.6, 404.3, 57.7, 259.9, 205.9, 560.7, 196.8, 79.2, 171.2, 315.8, 451.8, 490.6, 213.3, 156.7, 2000.0])
+    ridge = Ridge(alpha=alphas[idx], random_state=42)
     ridge.fit(xTrain, yTrain)
     yPred = ridge.predict(xTest)
     return yPred
@@ -91,7 +83,7 @@ def ElasticNetPred(xTrain, yTrain, xTest):
     return yPred
 
 
-def KFoldCV(X, y, reg, n_splits=5):
+def KFoldCV(X, y, reg, n_splits=5, idx=0):
     '''Performs KFold Cross Validation on data'''
     kfold = KFold(n_splits, True, 19)
     y_pred = 0
@@ -105,7 +97,7 @@ def KFoldCV(X, y, reg, n_splits=5):
         elif reg == 'LASSO':
             y_pred = LASSOPred(X_train, y_train, X_test)
         elif reg == 'Ridge':
-            y_pred = RidgePred(X_train, y_train, X_test)
+            y_pred = RidgePred(X_train, y_train, X_test, idx)
         elif reg == 'ENet':
             y_pred = ElasticNetPred(X_train, y_train, X_test)
 
@@ -117,3 +109,16 @@ def KFoldCV(X, y, reg, n_splits=5):
             yActual = np.concatenate((yActual, y_test))
         r2 = r2_score(yActual, yPredicted)
     return r2, yPredicted, yActual
+
+
+def predVsActual(predicted, actual, reg, drug, save=False):
+    sns.scatterplot(actual, predicted, color = 'darkmagenta')
+    sns.despine()
+    plt.xlabel('Actual')
+    plt.ylabel('Predicted')
+    plt.title('Predicted vs Actual ' + reg + ' ' + drug, size=15)
+    plt.xlim((0,6))
+    plt.ylim((0,6))
+    if save:
+        plt.savefig(reg + '.png', dpi = 1000, bbox_inches = "tight")
+    plt.show()
