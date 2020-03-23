@@ -124,14 +124,14 @@ def makeTensor(username, password, impute=False, returndf=False):
 def getCellLineComps(imputed=False):
     '''Import cell line components'''
     if imputed:
-        filename = join(path_here, './data/Imputed_Components_100.hdf5')
+        filename = join(path_here, 'tfac/data/Imputed_Components_100.hdf5')
 
         with h5py.File(filename, 'r') as f:
             data = f["Cell_Line_Comps"][:]
             f.close()
         return data
     else:
-        filename = join(path_here, './data/HDF5/cell_comps_25.hdf5')
+        filename = join(path_here, 'tfac/data/HDF5/cell_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["comps"][:]
             f.close()
@@ -141,14 +141,14 @@ def getCellLineComps(imputed=False):
 def getGeneComps(imputed=False):
     '''Import gene components'''
     if imputed:
-        filename = join(path_here, './data/Imputed_Components_100.hdf5')
+        filename = join(path_here, 'tfac/data/Imputed_Components_100.hdf5')
 
         with h5py.File(filename, 'r') as f:
             data = f["Gene_Comps"][:]
             f.close()
         return data
     else:
-        filename = join(path_here, './data/HDF5/gene_comps_25.hdf5')
+        filename = join(path_here, 'tfac/data/HDF5/gene_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["comps"][:]
             f.close()
@@ -158,14 +158,14 @@ def getGeneComps(imputed=False):
 def getCharacteristicComps(imputed=False):
     '''Import characteristic components'''
     if imputed:
-        filename = join(path_here, './data/Imputed_Components_100.hdf5')
+        filename = join(path_here, 'tfac/data/Imputed_Components_100.hdf5')
 
         with h5py.File(filename, 'r') as f:
             data = f["Characteristic_Comps"][:]
             f.close()
         return data
 
-    filename = join(path_here, './data/HDF5/measurement_comps_25.hdf5')
+    filename = join(path_here, 'tfac/data/HDF5/measurement_comps_25.hdf5')
     with h5py.File(filename, 'r') as f:
         data = f["comps"][:]
         f.close()
