@@ -121,13 +121,11 @@ def makeTensor(username, password, impute=False, returndf=False):
     return arr
 
 
-def getCellLineComps(imputed=False, rank=100):
+def getCellLineComps(imputed=False):
     '''Import cell line components'''
     if imputed:
-        if rank == 100:
-            filename = join(path_here, './data/Imputed_Components_100.hdf5')
-        else:
-            filename = join(path_here, './data/Imputed_Components_50.hdf5')
+        filename = join(path_here, './data/Imputed_Components_100.hdf5')
+
         with h5py.File(filename, 'r') as f:
             data = f["Cell_Line_Comps"][:]
             f.close()
@@ -140,13 +138,11 @@ def getCellLineComps(imputed=False, rank=100):
         return data.T
 
 
-def getGeneComps(imputed=False, rank=100):
+def getGeneComps(imputed=False):
     '''Import gene components'''
     if imputed:
-        if rank == 100:
-            filename = join(path_here, './data/Imputed_Components_100.hdf5')
-        else:
-            filename = join(path_here, './data/Imputed_Components_50.hdf5')
+        filename = join(path_here, './data/Imputed_Components_100.hdf5')
+
         with h5py.File(filename, 'r') as f:
             data = f["Gene_Comps"][:]
             f.close()
@@ -159,13 +155,11 @@ def getGeneComps(imputed=False, rank=100):
         return data.T
 
 
-def getCharacteristicComps(imputed=False, rank=100):
+def getCharacteristicComps(imputed=False):
     '''Import characteristic components'''
     if imputed:
-        if rank == 100:
-            filename = join(path_here, './data/Imputed_Components_100.hdf5')
-        else:
-            filename = join(path_here, './data/Imputed_Components_50.hdf5')
+        filename = join(path_here, './data/Imputed_Components_100.hdf5')
+
         with h5py.File(filename, 'r') as f:
             data = f["Characteristic_Comps"][:]
             f.close()
