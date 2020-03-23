@@ -17,8 +17,8 @@ def importLINCSprotein():
     dataC = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
 
     dataA["File"] = "A"
-    dataA["File"] = "A"
-    dataA["File"] = "A"
+    dataB["File"] = "B"
+    dataC["File"] = "C"
 
     return pd.concat([dataA, dataB, dataC])
 
