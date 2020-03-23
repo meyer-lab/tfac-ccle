@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import tqdm
 import h5py
-from synapseclient import Synapse, File
+from synapseclient import Synapse
 from .dataProcess import normalize
 
 path_here = dirname(dirname(__file__))
@@ -13,8 +13,8 @@ path_here = dirname(dirname(__file__))
 def importLINCSprotein():
     """ Import protein characterization from LINCS. """
     dataA = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
-    dataB = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
-    dataC = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
+    dataB = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_B.csv"))
+    dataC = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_C.csv"))
 
     dataA["File"] = "A"
     dataB["File"] = "B"
@@ -68,27 +68,6 @@ def importData(username, password, dataType=None):
     df = pd.read_csv(data.path, index_col=0, header=0)
     syn.logout()
     return df
-
-
-def exportData(username, password, data, nm):
-    '''Pandas Data Frame to upload back to synapse as an excel file
-    ---------------------------------------------------------------
-    Parameters:
-        username: String
-            Your synapse username
-        password: String
-            You synapse password
-        data: Data Frame
-            Pandas object containing the data to upload to synapse as an excel file
-        name: String
-            A name for the file in synapse
-    '''
-    syn = Synapse()
-    syn.login(username, password)
-    proj = syn.get('syn21032722')
-    data.to_csv('data/file.csv')
-    syn.store(File(path='data/file.csv', name=nm, parent=proj))
-    syn.logout()
 
 
 def makeTensor(username, password, impute=False, returndf=False):
