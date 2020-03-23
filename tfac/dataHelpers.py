@@ -125,15 +125,15 @@ def getCellLineComps(imputed=False, rank=100):
     '''Import cell line components'''
     if imputed:
         if rank == 100:
-            filename = os.path.join(path, './data/Imputed_Components_100.hdf5')
+            filename = join(path_here, './data/Imputed_Components_100.hdf5')
         else:
-            filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+            filename = join(path_here, './data/Imputed_Components_50.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["Cell_Line_Comps"][:]
             f.close()
         return data
     else:
-        filename = os.path.join(path, './data/HDF5/cell_comps_25.hdf5')
+        filename = join(path_here, './data/HDF5/cell_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["comps"][:]
             f.close()
@@ -144,15 +144,15 @@ def getGeneComps(imputed=False, rank=100):
     '''Import gene components'''
     if imputed:
         if rank == 100:
-            filename = os.path.join(path, './data/Imputed_Components_100.hdf5')
+            filename = join(path_here, './data/Imputed_Components_100.hdf5')
         else:
-            filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+            filename = join(path_here, './data/Imputed_Components_50.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["Gene_Comps"][:]
             f.close()
         return data
     else:
-        filename = os.path.join(path, './data/HDF5/gene_comps_25.hdf5')
+        filename = join(path_here, './data/HDF5/gene_comps_25.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["comps"][:]
             f.close()
@@ -163,15 +163,15 @@ def getCharacteristicComps(imputed=False, rank=100):
     '''Import characteristic components'''
     if imputed:
         if rank == 100:
-            filename = os.path.join(path, './data/Imputed_Components_100.hdf5')
+            filename = join(path_here, './data/Imputed_Components_100.hdf5')
         else:
-            filename = os.path.join(path, './data/Imputed_Components_50.hdf5')
+            filename = join(path_here, './data/Imputed_Components_50.hdf5')
         with h5py.File(filename, 'r') as f:
             data = f["Characteristic_Comps"][:]
             f.close()
         return data
 
-    filename = os.path.join(path, './data/HDF5/measurement_comps_25.hdf5')
+    filename = join(path_here, './data/HDF5/measurement_comps_25.hdf5')
     with h5py.File(filename, 'r') as f:
         data = f["comps"][:]
         f.close()
@@ -183,7 +183,7 @@ def cellLineNames():
     ------------------------------------------------------------
     ***Calling np.unique(ls) yields the 23 different cancer types***
     """
-    filename = os.path.join(path, "./data/cellLines(aligned,precut).csv")
+    filename = join(path_here, "./data/cellLines(aligned,precut).csv")
     df = pd.read_csv(filename)
     names = np.insert(df.values, 0, "22RV1_PROSTATE")
     ls = [x.split('_', maxsplit=1)[1] for x in names]
