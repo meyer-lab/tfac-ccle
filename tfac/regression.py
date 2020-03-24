@@ -27,20 +27,20 @@ def errorMetrics(y_test, y_pred):
     return metrics
 
 
-def RidgePred(xTrain, yTrain, xTest, idx):
+def ElasticNetPred(xTrain, yTrain, xTest):
     '''
     Makes a prediction after fitting the model to the training data
     Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
     Outputs: 1D Numpy Array, 1D Numpy Array
     '''
-    alphas = np.array([192.7, 548.3, 122.3, 61.1, 128.3, 128.4, 306.5, 2000.0, 177.6, 381.6, 404.3, 57.7, 259.9, 205.9, 560.7, 196.8, 79.2, 171.2, 315.8, 451.8, 490.6, 213.3, 156.7, 2000.0])
-    ridge = Ridge(alpha=alphas[idx], random_state=42)
-    ridge.fit(xTrain, yTrain)
-    yPred = ridge.predict(xTest)
+
+    elasticNet = ElasticNet(alpha=0.59, l1_ratio=0.031)
+    elasticNet.fit(xTrain, yTrain)
+    yPred = elasticNet.predict(xTest)
     return yPred
 
 
-def KFoldCV(X, y, reg, n_splits=5, idx=0):
+def KFoldCV(X, y, n_splits=5):
     '''Performs KFold Cross Validation on data'''
     kfold = KFold(n_splits, True, 19)
     y_pred = 0
@@ -49,8 +49,7 @@ def KFoldCV(X, y, reg, n_splits=5, idx=0):
     for rep, indices in enumerate(kfold.split(X)):
         X_train, X_test = X[indices[0]], X[indices[1]]
         y_train, y_test = y[indices[0]], y[indices[1]]
-        elif reg == 'Ridge':
-            y_pred = RidgePred(X_train, y_train, X_test, idx)
+        y_pred = ElasticNetPred(X_train, y_train, X_test)
 
         if rep == 0:
             yPredicted = y_pred
