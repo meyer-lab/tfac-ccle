@@ -52,18 +52,18 @@ def importData(username, password, dataType=None):
         return None
 
     # Find Data -- TODO: FIGURE OUT WHAT THESE ALL SPECIFICALLY REPRESENT
-    if dataType == 'Copy Number All':
-        data = syn.get('syn21089502')
+    if dataType == 'Copy Number All':        
+        data = syn.get('syn21089502')             # Insert Non-Processed Data
     elif dataType == 'Methylation All':
-        data = syn.get('syn21089540')
+        data = syn.get('syn21089540')             # Insert Non-Processed Data
     elif dataType == 'Gene Expression All':
-        data = syn.get('syn21089539')
+        data = syn.get('syn21089539')             # Insert Non-Processed Data
     elif dataType == 'Copy Number':
-        data = syn.get('syn21303730')
+        data = syn.get('syn21303730')             # Insert Processed Data
     elif dataType == 'Methylation':
-        data = syn.get('syn21303732')
+        data = syn.get('syn21303732')             # Insert Processed Data
     elif dataType == 'Gene Expression':
-        data = syn.get('syn21303731')
+        data = syn.get('syn21303731')             # Insert Processed Data
 
     df = pd.read_csv(data.path, index_col=0, header=0)
     syn.logout()
