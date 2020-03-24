@@ -27,36 +27,6 @@ def errorMetrics(y_test, y_pred):
     return metrics
 
 
-def OLSPred(xTrain, yTrain, xTest):
-    '''
-    Makes a prediction after fitting the model to the training data
-
-    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
-
-    Outputs: 1D Numpy Array, 1D Numpy Array
-    '''
-
-    OLS = LinearRegression()
-    OLS.fit(xTrain, yTrain)
-    yPred = OLS.predict(xTest)
-    return yPred
-
-
-def LASSOPred(xTrain, yTrain, xTest):
-    '''
-    Makes a prediction after fitting the model to the training data
-
-    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
-
-    Outputs: 1D Numpy Array, 1D Numpy Array
-    '''
-
-    LASSO = Lasso(alpha = 0.075)
-    LASSO.fit(xTrain, yTrain)
-    yPred = LASSO.predict(xTest)
-    return yPred
-
-
 def RidgePred(xTrain, yTrain, xTest, idx):
     '''
     Makes a prediction after fitting the model to the training data
@@ -70,19 +40,6 @@ def RidgePred(xTrain, yTrain, xTest, idx):
     return yPred
 
 
-def ElasticNetPred(xTrain, yTrain, xTest):
-    '''
-    Makes a prediction after fitting the model to the training data
-    Inputs: 2D Numpy Array, 1D Numpy Array, 2D Numpy Array, 1D Numpy Array
-    Outputs: 1D Numpy Array, 1D Numpy Array
-    '''
-
-    elasticNet = ElasticNet(alpha=0.59, l1_ratio=0.031)
-    elasticNet.fit(xTrain, yTrain)
-    yPred = elasticNet.predict(xTest)
-    return yPred
-
-
 def KFoldCV(X, y, reg, n_splits=5, idx=0):
     '''Performs KFold Cross Validation on data'''
     kfold = KFold(n_splits, True, 19)
@@ -92,14 +49,8 @@ def KFoldCV(X, y, reg, n_splits=5, idx=0):
     for rep, indices in enumerate(kfold.split(X)):
         X_train, X_test = X[indices[0]], X[indices[1]]
         y_train, y_test = y[indices[0]], y[indices[1]]
-        if reg == 'OLS':
-            y_pred = OLSPred(X_train, y_train, X_test)
-        elif reg == 'LASSO':
-            y_pred = LASSOPred(X_train, y_train, X_test)
         elif reg == 'Ridge':
             y_pred = RidgePred(X_train, y_train, X_test, idx)
-        elif reg == 'ENet':
-            y_pred = ElasticNetPred(X_train, y_train, X_test)
 
         if rep == 0:
             yPredicted = y_pred
