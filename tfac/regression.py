@@ -1,9 +1,11 @@
 """Performs regression on the drug data and cell line factors"""
 import os
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
+from sklearn.linear_model import ElasticNet
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -62,6 +64,7 @@ def KFoldCV(X, y, n_splits=5):
 
 
 def predVsActual(predicted, actual, reg, drug, save=False):
+    '''Create predicted vs actual Plot for regression model'''
     sns.scatterplot(actual, predicted, color='darkmagenta')
     sns.despine()
     plt.xlabel('Actual')
