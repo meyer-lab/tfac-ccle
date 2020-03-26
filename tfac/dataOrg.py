@@ -154,5 +154,4 @@ def extractCopy(dupes=False, cellLines=False):
 
     if dupes:
         return returnVal, duplicates
-    else:
-        return returnVal, None
+    return returnVal, None
