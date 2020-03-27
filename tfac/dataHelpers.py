@@ -2,7 +2,6 @@
 from os.path import join, dirname
 import numpy as np
 import pandas as pd
-import tqdm
 from synapseclient import Synapse
 from .dataProcess import normalize
 
