@@ -41,7 +41,8 @@ def importData(username, password, dataType=None):
     # Input Checking
     if dataType is None:
         print('Invalid Data Set')
-        print('Enter:', 'Copy Number All,', 'Methylation All,', 'or Gene Expression All')
+        print('For Raw Data Enter:', '"Copy Number All",', '"Methylation All",', 'or "Gene Expression All"')
+        print('For Processed Data Enter:', '"Copy Number"', '"Methylation"', 'or "Gene Expression"')
         return None
     syn = Synapse()
     try:
@@ -52,19 +53,18 @@ def importData(username, password, dataType=None):
 
     # Find Data -- TODO: FIGURE OUT WHAT THESE ALL SPECIFICALLY REPRESENT
     if dataType == 'Copy Number All':
-        data = syn.get('syn21089502')             # Insert Non-Processed Data
+        df = pd.read_excel(syn.get('syn21033823').path)
     elif dataType == 'Methylation All':
-        data = syn.get('syn21089540')             # Insert Non-Processed Data
+        df = pd.read_excel(syn.get('syn21033929').path)
     elif dataType == 'Gene Expression All':
-        data = syn.get('syn21089539')             # Insert Non-Processed Data
+        df = pd.read_excel(syn.get('syn21033805').path)
     elif dataType == 'Copy Number':
-        data = syn.get('syn21303730')             # Insert Processed Data
+        df = pd.read_csv(syn.get('syn21303730').path, index_col=0, header=0)
     elif dataType == 'Methylation':
-        data = syn.get('syn21303732')             # Insert Processed Data
+        df = pd.read_csv(syn.get('syn21303732').path, index_col=0, header=0)
     elif dataType == 'Gene Expression':
-        data = syn.get('syn21303731')             # Insert Processed Data
+        df = pd.read_csv(syn.get('syn21303731').path, index_col=0, header=0)
 
-    df = pd.read_csv(data.path, index_col=0, header=0)
     syn.logout()
     return df
 
