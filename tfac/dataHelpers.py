@@ -79,7 +79,7 @@ def makeTensor(username, password):
     gene_expression = importData(username, password, 'Gene Expression')
 
     # Create final tensor
-    arr = normalize(np.stack((gene_expression.values[:, 1:], copy_number.values[:, 1:], methylation.values[:, 1:])))
+    arr = normalize(np.stack((gene_expression.values, copy_number.values, methylation.values)))
 
     syn.logout()
     return arr
