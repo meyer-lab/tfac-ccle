@@ -18,7 +18,7 @@ def importLINCSprotein():
     dataB["File"] = "B"
     dataC["File"] = "C"
 
-    return pd.concat([dataA, dataB])
+    return pd.concat([dataA, dataB, dataC])
 
 
 def importData(username, password, dataType=None):
