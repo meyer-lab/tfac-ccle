@@ -5,8 +5,11 @@ import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import cellLineNames
+from ..Data_Mod import form_tensor
+from ..tensor import perform_decomposition, find_R2X
 
-
+ts, junk1, junk2 = form_tensor()
+factors = perform_decomposition(ts, 2)
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -14,7 +17,7 @@ def makeFigure():
 
     ax[0].axis('off')  # blank out axes for cartoon
     ax[1].axis('off')
-
+    cellLinePlot(ax[2], factors[0], 1,2 )
     # Add subplot labels
     subplotLabel(ax)
 
@@ -36,10 +39,10 @@ def R2X_figure(ax):
 
 def cellLinePlot(ax, factors, r1, r2):
     '''Plot Cell Lines (tensor axis 0) in factorization component space'''
-    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=cellLineNames(), legend=False)
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=junk1)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
-    ax.set_title('Cell Line Factors')
+    ax.set_title('Treatment Factors')
     setPlotLimits(ax, factors, r1, r2)
 
 
