@@ -6,8 +6,9 @@ import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import cellLineNames
 from ..Data_Mod import form_tensor
-from ..tensor import perform_decomposition, find_R2X
+from ..tensor import perform_decomposition, find_R2X, find_R2X_nnp
 import matplotlib.pyplot as plt
+
 
 ts, junk1, junk2 = form_tensor()
 factors = perform_decomposition(ts, 2)
@@ -17,10 +18,11 @@ def makeFigure():
     ax, f = getSetup((7, 6), (3, 2))
 
     ax[0].axis('off')  # blank out axes for cartoon
-    ax[1].axis('off')
+    R2X_figure(ax[1])
     cellLinePlot(ax[2], factors[0], 1,2, junk1)
     cellLinePlotTime(ax[3], factors[1], 1,2, junk2)
     cellLinePlot(ax[4], factors[2], 1,2, None)
+    
     # Add subplot labels
     subplotLabel(ax)
 
@@ -29,11 +31,14 @@ def makeFigure():
 
 def R2X_figure(ax):
     '''Create Parafac R2X Figure'''
+    R2X = []
+    nComps = range(1,11)
+    for i in nComps:
+        R2X.append(find_R2X_nnp(form_tensor()[0],i))
     ax = sns.scatterplot(nComps, R2X, ax=ax)
     sns.despine(ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
-    ax.set_xticks([0, 5, 10, 15, 20])
     ax.set_title("CP Decomposition")
 
 
