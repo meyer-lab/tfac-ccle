@@ -7,6 +7,7 @@ from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import cellLineNames
 from ..Data_Mod import form_tensor
 from ..tensor import perform_decomposition, find_R2X
+import matplotlib.pyplot as plt
 
 ts, junk1, junk2 = form_tensor()
 factors = perform_decomposition(ts, 2)
@@ -17,7 +18,9 @@ def makeFigure():
 
     ax[0].axis('off')  # blank out axes for cartoon
     ax[1].axis('off')
-    cellLinePlot(ax[2], factors[0], 1,2 )
+    cellLinePlot(ax[2], factors[0], 1,2, junk1)
+    cellLinePlotTime(ax[3], factors[1], 1,2, junk2)
+    cellLinePlot(ax[4], factors[2], 1,2, None)
     # Add subplot labels
     subplotLabel(ax)
 
@@ -26,9 +29,6 @@ def makeFigure():
 
 def R2X_figure(ax):
     '''Create Parafac R2X Figure'''
-    ### THIS DATA COMES FROM MATLAB -- INSERT NEW DATA HERE/CALL FUNCTION HERE ###
-    nComps = [0, 1, 2, 3, 4, 5, 10, 15, 20, 25]
-    R2X = [0, .681, .744, .787, .805, .819, .861, .887, .904, .916]
     ax = sns.scatterplot(nComps, R2X, ax=ax)
     sns.despine(ax=ax)
     ax.set_xlabel("Rank Decomposition")
@@ -37,13 +37,20 @@ def R2X_figure(ax):
     ax.set_title("CP Decomposition")
 
 
-def cellLinePlot(ax, factors, r1, r2):
+def cellLinePlot(ax, factors, r1, r2, senthue):
     '''Plot Cell Lines (tensor axis 0) in factorization component space'''
-    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=junk1)
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=senthue)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Treatment Factors')
-    setPlotLimits(ax, factors, r1, r2)
+    
+def cellLinePlotTime(ax, factors, r1, r2, senthue):
+    '''Plot Cell Lines (tensor axis 0) in factorization component space'''
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=senthue)
+    ax.set_xlabel('Component ' + str(r1))
+    ax.set_ylabel('Component ' + str(r2))
+    ax.set_title('Time Factors')
+
 
 
 def genePlot(ax, factors, r1, r2):
