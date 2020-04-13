@@ -56,8 +56,6 @@ def timePlot(ax, factors, r1, r2, senthue):
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Time Factors')
 
-
-
 def proteinPlot(ax, factors, r1, r2):
     '''Plot genes (tensor axis 1) in factorization component space'''
     sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
@@ -66,6 +64,8 @@ def proteinPlot(ax, factors, r1, r2):
     ax.set_title('Protein Factors')
 
 
+############## From Capstone ###################################################################################################################    
+    
 def characPlot(ax, factors, r1, r2):
     '''Plot the measured genetic characteristics (tensor axis 2) in component space'''
     sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, style=['Gene Expression', 'Copy Number', 'Methylation'])
