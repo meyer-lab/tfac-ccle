@@ -6,7 +6,7 @@ import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import cellLineNames
 from ..Data_Mod import form_tensor
-from ..tensor import perform_decomposition, find_R2X, find_R2X_nnp
+from ..tensor import perform_decomposition, find_R2X_nnp
 import matplotlib.pyplot as plt
 
 
