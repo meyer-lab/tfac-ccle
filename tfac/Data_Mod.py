@@ -24,5 +24,5 @@ def form_tensor():
     for treatment in unique_treatments:
         array, df_array, times = data_mod(treatment, df)
         slices.append(array)
-    tensor = np.vstack(slices)
+    tensor = np.stack(slices)
     return tensor, unique_treatments, times
