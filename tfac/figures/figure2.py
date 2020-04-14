@@ -10,7 +10,7 @@ from ..regression import KFoldCV
 from ..tensor import find_R2X_parafac
 
 tensor, treatments, times = form_tensor()
-_, factors = parafac(tensor, 12)
+_, factors = parafac(tensor, 12, orthogonalise=True)
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
