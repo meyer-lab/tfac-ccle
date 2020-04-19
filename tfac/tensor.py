@@ -35,7 +35,7 @@ def perform_decomposition(tensor, r, weightFactor=2):
 def perform_tucker(tensor, rank_list):
     """ Perform Tucker decomposition. """
     # index 0 is for core tensor, index 1 is for factors; output is a list of core and factors
-    return tucker(tensor, rank_list, , n_iter_max=2000, tol=1.0e-10)
+    return tucker(tensor, rank_list, n_iter_max=2000, tol=1.0e-10)
 
 
 def find_R2X_tucker(values, out):
