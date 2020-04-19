@@ -3,7 +3,7 @@ Tensor decomposition methods
 """
 import numpy as np
 import tensorly as tl
-from tensorly.decomposition import non_negative_parafac, non_negative_tucker
+from tensorly.decomposition import non_negative_parafac, tucker
 from tensorly.metrics.regression import variance as tl_var
 
 tl.set_backend("numpy")  # Set the backend
@@ -34,8 +34,8 @@ def perform_decomposition(tensor, r, weightFactor=2):
 
 def perform_tucker(tensor, rank_list):
     """ Perform Tucker decomposition. """
-    # index 0 is for core tensor, index 1 is for factors; out is a list of core and factors
-    return non_negative_tucker(tensor, rank_list, tol=1.0e-10, n_iter_max=2000)
+    # index 0 is for core tensor, index 1 is for factors; output is a list of core and factors
+    return tucker(tensor, rank_list, , n_iter_max=2000, tol=1.0e-10)
 
 
 def find_R2X_tucker(values, out):
