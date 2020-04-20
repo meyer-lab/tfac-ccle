@@ -6,12 +6,13 @@ import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import cellLineNames
 from ..Data_Mod import form_tensor
-from ..tensor import perform_decomposition, find_R2X_nnp
+from ..tensor import cp_decomp, find_R2X_parafac
 import matplotlib.pyplot as plt
 
 
 tensor, treatments, times = form_tensor()
-factors = perform_decomposition(tensor, 2)
+output = cp_decomp(tensor, 2)
+factors = output[1]
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
@@ -35,7 +36,8 @@ def R2X_figure(ax):
     R2X = []
     nComps = range(1,11)
     for i in nComps:
-        R2X.append(find_R2X_nnp(form_tensor()[0],i))
+        output = cp_decomp(tensor, i)
+        R2X.append(find_R2X_parafac(output, tensor))
     ax = sns.scatterplot(nComps, R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")

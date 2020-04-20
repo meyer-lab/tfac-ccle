@@ -9,9 +9,11 @@ from ..Data_Mod import form_tensor
 from ..regression import KFoldCV
 from ..tensor import find_R2X
 import numpy as np
+
 tensor, treatments, times = form_tensor()
 _, factors = parafac(tensor, 12, orthogonalise=True)
 temp1 = np.ndarray(shape=(6,12), dtype=float, order='C')
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
