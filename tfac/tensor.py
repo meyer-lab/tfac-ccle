@@ -3,7 +3,7 @@ Tensor decomposition methods
 """
 import numpy as np
 import tensorly as tl
-from tensorly.decomposition import non_negative_parafac, non_negative_tucker
+from tensorly.decomposition import parafac, non_negative_parafac, non_negative_tucker
 from tensorly.metrics.regression import variance as tl_var
 
 tl.set_backend("numpy")  # Set the backend
@@ -43,11 +43,12 @@ def find_R2X_tucker(values, out):
     return R2X(tl.tucker_to_tensor(out), values)
 
 
-def find_R2X(values, factors):
+def find_R2X_parafac(tensor, rank):
     """Compute R2X from parafac. Note that the inputs values and factors are in numpy."""
-    return R2X(tl.kruskal_to_tensor((np.ones(factors[0].shape[1]), factors)), values)
+    output = parafac(tensor, rank, tol=1.0e-10, n_iter_max=6000, orthogonalise=True)
+    return R2X(tl.kruskal_to_tensor(output), tensor)
 
 def find_R2X_nnp(tensor, rank):
-    """    """
+    """Compute R2X for non-negative PARAFAC decomposition"""
     output = non_negative_parafac(tensor, rank, tol=1.0e-10, n_iter_max=6000)
     return R2X(tl.kruskal_to_tensor(output), tensor)
