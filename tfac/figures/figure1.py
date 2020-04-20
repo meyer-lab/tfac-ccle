@@ -65,18 +65,6 @@ def proteinPlot(ax, factors, r1, r2):
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Protein Factors')
 
-
-############## From Capstone ###################################################################################################################    
-    
-def characPlot(ax, factors, r1, r2):
-    '''Plot the measured genetic characteristics (tensor axis 2) in component space'''
-    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, style=['Gene Expression', 'Copy Number', 'Methylation'])
-    ax.set_xlabel('Component ' + str(r1))
-    ax.set_ylabel('Component ' + str(r2))
-    ax.set_title('Genetic Characteristic Factors')
-    setPlotLimits(ax, factors, r1, r2)
-
-
 def setPlotLimits(axis, factors, r1, r2):
     '''Set appropriate limits for the borders of each component plot'''
     x = np.absolute(factors[:, r1 - 1])

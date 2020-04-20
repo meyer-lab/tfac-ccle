@@ -38,15 +38,3 @@ def R2X_figure(ax):
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("CP Decomposition")
-
-
-#### FROM ORIGINAL PROJECT #################################################################################
-
-def predVsActual(ax, x, y, reg):
-    '''Predicted vs Actual plotting function for regression'''
-    _, predicted, actual = KFoldCV(x, y, reg)
-    sns.scatterplot(actual, predicted, color='darkslategrey', ax=ax)
-    sns.despine()
-    ax.set_xlabel('Actual')
-    ax.set_ylabel('Predicted')
-    ax.set_title('Predicted vs Actual ' + reg)
