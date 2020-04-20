@@ -3,11 +3,10 @@ This creates Figure 1.
 """
 import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import cellLineNames
 from ..Data_Mod import form_tensor
 from ..tensor import cp_decomp, find_R2X_parafac
-import matplotlib.pyplot as plt
 
 
 tensor, treatments, times = form_tensor()

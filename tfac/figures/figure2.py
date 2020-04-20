@@ -1,18 +1,16 @@
 """
 This creates Figure 2.
 """
+import numpy as np
 import seaborn as sns
-from tensorly.decomposition import parafac
 from .figureCommon import subplotLabel, getSetup
 from .figure1 import treatmentPlot, timePlot, proteinPlot, setPlotLimits
 from ..Data_Mod import form_tensor
-from ..regression import KFoldCV
-from ..tensor import find_R2X
-import numpy as np
+from ..tensor import tucker_decomp, find_R2X_tucker
 
 tensor, treatments, times = form_tensor()
-_, factors = parafac(tensor, 12, orthogonalise=True)
-temp1 = np.ndarray(shape=(6,12), dtype=float, order='C')
+output = tucker_decomp(tensor, (2, 2, 2))
+factors = output[1]
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
@@ -33,8 +31,9 @@ def R2X_figure(ax):
     R2X = []
     nComps = range(1, 14)
     for i in nComps:
-        R2X.append(find_R2X(form_tensor()[0], i))
-    ax = sns.scatterplot(nComps, R2X, ax=ax)
+        output = tucker_decomp(tensor, (i, i, i))
+        R2X.append(find_R2X_tucker(output, tensor))
+    sns.scatterplot(nComps, R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("CP Decomposition")
