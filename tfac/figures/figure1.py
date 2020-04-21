@@ -20,7 +20,7 @@ def makeFigure():
 
     R2X_figure(ax[0])
     treatmentPlot(ax[1], factors[0], 1, 2, treatments)
-    timePlot(ax[2], factors[1], 1, 2, times)
+    timePlot(ax[2], factors[1], 1, 2)
     proteinPlot(ax[3], factors[2], 1, 2)
 
     # Add subplot labels
@@ -31,7 +31,7 @@ def makeFigure():
 
 def R2X_figure(ax):
     '''Create Parafac R2X Figure'''
-    R2X = np.zeros(14)
+    R2X = np.zeros(10)
     nComps = range(1, len(R2X))
     for i in nComps:
         output = cp_decomp(tensor, i)
@@ -44,23 +44,23 @@ def R2X_figure(ax):
 
 
 def treatmentPlot(ax, factors, r1, r2, senthue):
-    '''Plot Treatment (tensor axis 0) in factorization component space'''
+    '''Plot treatments (tensor axis 0) in factorization component space'''
     sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=senthue)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Treatment Factors')
     setPlotLimits(ax, factors, r1, r2)
     
-def timePlot(ax, factors, r1, r2, senthue):
-    '''Plot Cell Lines (tensor axis 0) in factorization component space'''
-    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=senthue)
-    ax.set_xlabel('Component ' + str(r1))
-    ax.set_ylabel('Component ' + str(r2))
-    ax.set_title('Time Factors')
-    setPlotLimits(ax, factors, r1, r2)
+def timePlot(ax, factors, r1, r2):
+    '''Plot time points (tensor axis 1) in factorization component space'''
+    for i in np.arange(factors.shape[1]):
+        sns.lineplot(times, factors[:, i], ax=ax, label="Component " + str(i))
+    ax.set_xlabel("Measurement Time")
+    ax.set_ylabel('Component Value')
+    ax.set_title('Time Components')
 
 def proteinPlot(ax, factors, r1, r2):
-    '''Plot genes (tensor axis 1) in factorization component space'''
+    '''Plot proteins (tensor axis 2) in factorization component space'''
     sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
