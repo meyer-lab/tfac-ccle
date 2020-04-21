@@ -27,13 +27,13 @@ def makeFigure():
     return f
 
 def R2X_figure(ax):
-    '''Create Parafac R2X Figure'''
-    R2X = []
-    nComps = range(1, 14)
+    '''Create Tucker R2X Figure'''
+    R2X = np.zeros(14)
+    nComps = range(1, len(R2X))
     for i in nComps:
         output = tucker_decomp(tensor, (i, i, i))
-        R2X.append(find_R2X_tucker(output, tensor))
-    sns.scatterplot(nComps, R2X, ax=ax)
+        R2X[i] = find_R2X_tucker(output, tensor)
+    sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("CP Decomposition")

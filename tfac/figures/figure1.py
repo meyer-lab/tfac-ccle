@@ -32,12 +32,12 @@ def makeFigure():
 
 def R2X_figure(ax):
     '''Create Parafac R2X Figure'''
-    R2X = []
-    nComps = range(1,11)
+    R2X = np.zeros(14)
+    nComps = range(1, len(R2X))
     for i in nComps:
         output = cp_decomp(tensor, i)
         R2X.append(find_R2X_parafac(output, tensor))
-    ax = sns.scatterplot(nComps, R2X, ax=ax)
+    sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("CP Decomposition")
