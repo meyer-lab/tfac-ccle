@@ -36,7 +36,7 @@ def R2X_figure(ax):
     nComps = range(1, len(R2X))
     for i in nComps:
         output = cp_decomp(tensor, i)
-        R2X.append(find_R2X_parafac(output, tensor))
+        R2X[i] = find_R2X_parafac(output, tensor)
     sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
@@ -49,6 +49,7 @@ def treatmentPlot(ax, factors, r1, r2, senthue):
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Treatment Factors')
+    setPlotLimits(ax, factors, r1, r2)
     
 def timePlot(ax, factors, r1, r2, senthue):
     '''Plot Cell Lines (tensor axis 0) in factorization component space'''
@@ -56,6 +57,7 @@ def timePlot(ax, factors, r1, r2, senthue):
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Time Factors')
+    setPlotLimits(ax, factors, r1, r2)
 
 def proteinPlot(ax, factors, r1, r2):
     '''Plot genes (tensor axis 1) in factorization component space'''
@@ -63,6 +65,7 @@ def proteinPlot(ax, factors, r1, r2):
     ax.set_xlabel('Component ' + str(r1))
     ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Protein Factors')
+    setPlotLimits(ax, factors, r1, r2)
 
 def setPlotLimits(axis, factors, r1, r2):
     '''Set appropriate limits for the borders of each component plot'''
@@ -72,5 +75,3 @@ def setPlotLimits(axis, factors, r1, r2):
     ylim = 1.1 * np.max(y)
     axis.set_xlim((-xlim, xlim))
     axis.set_ylim((-ylim, ylim))
-    axis.axvline(color='black')
-    axis.axhline(color='black')
