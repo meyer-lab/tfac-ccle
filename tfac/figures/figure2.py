@@ -1,5 +1,5 @@
 """
-This creates Figure 2.
+This creates Figure 2 - Tucker Decomposition Plots
 """
 import numpy as np
 import seaborn as sns
@@ -37,3 +37,4 @@ def R2X_figure(ax):
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("CP Decomposition")
+    ax.set_yticks([0, .2, .4, .6, .8, 1])
