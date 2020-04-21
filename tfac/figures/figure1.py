@@ -16,13 +16,12 @@ factors = output[1]
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (3, 2))
+    ax, f = getSetup((7, 6), (2, 2))
 
-    ax[0].axis('off')  # blank out axes for cartoon
-    R2X_figure(ax[1])
-    treatmentPlot(ax[2], factors[0], 1, 2, treatments)
-    timePlot(ax[3], factors[1], 1, 2, times)
-    proteinPlot(ax[4], factors[2], 1, 2)
+    R2X_figure(ax[0])
+    treatmentPlot(ax[1], factors[0], 1, 2, treatments)
+    timePlot(ax[2], factors[1], 1, 2, times)
+    proteinPlot(ax[3], factors[2], 1, 2)
 
     # Add subplot labels
     subplotLabel(ax)
