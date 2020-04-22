@@ -19,7 +19,7 @@ def makeFigure():
 
     R2X_figure(ax[0])
     treatmentPlot(ax[1], factors[0], 1, 2, treatments)
-    timePlot(ax[2], factors[1], 1, 2)
+    timePlot(ax[2], factors[1])
     proteinPlot(ax[3], factors[2], 1, 2)
 
     # Add subplot labels
