@@ -9,8 +9,8 @@ from ..Data_Mod import form_tensor
 from ..tensor import tucker_decomp, find_R2X_tucker
 
 tensor, treatments, times = form_tensor()
-output = tucker_decomp(tensor, (2, 2, 2))
-factors = output[1]
+results = tucker_decomp(tensor, (2, 2, 2))
+factors = results[1]
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """

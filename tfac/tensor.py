@@ -27,7 +27,7 @@ def R2X(reconstructed, original):
 #### Decomposition Methods ###################################################################
 
 def cp_decomp(tensor, r, nneg=False):
-    """ Perform PARAFAC decomposition. 
+    """Perform PARAFAC decomposition.
     -----------------------------------------------
     Input
         tensor: 3D data tensor
@@ -44,11 +44,11 @@ def cp_decomp(tensor, r, nneg=False):
 
 
 def tucker_decomp(tensor, rank_list, nneg=False):
-    """ Perform Tucker decomposition. 
+    """Perform Tucker decomposition.
     -----------------------------------------------
     Input:
         tensor: 3D data tensor
-        r: rank of decomposition
+        r: rank of decomposition (list of ranks)
     Returns
         output[0]: core tensor
         output[1]: list of factor matrices
