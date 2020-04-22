@@ -29,7 +29,7 @@ def reorient_one(factors, component_index):
     """ Takes the factor matrices and flips factor one with its next if negative. """
 
     for index in range(len(factors) - 1):
-       meann = np.mean(factors[index][:, component_index])
+        meann = np.mean(factors[index][:, component_index])
         if meann < 0:
             factors[index][:, component_index] *= -1
             factors[index + 1][:, component_index] *= -1
