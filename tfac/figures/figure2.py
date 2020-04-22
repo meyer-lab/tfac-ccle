@@ -4,7 +4,7 @@ This creates Figure 2 - Tucker Decomposition Plots
 import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from .figure1 import treatmentPlot, timePlot, proteinPlot, setPlotLimits
+from .figure1 import treatmentPlot, timePlot, proteinPlot
 from ..Data_Mod import form_tensor
 from ..tensor import tucker_decomp, find_R2X_tucker
 
