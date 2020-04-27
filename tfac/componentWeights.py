@@ -29,3 +29,12 @@ def componentWeights(decomps, proteinLabels):
             p_labels[x].append(proteinLabels[ind])
         
     return p_weights, p_labels
+
+def topThreeProteins(comp):
+    """Returns the names of the top three weighted proteins for an individual protein component"""
+    names = []
+    for i in range(0, 3):
+        temp = np.argmax(comp)
+        names.append(proteinNames()[temp])
+        comp[temp] = -1000
+    return names
