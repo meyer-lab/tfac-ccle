@@ -44,8 +44,8 @@ def R2X_figure(ax):
 
 def treatmentPlot(ax, factors, r1, r2, senthue):
     '''Plot treatments (tensor axis 0) in factorization component space'''
-    complist = np.arange(6)
-    for i in np.arange(factors.shape[1]):
+    complist = np.arange(factors.shape[1])
+    for i in np.arange(len(treatments)):
         sns.lineplot(complist, factors[i, :], ax=ax, label=treatments[i])
     ax.set_xlabel('Component')
     ax.set_ylabel('Component Value' )
