@@ -4,9 +4,8 @@ This creates Figure 1 - CP Decomposition Plots
 import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..Data_Mod import form_tensor
 from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
-
+from ..Data_Mod import form_tensor
 
 tensor, treatments, times = form_tensor()
 results = cp_decomp(tensor, 5)
@@ -19,7 +18,7 @@ def makeFigure():
     ax, f = getSetup((7, 6), (2, 2))
 
     R2X_figure(ax[0])
-    treatmentPlot(ax[1], comps[0], 1, 2, treatments)
+    treatmentPlot(ax[1], comps[0].T, 1, 2, treatments)
     timePlot(ax[2], comps[1])
     proteinPlot(ax[3], comps[2], 1, 2)
 
@@ -45,11 +44,14 @@ def R2X_figure(ax):
 
 def treatmentPlot(ax, factors, r1, r2, senthue):
     '''Plot treatments (tensor axis 0) in factorization component space'''
-    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=senthue)
-    ax.set_xlabel('Component ' + str(r1))
-    ax.set_ylabel('Component ' + str(r2))
+    complist = np.zeros(6)
+    for i in range(1,6):
+        complist[i] = i
+    for i in np.arange(factors.shape[1]):
+        sns.lineplot(complist[1:], factors[:, i], ax=ax, label=treatments[i])
+    ax.set_xlabel('Component')
+    ax.set_ylabel('Component Value' )
     ax.set_title('Treatment Factors')
-    setPlotLimits(ax, factors, r1, r2)
 
 
 def timePlot(ax, factors):
