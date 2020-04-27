@@ -38,5 +38,5 @@ def R2X_figure(ax):
     sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
-    ax.set_title("CP Decomposition")
+    ax.set_title("Tucker Decomposition")
     ax.set_yticks([0, .2, .4, .6, .8, 1])

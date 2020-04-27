@@ -58,7 +58,7 @@ def timePlot(ax, factors):
         sns.lineplot(times, factors[:, i], ax=ax, label="Component " + str(i))
     ax.set_xlabel("Measurement Time")
     ax.set_ylabel('Component Value')
-    ax.set_title('Time Components')
+    ax.set_title('Time Factors')
 
 
 def proteinPlot(ax, factors, r1, r2):
