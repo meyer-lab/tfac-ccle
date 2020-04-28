@@ -10,7 +10,7 @@ from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
 
 tensor, treatments, times = form_tensor()
 results = cp_decomp(tensor, 5)
-comps = reorient_factors(results[1])
+comps = reorient_factors(results)
 
 
 def makeFigure():
