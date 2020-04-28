@@ -8,7 +8,7 @@ from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
 from ..Data_Mod import form_tensor
 
 tensor, treatments, times = form_tensor()
-results = cp_decomp(tensor, 5)
+results = cp_decomp(tensor, 8)
 comps = reorient_factors(results[1])
 
 
