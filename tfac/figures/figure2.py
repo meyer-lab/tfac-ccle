@@ -9,8 +9,9 @@ from ..Data_Mod import form_tensor
 from ..tensor import tucker_decomp, find_R2X_tucker
 
 tensor, treatments, times = form_tensor()
-results = tucker_decomp(tensor, (2, 2, 2))
+results = tucker_decomp(tensor, (4, 4, 5))
 factors = results[1]
+print("Tucker R2X: " + str(find_R2X_tucker(results, tensor)))
 
 
 def makeFigure():
