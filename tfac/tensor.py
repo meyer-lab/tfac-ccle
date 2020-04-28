@@ -51,7 +51,8 @@ def cp_decomp(tensor, r):
     """
     weights, factors = parafac(tensor, r, tol=1.0e-10, n_iter_max=6000, orthogonalise=True)
     factors[2] *= weights[np.newaxis, :]  # Put weighting in designated factor
-    return factors
+    weights /= weights
+    return weights, factors
 
 
 def tucker_decomp(tensor, rank_list, nneg=False):
