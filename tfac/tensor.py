@@ -49,7 +49,7 @@ def cp_decomp(tensor, r):
     Returns
         factors: list of factor matrices
     """
-    weights, factors = parafac(tensor, r, tol=1.0e-10, n_iter_max=6000, orthogonalise=True)
+    weights, factors = parafac(tensor, r, tol=1.0e-10, n_iter_max=6000, orthogonalise=True, normalize_factors=True)
     factors[2] *= weights[np.newaxis, :]  # Put weighting in designated factor
     weights /= weights
     return weights, factors
