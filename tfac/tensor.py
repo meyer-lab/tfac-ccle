@@ -47,12 +47,11 @@ def cp_decomp(tensor, r):
         tensor: 3D data tensor
         r: rank of decomposition
     Returns
-        output[0]: component weights
-        output[1]: list of factor matrices
+        factors: list of factor matrices
     """
     weights, factors = parafac(tensor, r, tol=1.0e-10, n_iter_max=6000, orthogonalise=True)
     factors[2] *= weights[np.newaxis, :]  # Put weighting in designated factor
-    return weights
+    return factors
 
 
 def tucker_decomp(tensor, rank_list, nneg=False):
