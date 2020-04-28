@@ -40,7 +40,7 @@ def reorient_factors(factors):
 #### Decomposition Methods ###################################################################
 
 
-def cp_decomp(tensor, r, nneg=False):
+def cp_decomp(tensor, r):
     """Perform PARAFAC decomposition.
     -----------------------------------------------
     Input
@@ -50,11 +50,9 @@ def cp_decomp(tensor, r, nneg=False):
         output[0]: component weights
         output[1]: list of factor matrices
     """
-    if nneg:
-        output = non_negative_parafac(tensor, r, tol=1.0e-10, n_iter_max=6000)
-    else:
-        output = parafac(tensor, r, tol=1.0e-10, n_iter_max=6000, orthogonalise=True)
-    return output
+    weights, factors = parafac(tensor, r, tol=1.0e-10, n_iter_max=6000, orthogonalise=True)
+    weights[1] *= weights[np.newaxis, :]  # Put weighting in designated factor
+    return weights
 
 
 def tucker_decomp(tensor, rank_list, nneg=False):
