@@ -18,7 +18,7 @@ def makeFigure():
     ax, f = getSetup((7, 6), (2, 2))
 
     R2X_figure(ax[0])
-    treatmentPlot(ax[1], comps[0], 1, 2, treatments)
+    treatmentPlot(ax[1], comps[0], treatments)
     timePlot(ax[2], comps[1])
     proteinPlot(ax[3], comps[2], 1, 2)
 
@@ -42,7 +42,7 @@ def R2X_figure(ax):
     ax.set_yticks([0, .2, .4, .6, .8, 1])
 
 
-def treatmentPlot(ax, factors, r1, r2, senthue):
+def treatmentPlot(ax, factors, senthue):
     '''Plot treatments (tensor axis 0) in factorization component space'''
     complist = np.arange(factors.shape[1])
     for i in np.arange(len(treatments)):
