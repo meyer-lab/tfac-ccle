@@ -42,14 +42,13 @@ def R2X_figure(ax):
     ax.set_yticks([0, .2, .4, .6, .8, 1])
 
 
-def treatmentPlot(ax, factors, senthue):
+def treatmentPlot(ax, factors, r1, r2, senthue):
     '''Plot treatments (tensor axis 0) in factorization component space'''
-    complist = np.arange(factors.shape[1])
-    for i in np.arange(len(treatments)):
-        sns.lineplot(complist, factors[i, :], ax=ax, label=treatments[i])
-    ax.set_xlabel('Component')
-    ax.set_ylabel('Component Value' )
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax, hue=senthue)
+    ax.set_xlabel('Component ' + str(r1))
+    ax.set_ylabel('Component ' + str(r2))
     ax.set_title('Treatment Factors')
+    setPlotLimits(ax, factors, r1, r2)
 
 
 def timePlot(ax, factors):
