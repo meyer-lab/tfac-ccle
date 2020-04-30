@@ -18,10 +18,10 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 6), (2, 2))
 
-    treatmentPlot(ax[0], factors[0], 1, 2, treatments)
-    treatmentPlot(ax[1], factors[0], 2, 3, treatments)
-    treatmentPlot(ax[2], factors[0], 3, 4, treatments)
-    treatmentPlot(ax[3], factors[0], 4, 5, treatments)
+    treatmentPlot(ax[0], factors[0], treatments)
+    treatmentPlot(ax[1], factors[0], treatments)
+    treatmentPlot(ax[2], factors[0], treatments)
+    treatmentPlot(ax[3], factors[0], treatments)
     #timePlot(ax[2], factors[1])
     #proteinPlot(ax[3], factors[2], 1, 2)
 
