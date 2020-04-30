@@ -16,7 +16,7 @@ factors = results[1]
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (2, 2))
+    ax, f = getSetup((7, 6), (2, 4))
 
     treatmentPlot(ax[0], factors[0], 1,2, treatments)
     treatmentPlot(ax[1], factors[0], 2,3, treatments)
