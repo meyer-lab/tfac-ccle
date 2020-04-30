@@ -24,8 +24,6 @@ def makeFigure():
     treatmentPlot(ax[3], factors[0], 4,5, treatments)
     treatmentPlot(ax[4], factors[0], 5,6, treatments)
     treatmentPlot(ax[5], factors[0], 6,7, treatments)
-    treatmentPlot(ax[6], factors[0], 7,8, treatments)
-    treatmentPlot(ax[7], factors[0], 8,9, treatments)
     #timePlot(ax[2], factors[1])
     #proteinPlot(ax[3], factors[2], 1, 2)
 
