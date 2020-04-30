@@ -18,7 +18,7 @@ def makeFigure():
     ax, f = getSetup((7, 6), (2, 2))
 
     R2X_figure(ax[0])
-    treatmentPlot(ax[1], comps[0], treatments)
+    treatmentPlot(ax[1], comps[0], 1,2, treatments)
     timePlot(ax[2], comps[1])
     proteinPlot(ax[3], comps[2], 1, 2)
 
