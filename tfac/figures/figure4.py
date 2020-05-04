@@ -17,15 +17,16 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((7, 6), (3, 3))
-
-    proteinPlot(ax[0], factors1[2], 1, 2)
+    for i in range (1,9):
+        proteinPlot(ax[i-1], factors1[2], i, i+1)
+    """"proteinPlot(ax[0], factors1[2], 1, 2)
     proteinPlot(ax[1], factors1[2], 2, 3)
     proteinPlot(ax[2], factors1[2], 3, 4)
     proteinPlot(ax[3], factors1[2], 4, 5)
     proteinPlot(ax[4], factors1[2], 5, 6)
     proteinPlot(ax[5], factors1[2], 6, 7)
     proteinPlot(ax[6], factors1[2], 7, 8)
-    proteinPlot(ax[7], factors1[2], 8, 9)
+    proteinPlot(ax[7], factors1[2], 8, 9)"""
     
     # Add subplot labels
     subplotLabel(ax)
