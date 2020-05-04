@@ -15,10 +15,10 @@ def componentWeights(decomps, proteinLabels):
     i=np.shape(decomps)
     proteins=decomps[i[0]-1]
     proteinNum,compNum=np.shape(proteins)
-    p_weights=np.zeros((3,compNum)) '''stores indicies of 3 largest protein weights'''
-    p_labels=[] '''corresponding labels'''
+    p_weights=np.zeros((3,compNum)) #'''stores indicies of 3 largest protein weights'''
+    p_labels=[] #'''corresponding labels'''
 
-    p_sorted=np.argsort(proteins,axis=0) '''indirectly sorts by component from smallest to largest'''
+    p_sorted=np.argsort(proteins,axis=0) #'''indirectly sorts by component from smallest to largest'''
     
     for y in range(0, compNum):
         for x in range(0, 3):
