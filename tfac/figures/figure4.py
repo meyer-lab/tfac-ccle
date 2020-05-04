@@ -16,7 +16,7 @@ comps = reorient_factors(results[1])
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (2, 4))
+    ax, f = getSetup((8, 8), (2, 4))
     
     for i in range (1,8):
         proteinPlot(ax[i-1], comps[2], i, i+1)
