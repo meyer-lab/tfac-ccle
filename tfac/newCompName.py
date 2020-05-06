@@ -1,7 +1,7 @@
 
 """returns names of top three weighted proteins per component, each comp separated by 'Col Name'"""
 
-def rearrangeTensor(comps):
+def compProteins(comps):
     i=np.shape(comps)
     proteins, df_pnames= proteinNames()
     proteinNum,compNum=np.shape(comps[i[0]-1])
