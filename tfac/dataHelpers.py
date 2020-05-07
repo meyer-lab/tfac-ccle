@@ -21,7 +21,7 @@ def importLINCSprotein():
 
 def compProteins(comps):
     """Returns the top three weighted proteins for each component in input protein component matrix"""
-    i = np.shape(comps) """input tensor decomp output"""
+    i = np.shape(comps)                                    #input tensor decomp output
     proteins = proteinNames()
     proteinNum, compNum = np.shape(comps[i[0]-1])
     compName = []
