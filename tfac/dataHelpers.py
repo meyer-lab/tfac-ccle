@@ -20,11 +20,12 @@ def importLINCSprotein():
     return pd.concat([dataA, dataB, dataC])
 
 def compProteins(comps):
+    """Returns the top three weighted proteins for each component in input protein component matrix"""
     i = np.shape(comps)
-    proteins, df_pnames = proteinNames()
+    proteins = proteinNames()
     proteinNum, compNum = np.shape(comps[i[0]-1])
     compName = []
-    proteinN=[]
+    proteinN = []
     
     for x in range(0, compNum):
         compName.append('Col' + str(x+1))
@@ -41,7 +42,7 @@ def compProteins(comps):
 
 def proteinNames():
     data = importLINCSprotein()
-    data = data.drop(columns=['Treatment', 'Sample description', 'File', 'Time'],axis=1)
+    data = data.drop(columns=['Treatment', 'Sample description', 'File', 'Time'], axis=1)
     proteinN = data.columns.values.tolist()
     return proteinN 
 
