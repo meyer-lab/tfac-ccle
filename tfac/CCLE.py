@@ -1,8 +1,8 @@
 """Functions for importing and manipulating data from the Cancer Cell Line Encyclopedia"""
-import numpy as np
-import pandas as pd
 import os
 from functools import reduce
+import numpy as np
+import pandas as pd
 from synapseclient import Synapse
 from sklearn.preprocessing import scale
 

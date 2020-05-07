@@ -3,6 +3,7 @@ from os.path import join, dirname
 import numpy as np
 import pandas as pd
 from synapseclient import Synapse
+from .CCLE import normalize
 
 path_here = dirname(dirname(__file__))
 
