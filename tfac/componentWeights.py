@@ -2,12 +2,6 @@ import numpy as np
 import pandas as pd
 from .dataHelpers import importLINCSprotein
 
-
-def proteinNames():
-    data=importLINCSprotein()
-    data=data.drop(columns=['Treatment', 'Sample description', 'File', 'Time'],axis=1)
-    proteinN=data.columns.values.tolist()
-    return proteinN 
     
 def componentWeights(decomps, proteinLabels):
     '''takes in array of protein decomp'd components and list of proteinNames and picks out top 3 protein weights
