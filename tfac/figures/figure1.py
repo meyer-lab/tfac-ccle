@@ -3,6 +3,7 @@ This creates Figure 1 - CP Decomposition Plots
 """
 import numpy as np
 import seaborn as sns
+import pandas as pd
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
 from ..Data_Mod import form_tensor
