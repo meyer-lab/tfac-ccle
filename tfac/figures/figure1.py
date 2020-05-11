@@ -18,7 +18,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 6), (2, 2))
 
-    R2X_figure(ax[0])
+    R2X_figure(ax[0], tensor)
     treatmentPlot(ax[1], comps[0], treatments)
     timePlot(ax[2], comps[1])
     proteinPlot(ax[3], comps[2], 1, 2)
@@ -65,7 +65,7 @@ def timePlot(ax, factors):
 def proteinPlot(ax, factors, r1, r2):
     '''Plot proteins (tensor axis 2) in factorization component space'''
     df = pd.DataFrame(factors)
-    sns.boxplot(data = df, ax = ax)
+    sns.boxplot(data=df, ax=ax)
     ax.set_xlabel("Component")
     ax.set_ylabel('Component Value')
     ax.set_title('Protein Factors')
