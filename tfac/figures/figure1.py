@@ -6,11 +6,12 @@ import seaborn as sns
 import pandas as pd
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
-from ..Data_Mod import form_tensor
+from ..Data_Mod import form_tensor, z_score_tensor_bymeasure
 
-#tensor, treatments, times = form_tensor()
-#results = cp_decomp(tensor, 8)
-#comps = reorient_factors(results[1])
+tensor, treatments, times = form_tensor()
+zscore_tensor_bymeasurement = z_score_tensor_bymeasure(tensor)
+results = cp_decomp(zscore_tensor_bymeasurement, 13)
+comps = reorient_factors(results[1])
 
 
 def makeFigure():
@@ -18,10 +19,10 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 6), (2, 2))
 
-    R2X_figure(ax[0])
+    R2X_figure(ax[0], zscore_tensor_bymeasurement)
     treatmentPlot(ax[1], comps[0], treatments)
-    timePlot(ax[2], comps[1])
-    proteinPlot(ax[3], comps[2], 1, 2)
+    timePlot(ax[2], comps[1], times)
+    proteinPlot(ax[3], comps[2])
 
     # Add subplot labels
     subplotLabel(ax)
