@@ -8,9 +8,9 @@ from .figureCommon import subplotLabel, getSetup
 from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
 from ..Data_Mod import form_tensor
 
-tensor, treatments, times = form_tensor()
-results = cp_decomp(tensor, 8)
-comps = reorient_factors(results[1])
+#tensor, treatments, times = form_tensor()
+#results = cp_decomp(tensor, 8)
+#comps = reorient_factors(results[1])
 
 
 def makeFigure():
@@ -45,26 +45,36 @@ def R2X_figure(ax, input_tensor):
 
 def treatmentPlot(ax, factors, senthue):
     '''Plot treatments (tensor axis 0) in factorization component space'''
-    complist = np.arange(factors.shape[1])
-    for i in np.arange(len(treatments)):
-        sns.lineplot(complist, factors[i, :], ax=ax, label=treatments[i])
+    df = pd.DataFrame(factors).T
+    markers = ['o', 's', 'X', 'h', '^', 'D', 'P']
+    df.columns = senthue
+    df["Components"] = range(1, 14)
+    df = df.set_index('Components')
+    sns.scatterplot(data=df, ax=ax, markers=markers, palette='bright', s=100)
     ax.set_xlabel('Component')
     ax.set_ylabel('Component Value')
-    ax.set_title('Treatment Factors')
+    ax.set_title('Treatment Factors')  
 
 
-def timePlot(ax, factors):
+def timePlot(ax, factors, senthue):
     '''Plot time points (tensor axis 1) in factorization component space'''
-    for i in np.arange(factors.shape[1]):
-        sns.lineplot(times, factors[:, i], ax=ax, label="Component " + str(i))
+    df = pd.DataFrame(factors)
+    columns = []
+    for i in range(1, (factors.shape[1] + 1)):
+        columns.append('Component ' + str(i))
+    df.columns = columns
+    df['Measurement Time'] = senthue
+    df = df.set_index('Measurement Time')
+    sns.lineplot(data=df, ax=ax, palette='tab20', dashes=False)
     ax.set_xlabel("Measurement Time")
     ax.set_ylabel('Component Value')
     ax.set_title('Time Factors')
 
-
-def proteinPlot(ax, factors, r1, r2):
+def proteinPlot(ax, factors):
     '''Plot proteins (tensor axis 2) in factorization component space'''
     df = pd.DataFrame(factors)
+    complist = range(1, (factors.shape[1] + 1))
+    df.columns = complist
     sns.boxplot(data = df, ax = ax)
     ax.set_xlabel("Component")
     ax.set_ylabel('Component Value')
