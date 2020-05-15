@@ -51,3 +51,16 @@ def z_score_tensor_bymeasure(tensor):
             for i in range(time.shape[0]):
                 time[i] = ((time[i] - mean_val) / sd_val)
     return tensor
+
+def z_score_tensor_byprotein(tensor):
+    for prot_idx in range(tensor.shape[2]):
+        prot_list = []
+        for treat_idx in range(tensor.shape[0]):
+            for time_idx in range(tensor.shape[1]):
+                prot_list.append(tensor[treat_idx][time_idx][prot_idx])
+        mean_val = np.mean(prot_list)
+        std_val = np.std(prot_list)
+        for treat_idx in range(tensor.shape[0]):
+            for time_idx in range(tensor.shape[1]):
+                tensor[treat_idx][time_idx][prot_idx] = (tensor[treat_idx][time_idx][prot_idx] - mean_val) / std_val
+    return tensor

@@ -66,9 +66,9 @@ def tucker_decomp(tensor, rank_list, nneg=False):
         output[1]: list of factor matrices
     """
     if nneg:
-        output = non_negative_tucker(tensor, rank_list, tol=1.0e-10, n_iter_max=2000)
+        output = non_negative_tucker(tensor, rank_list, tol=1.0e-10, n_iter_max=2000, random_state=1)
     else:
-        output = tucker(tensor, rank_list, tol=1.0e-10, n_iter_max=2000)
+        output = tucker(tensor, rank_list, tol=1.0e-10, n_iter_max=2000, random_state=1)
     return output
 
 

@@ -6,23 +6,23 @@ import seaborn as sns
 import pandas as pd
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
-from ..Data_Mod import form_tensor, z_score_tensor_bymeasure
+from ..Data_Mod import form_tensor, z_score_tensor_bymeasure, z_score_tensor_byprotein
 
 tensor, treatments, times = form_tensor()
-zscore_tensor_bymeasurement = z_score_tensor_bymeasure(tensor)
-results = cp_decomp(zscore_tensor_bymeasurement, 13)
+tensor_z = z_score_tensor_byprotein(tensor)
+results = cp_decomp(tensor_z, 8)
 comps = reorient_factors(results[1])
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (2, 2))
+    ax, f = getSetup((12, 12), (2, 2))
 
-    R2X_figure(ax[0], zscore_tensor_bymeasurement)
+    R2X_figure(ax[0], tensor_z)
     treatmentPlot(ax[1], comps[0], treatments)
     timePlot(ax[2], comps[1], times)
-    proteinPlot(ax[3], comps[2])
+    proteinBoxPlot(ax[3], comps[2])
 
     # Add subplot labels
     subplotLabel(ax)
@@ -32,7 +32,7 @@ def makeFigure():
 
 def R2X_figure(ax, input_tensor):
     '''Create Parafac R2X Figure'''
-    R2X = np.zeros(14)
+    R2X = np.zeros(13)
     nComps = range(1, len(R2X))
     for i in nComps:
         output = cp_decomp(input_tensor, i)
@@ -49,7 +49,7 @@ def treatmentPlot(ax, factors, senthue):
     df = pd.DataFrame(factors).T
     markers = ['o', 's', 'X', 'h', '^', 'D', 'P']
     df.columns = senthue
-    df["Components"] = range(1, 14)
+    df["Components"] = range(1, factors.shape[1] + 1)
     df = df.set_index('Components')
     sns.scatterplot(data=df, ax=ax, markers=markers, palette='bright', s=100)
     ax.set_xlabel('Component')
@@ -71,7 +71,7 @@ def timePlot(ax, factors, senthue):
     ax.set_ylabel('Component Value')
     ax.set_title('Time Factors')
 
-def proteinPlot(ax, factors):
+def proteinBoxPlot(ax, factors):
     '''Plot proteins (tensor axis 2) in factorization component space'''
     df = pd.DataFrame(factors)
     complist = range(1, (factors.shape[1] + 1))
@@ -81,6 +81,12 @@ def proteinPlot(ax, factors):
     ax.set_ylabel('Component Value')
     ax.set_title('Protein Factors')
 
+def proteinScatterPlot(ax, factors, r1, r2):
+    '''Plot compared proteins (tensor axis 2) in factorization component space'''
+    sns.scatterplot(factors[:, r1 - 1], factors[:, r2 - 1], ax=ax)
+    ax.set_xlabel('Component ' + str(r1))
+    ax.set_ylabel('Component ' + str(r2))
+    ax.set_title('Protein Factors')
 
 def setPlotLimits(axis, factors, r1, r2):
     '''Set appropriate limits for the borders of each component plot'''
@@ -90,3 +96,4 @@ def setPlotLimits(axis, factors, r1, r2):
     ylim = 1.1 * np.max(y)
     axis.set_xlim((-xlim, xlim))
     axis.set_ylim((-ylim, ylim))
+    
