@@ -50,7 +50,7 @@ def cp_decomp(tensor, r):
         output[0]: reconstruction variance explained
         output[1]: list of factor matrices
     """
-    weights, factors = parafac(tensor, r, tol=1.0e-15, n_iter_max=2000, orthogonalise=10, normalize_factors=True)
+    weights, factors = parafac(tensor, r, tol=1.0e-15, n_iter_max=2000, orthogonalise=10, random_state=1, normalize_factors=True)
     factors[2] *= weights[np.newaxis, :]  # Put weighting in designated factor
     weights /= weights
 
