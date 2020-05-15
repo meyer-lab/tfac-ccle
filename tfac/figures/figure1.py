@@ -8,7 +8,7 @@ from ..tensor import cp_decomp
 from ..Data_Mod import form_tensor
 
 tensor, treatments, times = form_tensor()
-comps = cp_decomp(tensor, 8)[1]
+comps = cp_decomp(tensor, 6)[1]
 
 
 def makeFigure():
@@ -22,7 +22,6 @@ def makeFigure():
     proteinPlot(ax[3], comps[2], 1, 2)
     proteinPlot(ax[4], comps[2], 3, 4)
     proteinPlot(ax[5], comps[2], 5, 6)
-    proteinPlot(ax[6], comps[2], 7, 8)
 
     # Add subplot labels
     subplotLabel(ax)
