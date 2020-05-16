@@ -24,6 +24,6 @@ def makeFigure():
             counter += 1
     
     # Add subplot labels
-    subplotLabel(ax)
+    #subplotLabel(ax)
 
     return f
