@@ -96,4 +96,23 @@ def setPlotLimits(axis, factors, r1, r2):
     ylim = 1.1 * np.max(y)
     axis.set_xlim((-xlim, xlim))
     axis.set_ylim((-ylim, ylim))
-    
+
+def separate_treatmentPlot(factors, senthue):
+    '''Plot treatments (tensor axis 0) in factorization component space'''
+    df = pd.DataFrame(factors)
+    df.columns = range(1, factors.shape[1] + 1)
+    df["Treatment"] = senthue
+    df = pd.melt(df, "Treatment")
+    df.columns = ["Treatment", "Component", "Value"]
+    grid = sns.FacetGrid(df, col="Treatment", hue="Treatment", col_wrap=4, height=4, sharex=False)
+    grid.map(plt.plot, "Component", "Value")
+    for i in range(1, factors.shape[1] + 1):
+        grid.map(plt.axvline, x=i, ls=":", c=".7")
+    for i in np.arange(-.8, 1, .2):
+        grid.map(plt.axhline, y=i, ls=":", c=".7")
+    grid.map(plt.axhline, y=0, ls="-", c=".5")
+    grid.set(xticks=np.arange(1, factors.shape[1] + 1))
+    grid.set(yticks=np.arange(-.8, 1, .2))
+    for i in range(factors.shape[0]):
+        grid.axes[i].set_xlabel('Components')
+    grid.fig.tight_layout(w_pad=1)
