@@ -22,7 +22,7 @@ def makeFigure():
         for j in range(i + 1, 8):
             proteinScatterPlot(ax[counter], comps[2], i+1, j+1)
             counter += 1
-    
+
     # Add subplot labels
     #subplotLabel(ax)
 
