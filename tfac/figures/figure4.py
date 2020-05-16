@@ -3,6 +3,12 @@ This creates Figure 4.
 """
 from .figureCommon import subplotLabel, getSetup
 from .figure1 import proteinScatterPlot
+from ..Data_Mod import form_tensor, z_score_tensor_bymeasure, z_score_tensor_byprotein
+
+tensor, treatments, times = form_tensor()
+tensor_z = z_score_tensor_byprotein(tensor)
+results = cp_decomp(tensor_z, 8)
+comps = reorient_factors(results[1])
 
 
 def makeFigure():
