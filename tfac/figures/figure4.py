@@ -4,6 +4,7 @@ This creates Figure 4.
 from .figureCommon import subplotLabel, getSetup
 from .figure1 import proteinScatterPlot
 from ..Data_Mod import form_tensor, z_score_tensor_bymeasure, z_score_tensor_byprotein
+from ..tensor import cp_decomp, reorient_factors
 
 tensor, treatments, times = form_tensor()
 tensor_z = z_score_tensor_byprotein(tensor)
