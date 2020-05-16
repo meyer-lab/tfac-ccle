@@ -72,6 +72,18 @@ def tucker_decomp(tensor, rank_list, nneg=False):
     return output
 
 
+def partial_tucker_decomp(tensor, mode_list, rank):
+    """Perform Partial Tucker decomposition.
+    -----------------------------------------------
+    Input:
+        tensor: 3D data tensor
+        mode_list: which mode(s) to apply tucker decomposition to
+        rank: rank of decomposition
+    Returns
+        output[0]: core tensor
+        output[1]: list of factor matrices
+    """
+
 #### For R2X Plots ###########################################################################
 
 
