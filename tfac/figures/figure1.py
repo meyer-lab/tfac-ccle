@@ -4,6 +4,7 @@ This creates Figure 1 - CP Decomposition Plots
 import numpy as np
 import seaborn as sns
 import pandas as pd
+import matplotlib.pyplot as plt
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import cp_decomp, find_R2X_parafac, reorient_factors
 from ..Data_Mod import form_tensor, z_score_tensor_bymeasure, z_score_tensor_byprotein
@@ -54,7 +55,7 @@ def treatmentPlot(ax, factors, senthue):
     sns.scatterplot(data=df, ax=ax, markers=markers, palette='bright', s=100)
     ax.set_xlabel('Component')
     ax.set_ylabel('Component Value')
-    ax.set_title('Treatment Factors')  
+    ax.set_title('Treatment Factors')
 
 
 def timePlot(ax, factors, senthue):
@@ -76,7 +77,7 @@ def proteinBoxPlot(ax, factors):
     df = pd.DataFrame(factors)
     complist = range(1, (factors.shape[1] + 1))
     df.columns = complist
-    sns.boxplot(data = df, ax = ax)
+    sns.boxplot(data=df, ax=ax)
     ax.set_xlabel("Component")
     ax.set_ylabel('Component Value')
     ax.set_title('Protein Factors')
