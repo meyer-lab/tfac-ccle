@@ -79,6 +79,18 @@ def find_R2X_parafac(cp_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(tl.kruskal_to_tensor(cp_output), orig)
 
+def tucker_decomp(tensor, rank_list):
+    """Perform Tucker decomposition.
+    -----------------------------------------------
+    Input:
+        tensor: 3D data tensor
+        r: rank of decomposition (list of ranks)
+    Returns
+        output[0]: reconstruction variance explained
+        output[1]: list of factor matrices
+    """
+    tucked = tucker(tensor, rank_list, tol=1.0e-15)
+    recon2X = R2X(tl.tucker_to_tensor(tucked), tensor)
 
 def find_R2X_tucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""

@@ -14,7 +14,6 @@ tensor_z = z_score_tensor_byprotein(tensor)
 results = cp_decomp(tensor_z, 8)
 comps = reorient_factors(results[1])
 
-
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
