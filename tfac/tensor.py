@@ -3,8 +3,9 @@ Tensor decomposition methods
 """
 import numpy as np
 import tensorly as tl
-from tensorly.decomposition import non_negative_parafac, non_negative_tucker, parafac, tucker
+from tensorly.decomposition import non_negative_parafac, non_negative_tucker, parafac, tucker, partial_tucker
 from tensorly.metrics.regression import variance as tl_var
+from tensorly.tenalg import mode_dot
 
 tl.set_backend("numpy")  # Set the backend
 
@@ -83,7 +84,7 @@ def partial_tucker_decomp(tensor, mode_list, rank):
         output[0]: core tensor
         output[1]: list of factor matrices
     """
-
+    return partial_tucker(tensor, mode_list, rank, tol=1.0e-10, n_iter_max=2000, random_state=1)
 #### For R2X Plots ###########################################################################
 
 
@@ -95,3 +96,7 @@ def find_R2X_parafac(cp_output, orig):
 def find_R2X_tucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(tl.tucker_to_tensor(tucker_output), orig)
+
+def find_R2X_partialtucker(tucker_output, orig):
+    """Compute R2X for the tucker decomposition."""
+    return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
