@@ -1,6 +1,7 @@
 """
 This creates Figure 2 - Partial Tucker Decomposition Treatment and Time Plots.
 """
+import numpy as np
 import seaborn as sns
 import pandas as pd
 from .figureCommon import subplotLabel, getSetup
@@ -10,8 +11,6 @@ from ..Data_Mod import form_tensor
 components = 7
 tensor, treatments, times = form_tensor()
 results = partial_tucker_decomp(tensor, [2], components)
-
-
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """

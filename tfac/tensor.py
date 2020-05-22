@@ -72,7 +72,6 @@ def tucker_decomp(tensor, rank_list, nneg=False):
         output = tucker(tensor, rank_list, tol=1.0e-10, n_iter_max=2000, random_state=1)
     return output
 
-
 def partial_tucker_decomp(tensor, mode_list, rank):
     """Perform Partial Tucker decomposition.
     -----------------------------------------------
@@ -85,13 +84,12 @@ def partial_tucker_decomp(tensor, mode_list, rank):
         output[1]: list of factor matrices
     """
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-10, n_iter_max=2000, random_state=1)
-#### For R2X Plots ###########################################################################
 
+#### For R2X Plots ###########################################################################
 
 def find_R2X_parafac(cp_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(tl.kruskal_to_tensor(cp_output), orig)
-
 
 def find_R2X_tucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
