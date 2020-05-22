@@ -1,13 +1,13 @@
 """Functions for importing and manipulating data from the Cancer Cell Line Encyclopedia"""
 import os
-from os.path import join, dirname
+from os.path import join
 from functools import reduce
 import numpy as np
 import pandas as pd
 from synapseclient import Synapse
 from sklearn.preprocessing import scale
 
-path = os.path.dirname(os.path.abspath(__file__))
+path_here = os.path.dirname(os.path.abspath(__file__))
 
 ################################ Summary Function for All Preprocessing #################################################
 
