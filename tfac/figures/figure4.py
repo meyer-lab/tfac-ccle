@@ -8,6 +8,11 @@ from .figureCommon import subplotLabel, getSetup
 from .figure1 import proteinScatterPlot
 from ..dataHelpers import importLINCSprotein
 
+components = 7
+tensor, treatments, times = form_tensor()
+results = partial_tucker_decomp(tensor, [2], components)
+
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
