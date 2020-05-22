@@ -5,8 +5,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from .figure1 import proteinScatterPlot
 from ..dataHelpers import importLINCSprotein
+from ..tensor import partial_tucker_decomp
+from ..Data_Mod import form_tensor
 
 components = 7
 tensor, treatments, times = form_tensor()
