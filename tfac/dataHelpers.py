@@ -3,6 +3,7 @@ from os.path import join, dirname
 import numpy as np
 import pandas as pd
 from synapseclient import Synapse
+from sklearn.preprocessing import scale
 
 path_here = dirname(dirname(__file__))
 
