@@ -53,6 +53,7 @@ def z_score_tensor_bymeasure(tensor):
     return tensor
 
 def z_score_tensor_byprotein(tensor):
+    '''z-scores the LINCS data across all measurements for one protein for all proteins.'''
     for prot_idx in range(tensor.shape[2]):
         prot_list = []
         for treat_idx in range(tensor.shape[0]):

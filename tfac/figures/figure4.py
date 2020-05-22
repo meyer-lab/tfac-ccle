@@ -20,7 +20,7 @@ def makeFigure():
     ax, f = getSetup((15, 8), (1, 1))
 
     proteinBoxPlot(ax[0], results, components)
-    
+
     # Add subplot labels
     subplotLabel(ax)
 
@@ -28,6 +28,7 @@ def makeFigure():
 
 
 def outliersForPlot(dframe):
+    '''Determines outliers based on IQR range by component and returns dictionary by component that allows annotation'''
     df = dframe.copy(deep=True)
     proteins = importLINCSprotein()
     columns = proteins.columns[3:298]
@@ -42,18 +43,18 @@ def outliersForPlot(dframe):
             if (col[i] < (Q1[i] - 1.7 * IQR[i])) or (col[i] > (Q3[i] + 1.7 * IQR[i])):
                 tup = [i, col[i], col['Proteins'][:-4], True, True]
                 prots[i].append(tup)
-        prots[i].sort(key = lambda x: x[1])
-        for idx, tup in enumerate(prots[i]):          
+        prots[i].sort(key=lambda x: x[1])
+        for idx, tup in enumerate(prots[i]):
             if idx < len(prots[i]) - 4:
                 if tup[1] > prots[i][idx+2][1] - .012 and tup[3] == tup[4] == True:
                     random1 = np.random.choice([0, 1, 1])
                     prots[i][idx+(random1*2)][3] = False
                     tup[4] = False
                     prots[i][idx+2][4] = False
-                elif tup[1] > prots[i][idx+2][1] - .012 and tup[3] == True:
+                elif tup[1] > prots[i][idx+2][1] - .012 and tup[3]:
                     prots[i][idx+2][3] = False
                     prots[i][idx+2][4] = False
-                if tup[1] > prots[i][idx+4][1] - .012 and tup[3] == True:
+                if tup[1] > prots[i][idx+4][1] - .012 and tup[3]:
                     random2 = np.random.randint(0, 2)
                     #print(tup[2], random1, random2)
                     prots[i][idx+random2*4][3] = False
@@ -62,11 +63,12 @@ def outliersForPlot(dframe):
 
 
 def proteinBoxPlot(ax, results, components):
+    '''Plots protein component in partial tucker factorization space with annotation of some outliers'''
     df = pd.DataFrame(results[1][0])
     prots = outliersForPlot(df)
     complist = range(1, (components + 1))
     df.columns = complist
-    sns.boxplot(data = df, ax = ax)
+    sns.boxplot(data=df, ax=ax)
     ax.set_xlabel("Component")
     ax.set_ylabel('Component Value')
     ax.set_title('Protein Factors')
@@ -78,7 +80,7 @@ def proteinBoxPlot(ax, results, components):
                     ax.text(outlier[0] + .05, outlier[1] - .005, outlier[2], horizontalalignment='left', size='large', color='black', weight=100)
                     offset_side = 1
                 elif offset_side == 1:
-                    ax.text( outlier[0] - .05, outlier[1] - .005, outlier[2], horizontalalignment='right', size='large', color='black', weight=100)
+                    ax.text(outlier[0] - .05, outlier[1] - .005, outlier[2], horizontalalignment='right', size='large', color='black', weight=100)
                     offset_side = 0
             else:
                 offset_side = 1 - offset_side

@@ -3,7 +3,6 @@ This creates Figure 1 - Partial Tucker Decomposition Protein Plots
 """
 import numpy as np
 import seaborn as sns
-import pandas as pd
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import partial_tucker_decomp
 from ..Data_Mod import form_tensor
@@ -21,7 +20,7 @@ def makeFigure():
     ax, f = getSetup((21, 7), (row, col))
 
     proteinScatterPlot(ax, results, components)
-    
+
     # Add subplot labels
     subplotLabel(ax)
 
@@ -41,7 +40,7 @@ def proteinScatterPlot(ax, results, components):
     for _ in range(counter, len(ax)):
         ax[counter].axis('off')
         counter += 1
-    
+
 
 def setPlotLimits(axis, factors, r1, r2):
     '''Set appropriate limits for the borders of each component plot'''

@@ -18,8 +18,8 @@ def makeFigure():
     # Get list of axis objects
     row = 2
     col = 4
-    ax, f = getSetup((7, 6), (row, col))
-    
+    ax, f = getSetup((15, 8), (row, col))
+
     treatmentvsTimePlot(results, components, ax)
 
     # Add subplot labels
@@ -28,14 +28,15 @@ def makeFigure():
 
 
 def treatmentvsTimePlot(results, components, ax):
+    '''Plots the treatments over time by component for partial tucker decomposition of OHSU data'''
     frame_list = []
-    for i in range(7):
+    for i in range(components):
         df = pd.DataFrame(results[0][i])
         frame_list.append(df)
 
-    for component in range(7):
+    for component in range(components):
         column_list = []
-        for i in range(7):
+        for i in range(components):
             column_list.append(pd.DataFrame(frame_list[i].iloc[:, component]))
         df = pd.concat(column_list, axis=1)
         df.columns = treatments
