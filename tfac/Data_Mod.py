@@ -64,5 +64,3 @@ def z_score_tensor_byprotein(tensor):
             for time_idx in range(tensor.shape[1]):
                 tensor[treat_idx][time_idx][prot_idx] = (tensor[treat_idx][time_idx][prot_idx] - mean_val) / std_val
     return tensor
-
-  
