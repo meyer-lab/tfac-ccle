@@ -1,6 +1,8 @@
 '''Contains function for importing data from and sending data to synapse'''
 from os.path import join, dirname
+import numpy as np
 import pandas as pd
+from synapseclient import Synapse
 
 path_here = dirname(dirname(__file__))
 
@@ -41,6 +43,7 @@ def compProteins(comps):
 
 
 def proteinNames():
+    '''Returns a list of all proteins in the OHSU/LINCS data'''
     data = importLINCSprotein()
     data = data.drop(columns=['Treatment', 'Sample description', 'File', 'Time'], axis=1)
     proteinN = data.columns.values.tolist()
@@ -128,3 +131,10 @@ def geneNames():
     '''Get a full list of the ordered gene names in the tensor (names are EGID's)'''
     genes = importData("robertt", "LukeKuechly59!", "Gene Expression")
     return np.array(genes.index)
+
+def normalize(data):
+    """Scale the data along cell lines"""
+    data_1 = scale(data[0, :, :])
+    data_2 = scale(data[1, :, :])
+    data_3 = scale(data[2, :, :])
+    return np.array((data_1, data_2, data_3))
