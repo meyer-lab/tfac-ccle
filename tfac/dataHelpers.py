@@ -51,6 +51,7 @@ def proteinNames():
     return proteinN
 
 def printOutliers(results):
+    '''Prints most extremem protein outliers of partial tucker decomposition of OHSU data based on IQR'''
     df = pd.DataFrame(results[1][0])
     proteins = importLINCSprotein()
     columns = proteins.columns[3:298]
@@ -64,13 +65,13 @@ def printOutliers(results):
         positives = []
         negatives = []
         for row, col in df.iterrows():
-            if (col[i] < (Q1[i] - 1.5 * IQR[i])):
+            if col[i] < (Q1[i] - 1.5 * IQR[i]):
                 negatives.append((col[i], col["Proteins"]))
                 if col['Proteins'] not in prots:
                     prots[col['Proteins']] = 1
                 else:
                     prots[col['Proteins']] += 1
-            elif (col[i] > (Q3[i] + 1.5 * IQR[i])):
+            elif col[i] > (Q3[i] + 1.5 * IQR[i]):
                 positives.append((col[i], col['Proteins']))
                 if col['Proteins'] not in prots:
                     prots[col['Proteins']] = 1
@@ -89,7 +90,7 @@ def printOutliers(results):
         for tup in negatives:
             print(np.round(tup[0], 2))
         print()
-    display(prots)
+    print(prots)
 
 
 ###################################################### CCLE DATA FUNCTIONS ##########################################################
