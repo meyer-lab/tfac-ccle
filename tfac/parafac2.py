@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 
+tensor, cytokines, GeneIDs = form_MRSA_tensor()
+print(tensor)
+
 def form_MRSA_tensor():
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
