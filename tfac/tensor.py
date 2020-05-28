@@ -51,7 +51,7 @@ def partial_tucker_decomp(tensor, mode_list, rank):
         output[0]: core tensor
         output[1]: list of factor matrices
     """
-    return partial_tucker(tensor, mode_list, rank, tol=1.0e-10, n_iter_max=2000, random_state=1)
+    return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
 #### For R2X Plots ###########################################################################
 
