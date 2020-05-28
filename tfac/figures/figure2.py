@@ -8,7 +8,7 @@ from .figureCommon import subplotLabel, getSetup
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
 from ..Data_Mod import form_tensor
 
-components = 7
+components = 5
 tensor, treatments, times = form_tensor()
 results = partial_tucker_decomp(tensor, [2], components)
 
@@ -16,8 +16,8 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     row = 2
-    col = 4
-    ax, f = getSetup((15, 8), (row, col))
+    col = 3
+    ax, f = getSetup((12, 8), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
     treatmentvsTimePlot(results, components, ax[1::])

@@ -9,7 +9,7 @@ from ..dataHelpers import importLINCSprotein
 from ..tensor import partial_tucker_decomp
 from ..Data_Mod import form_tensor
 
-components = 7
+components = 5
 tensor, treatments, times = form_tensor()
 results = partial_tucker_decomp(tensor, [2], components)
 
