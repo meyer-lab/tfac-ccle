@@ -1,7 +1,6 @@
 """
 This creates Figure 2 - Partial Tucker Decomposition Treatment and Time Plots.
 """
-import numpy as np
 import seaborn as sns
 import pandas as pd
 from .figureCommon import subplotLabel, getSetup
