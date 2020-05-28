@@ -22,7 +22,7 @@ def makeFigure():
     print(tl_var(tensor_slices[1])/tl_var(tensor_slices[0]))
     
     AllR2X = []
-    for i in range(1, 11):
+    for i in range(1, 6):
         parafac2tensor = parafac2(tensor_slices, i, random_state=1)
         AllR2X.append(R2Xparafac2(tensor_slices, parafac2tensor))
     

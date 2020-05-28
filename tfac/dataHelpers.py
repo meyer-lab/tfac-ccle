@@ -65,7 +65,7 @@ def form_MRSA_tensor():
     
     expNumpy = expNumpy.astype(float)
     var = (tl_var(expNumpy)/tl_var(cytoNumpy))
-    cytoNumpy = cytoNumpy * var ** .5
+    cytoNumpy = cytoNumpy * 29
     
     tensor_slices = [cytoNumpy, expNumpy]
 
