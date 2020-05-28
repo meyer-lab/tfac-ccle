@@ -40,6 +40,7 @@ def reorient_factors(factors):
 
 #### Decomposition Methods ###################################################################
 
+
 def partial_tucker_decomp(tensor, mode_list, rank):
     """Perform Partial Tucker decomposition.
     -----------------------------------------------
@@ -54,6 +55,7 @@ def partial_tucker_decomp(tensor, mode_list, rank):
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
 #### For R2X Plots ###########################################################################
+
 
 def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
