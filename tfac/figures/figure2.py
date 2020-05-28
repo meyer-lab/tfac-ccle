@@ -1,10 +1,11 @@
 """
 This creates Figure 2 - Partial Tucker Decomposition Treatment and Time Plots.
 """
+import numpy as np
 import seaborn as sns
 import pandas as pd
 from .figureCommon import subplotLabel, getSetup
-from ..tensor import partial_tucker_decomp
+from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
 from ..Data_Mod import form_tensor
 
 components = 7
@@ -18,7 +19,8 @@ def makeFigure():
     col = 4
     ax, f = getSetup((15, 8), (row, col))
 
-    treatmentvsTimePlot(results, components, ax)
+    R2X_Figure_PartialTucker(ax[0], tensor)
+    treatmentvsTimePlot(results, components, ax[1::])
 
     # Add subplot labels
     subplotLabel(ax)
@@ -44,3 +46,16 @@ def treatmentvsTimePlot(results, components, ax):
         b.set_title('Component ' + str(component+1))
     for i in range(component + 1, len(ax)):
         ax[i].axis('off')
+
+
+def R2X_Figure_PartialTucker(ax, input_tensor):
+    '''Create Partial Tucker R2X Figure'''
+    R2X = np.zeros(13)
+    for i in range(1, 13):
+        output = partial_tucker_decomp(input_tensor, [2], i)
+        R2X[i] = find_R2X_partialtucker(output, input_tensor)
+    sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)
+    ax.set_xlabel("Rank Decomposition")
+    ax.set_ylabel("R2X")
+    ax.set_title("Partial Tucker Decomposition")
+    ax.set_yticks([0, .2, .4, .6, .8, 1])
