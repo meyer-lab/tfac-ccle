@@ -20,23 +20,23 @@ def makeFigure():
     ax, f = getSetup((12, 8), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
-    treatmentvsTimePlot(results, components, ax[1::])
+    treatmentvsTimePlot(results, components, treatments, ax[1::])
 
     # Add subplot labels
     subplotLabel(ax)
     return f
 
 
-def treatmentvsTimePlot(results, components, ax):
+def treatmentvsTimePlot(results, components, treatments, ax):
     '''Plots the treatments over time by component for partial tucker decomposition of OHSU data'''
     frame_list = []
-    for i in range(components):
+    for i in range(len(treatments)):
         df = pd.DataFrame(results[0][i])
         frame_list.append(df)
 
     for component in range(components):
         column_list = []
-        for i in range(components):
+        for i in range(len(treatments)):
             column_list.append(pd.DataFrame(frame_list[i].iloc[:, component]))
         df = pd.concat(column_list, axis=1)
         df.columns = treatments
