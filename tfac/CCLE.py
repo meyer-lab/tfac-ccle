@@ -7,7 +7,7 @@ import pandas as pd
 from synapseclient import Synapse
 from sklearn.preprocessing import scale
 
-path = os.path.dirname(os.path.abspath(__file__))
+path_here = dirname(dirname(__file__))
 
 ################################ Summary Function for All Preprocessing #################################################
 

@@ -43,12 +43,14 @@ def compProteins(comps):
 
 
 def proteinNames():
+    """Return protein names (data columns)"""
     data = importLINCSprotein()
     data = data.drop(columns=['Treatment', 'Sample description', 'File', 'Time'], axis=1)
     proteinN = data.columns.values.tolist()
     return proteinN
 
 def get_patient_info():
+    """Return specific patiend ID information"""
     dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter='\t')
     cohortID = list(dataCohort["sample"])
     statusID = list(dataCohort["outcome_txt"])
@@ -56,6 +58,7 @@ def get_patient_info():
     return cohortID, statusID
 
 def form_MRSA_tensor():
+    """Create list of data matrices for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
     dfCyto = dfCyto.sort_values(by='sid')
