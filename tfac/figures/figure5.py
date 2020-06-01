@@ -4,14 +4,14 @@ This creates Figure 5.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import form_MRSA_tensor, get_patient_info
 from tensorly.decomposition import parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice
 from tensorly.metrics.regression import variance as tl_var
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
+from .figureCommon import subplotLabel, getSetup
+from ..dataHelpers import form_MRSA_tensor, get_patient_info
 
 
 tl.set_backend("numpy")
@@ -39,7 +39,7 @@ def makeFigure():
 
     outcomes = np.asarray(outcome_bools)
 
-    
+
     #clf = LogisticRegression(random_state=1).fit(patient_matrix, outcomes)
     #c = clf.score(patient_matrix, outcomes)
     kf = KFold(n_splits=61)
@@ -62,26 +62,27 @@ def makeFigure():
     patient_df.columns = columns
 
     patient_df = pd.melt(patient_df, id_vars=['Outcome'], var_name='Component')
-    
-    
-    
+
+
+
     ax, f = getSetup((8, 8), (1, 1))
     sns.stripplot(data=patient_df, x='Component', y='value', hue='Outcome')
-    
 
-    
+
+
     #print(tl_var(tensor_slices[1])/tl_var(tensor_slices[0]))
-    
+
     #AllR2X = []
     #for i in range(1, 6):
         #parafac2tensor = parafac2(tensor_slices, i, random_state=1)
         #AllR2X.append(R2Xparafac2(tensor_slices, parafac2tensor))
-    
+
     #print(AllR2X)
     #ax, f = getSetup((8, 8), (1, 1))
     return f
 
 def R2Xparafac2(tensor_slices, decomposition):
+    """Calculate the R2X of parafac2 decomposition"""
     R2X = [0, 0]
     for idx, tensor_slice in enumerate(tensor_slices):
         reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
