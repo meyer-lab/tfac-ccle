@@ -47,26 +47,33 @@ def proteinNames():
     proteinN = data.columns.values.tolist()
     return proteinN
 
+def get_patient_info():
+    dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter='\t')
+    cohortID = list(dataCohort["sample"])
+    statusID = list(dataCohort["outcome_txt"])
+
+    return cohortID, statusID
+
 def form_MRSA_tensor():
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
     dfCyto = dfCyto.sort_values(by='sid')
     dfCyto = dfCyto.set_index('sid')
     cytokines = dfCyto.columns
-    
+
     dfExp = importExpressionData()
     dfExp = dfExp.T
     geneIDs = dfExp.iloc[0, 0:].to_list()
     dfExp.columns = geneIDs
     dfExp = dfExp.drop('Geneid')
-    
+
     cytoNumpy = dfCyto.to_numpy().T
     expNumpy = dfExp.to_numpy().T
-    
+
     expNumpy = expNumpy.astype(float)
     var = (tl_var(expNumpy)/tl_var(cytoNumpy))
     cytoNumpy = cytoNumpy * 29
-    
+
     tensor_slices = [cytoNumpy, expNumpy]
 
     return tensor_slices, cytokines, geneIDs
@@ -81,17 +88,17 @@ def clinicalCyto(dataClinical, dataCohort):
     """isolate cytokine data from clinical"""
     rowSize, colSize = dataClinical.shape
     patientID = list(dataClinical["sid"])
-    
+
     dataClinical = dataClinical.drop(dataClinical.iloc[:, 0:3], axis=1)
     dataClinical = dataClinical.drop(dataClinical.iloc[:, 1:207], axis=1)
-    
+
     """isolate patient IDs from cohort 1"""
     dataCohort = dataCohort.drop(columns=['age','gender','race','sampletype','pair','outcome_txt'], axis=1)
     cohortID = list(dataCohort["sample"])
     IDSize, column = dataCohort.shape
-   
+
     cytokineData = pd.DataFrame()
-    
+
     for y in range(0, rowSize):
         for z in range(0, IDSize):
             if (cohortID[z]).find(str(patientID[y])) != -1:
