@@ -11,7 +11,7 @@ synapseclient
 matplotlib==3.2.1
 seaborn==0.10.1
 svgutils==0.3.1
-git+git://github.com/MarieRoald/tensorly.git@e4f812793a75d270376d4e13f1e575c7eaf7a435
+git+git://github.com/tensorly/tensorly.git@b479f18d9b1658f9e849538dce1fd87931d2017a
 tqdm
 scikit-learn==0.23.1
 pybiomart
