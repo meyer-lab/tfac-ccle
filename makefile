@@ -10,7 +10,7 @@ all: pylint.log $(flistFull) output/manuscript.md
 venv/bin/activate:
 	test -d venv || virtualenv venv
 	pip install --user poetry
-	poetry export -f requirements.txt > requirements.txt
+	source ~/.poetry/env && poetry export -f requirements.txt > requirements.txt
 	. venv/bin/activate && pip install -Uqr requirements.txt
 	touch venv/bin/activate
 
