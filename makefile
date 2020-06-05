@@ -9,7 +9,10 @@ all: pylint.log $(flistFull) output/manuscript.md
 
 venv/bin/activate:
 	test -d venv || virtualenv venv
-	. venv/bin/activate && poetry install --no-root
+	pip install --user poetry
+	poetry export -f requirements.txt > requirements.txt
+	. venv/bin/activate && pip install -Uqr requirements.txt
+	touch venv/bin/activate
 
 output/figure%.svg: genFigures.py tfac/figures/figure%.py venv/bin/activate
 	@ mkdir -p ./output
@@ -42,4 +45,4 @@ pylint.log: venv/bin/activate
 	. venv/bin/activate && (pylint --rcfile=./common/pylintrc tfac > pylint.log || echo "pylint exited with $?")
 
 clean:
-	rm -rf coverage.xml junit.xml output venv style.csl
+	rm -rf coverage.xml junit.xml output venv requirements.txt
