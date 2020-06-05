@@ -6,6 +6,7 @@ pipeline {
   stages {
     stage('Clean/Setup') {
       steps {
+        sh 'curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python'
         sh 'git submodule update --init --recursive && make clean'
         sh 'make venv/bin/activate'
       }

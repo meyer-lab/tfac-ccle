@@ -7,10 +7,6 @@ flistFull = $(patsubst %, output/figure%.svg, $(flist))
 
 all: pylint.log $(flistFull) output/manuscript.md
 
-ifeq (, $(shell which poetry))
-	curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-endif
-
 venv/bin/activate:
 	test -d venv || virtualenv venv
 	. venv/bin/activate && poetry install --no-root
