@@ -11,7 +11,7 @@ from tensorly.metrics.regression import variance as tl_var
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import form_MRSA_tensor, get_patient_info
+from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
 
 
 tl.set_backend("numpy")
