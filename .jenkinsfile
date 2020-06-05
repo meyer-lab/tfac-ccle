@@ -7,7 +7,7 @@ pipeline {
     stage('Clean/Setup') {
       steps {
         sh 'git submodule update --init --recursive && make clean'
-        sh 'make venv/bin/activate'
+        sh 'make venv'
       }
     }
     stage('Test/Build/Lint') {
