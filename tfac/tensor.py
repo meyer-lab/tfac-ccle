@@ -5,6 +5,8 @@ import numpy as np
 import tensorly as tl
 from tensorly.decomposition import parafac, tucker
 from tensorly.metrics.regression import variance as tl_var
+from tensorly.decomposition import parafac2
+from tensorly.parafac2_tensor import parafac2_to_slice
 
 tl.set_backend("numpy")  # Set the backend
 
@@ -23,6 +25,15 @@ def z_score_values(A, cell_dim):
 def R2X(reconstructed, original):
     """ Calculates R2X of two tensors. """
     return 1.0 - tl_var(reconstructed - original) / tl_var(original)
+
+
+def R2Xparafac2(tensor_slices, decomposition):
+    """Calculate the R2X of parafac2 decomposition"""
+    R2X = [0, 0]
+    for idx, tensor_slice in enumerate(tensor_slices):
+        reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
+        R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
+    return R2X
 
 
 def reorient_factors(factors):
