@@ -31,7 +31,7 @@ for variance in variance_list:
     tensor_slices, cytokines, geneIDs = form_MRSA_tensor(variance)
     parafac2tensor = None
     best_error = np.inf
-    for run in range(2):
+    for run in range(1):
         decomposition, errors = parafac2(tensor_slices, components, return_errors=True)
         if best_error > errors[-1]:
             best_error = errors[-1]

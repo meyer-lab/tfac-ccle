@@ -23,7 +23,7 @@ AllR2X = []
 for i in range(1, components + 1):
     parafac2tensor = None
     best_error = np.inf
-    for run in range(2):
+    for run in range(1):
         decomposition, errors = parafac2(tensor_slices, i, return_errors=True)
         if best_error > errors[-1]:
             best_error = errors[-1]
