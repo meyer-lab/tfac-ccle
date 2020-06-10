@@ -24,7 +24,7 @@ for i in range(1, components + 1):
     parafac2tensor = None
     best_error = np.inf
     for run in range(2):
-        decomposition, errors = parafac2(tensor_slices, components, return_errors=True)
+        decomposition, errors = parafac2(tensor_slices, i, return_errors=True)
         if best_error > errors[-1]:
             best_error = errors[-1]
             parafac2tensor = decomposition
