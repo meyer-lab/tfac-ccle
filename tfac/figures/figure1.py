@@ -22,6 +22,7 @@ for outcome in outcomeID:
         outcome_bools.append(1)
 
 outcomes = np.asarray(outcome_bools)
+true_y = outcomes
 
 values_vars = []
 variance_list = [.001, .1, 1, 2.25, 5, 29, 100, 1000, 100000]

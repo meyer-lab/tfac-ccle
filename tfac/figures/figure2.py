@@ -24,6 +24,7 @@ for outcome in outcomeID:
         outcome_bools.append(1)
 
 outcomes = np.asarray(outcome_bools)
+true_y = outcomes
 
 values_comps = []
 for components in range(1, 39):
