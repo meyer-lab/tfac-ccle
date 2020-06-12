@@ -16,7 +16,7 @@ def get_patient_info():
     return cohortID, statusID
 
 
-def form_MRSA_tensor():
+def form_MRSA_tensor(variance):
     """Create list of data matrices for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
@@ -34,8 +34,7 @@ def form_MRSA_tensor():
     expNumpy = dfExp.to_numpy().T
 
     expNumpy = expNumpy.astype(float)
-    var = tl_var(expNumpy) / tl_var(cytoNumpy)
-    cytoNumpy = cytoNumpy * 29
+    cytoNumpy = cytoNumpy * variance
 
     tensor_slices = [cytoNumpy, expNumpy]
 
