@@ -9,7 +9,7 @@ from tensorly.decomposition import parafac2
 import tensorly as tl
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import form_MRSA_tensor
+from ..dataHelpersMRSA_ import form_MRSA_tensor
 from ..tensor import R2Xparafac2
 
 
@@ -40,6 +40,7 @@ df.columns = ['Cytokines', 'GeneIDs', 'Component']
 test = pd.melt(df, id_vars=['Component'])
 
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -53,3 +54,12 @@ def makeFigure():
     ax[0].set_ylim(0, 1)
 
     return f
+
+
+def R2Xparafac2(tensor_slices, decomposition):
+    """Calculate the R2X of parafac2 decomposition"""
+    R2X = [0, 0]
+    for idx, tensor_slice in enumerate(tensor_slices):
+        reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
+        R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
+    return R2X

@@ -1,67 +1,63 @@
 """
-This creates Figure 2
+This creates Figure 2 - Partial Tucker Decomposition Treatment and Time Plots.
 """
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from tensorly.decomposition import parafac2
-import tensorly as tl
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import KFold
 from .figureCommon import subplotLabel, getSetup
-from sklearn.metrics import roc_curve, roc_auc_score
-from ..dataHelpers import form_MRSA_tensor, get_patient_info
+from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
+from ..Data_Mod import form_tensor
 
-cohortID, outcomeID = get_patient_info()
+components = 5
+tensor, treatments, times = form_tensor()
+results = partial_tucker_decomp(tensor, [2], components)
 
-
-outcome_bools = []
-
-for outcome in outcomeID:
-    if outcome == 'APMB':
-        outcome_bools.append(0)
-    else:
-        outcome_bools.append(1)
-
-outcomes = np.asarray(outcome_bools)
-true_y = outcomes
-
-values_comps = []
-for components in range(1, 39):
-    tensor_slices, cytokines, geneIDs = form_MRSA_tensor(1)
-    parafac2tensor = None
-    best_error = np.inf
-    for run in range(4):
-        decomposition, errors = parafac2(tensor_slices, components, return_errors=True)
-        if best_error > errors[-1]:
-            best_error = errors[-1]
-            parafac2tensor = decomposition
-
-    patient_matrix = parafac2tensor[1][2]
-
-
-    kf = KFold(n_splits=61)
-    decisions = []
-    for train, test in kf.split(patient_matrix):
-        clf = LogisticRegression(random_state=1, max_iter=10000).fit(patient_matrix[train], outcomes[train])
-        decisions.append(clf.decision_function(patient_matrix[test]))
-    score_y = decisions
-    auc = roc_auc_score(true_y, score_y)
-    values_comps.append([components, auc])
-df_comp = pd.DataFrame(values_comps)
-df_comp.columns = ['Components', 'AUC']
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((10, 5), (1, 1))
-    b = sns.scatterplot(data=df_comp, x='Components', y='AUC', ax=ax[0])
-    b.set_xlabel("Components",fontsize=20)
-    b.set_ylabel("AUC",fontsize=20)
-    b.tick_params(labelsize=14)
-    ax[0].set_ylim(0, 1)
-    
+    row = 2
+    col = 3
+    ax, f = getSetup((12, 8), (row, col))
+
+    R2X_Figure_PartialTucker(ax[0], tensor)
+    treatmentvsTimePlot(results, components, treatments, ax[1::])
+
     # Add subplot labels
     subplotLabel(ax)
 
     return f
+
+
+def treatmentvsTimePlot(results, components, treatments, ax):
+    '''Plots the treatments over time by component for partial tucker decomposition of OHSU data'''
+    frame_list = []
+    for i in range(len(treatments)):
+        df = pd.DataFrame(results[0][i])
+        frame_list.append(df)
+
+    for component in range(components):
+        column_list = []
+        for i in range(len(treatments)):
+            column_list.append(pd.DataFrame(frame_list[i].iloc[:, component]))
+        df = pd.concat(column_list, axis=1)
+        df.columns = treatments
+        df['Times'] = [0, 2, 4, 8, 24, 48]
+        df = df.set_index('Times')
+        b = sns.lineplot(data=df, ax=ax[component], dashes=None)
+        b.set_title('Component ' + str(component + 1))
+    for i in range(component + 1, len(ax)):
+        ax[i].axis('off')
+
+
+def R2X_Figure_PartialTucker(ax, input_tensor):
+    '''Create Partial Tucker R2X Figure'''
+    R2X = np.zeros(13)
+    for i in range(1, 13):
+        output = partial_tucker_decomp(input_tensor, [2], i)
+        R2X[i] = find_R2X_partialtucker(output, input_tensor)
+    sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)
+    ax.set_xlabel("Rank Decomposition")
+    ax.set_ylabel("R2X")
+    ax.set_title("Partial Tucker Decomposition")
+    ax.set_yticks([0, .2, .4, .6, .8, 1])

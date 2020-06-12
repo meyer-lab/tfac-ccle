@@ -10,7 +10,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
 from .figureCommon import subplotLabel, getSetup
 from sklearn.metrics import roc_curve, roc_auc_score
-from ..dataHelpers import form_MRSA_tensor, get_patient_info
+from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
 
 cohortID, outcomeID = get_patient_info()
 outcome_bools = []
