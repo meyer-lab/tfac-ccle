@@ -9,7 +9,7 @@ from tensorly.decomposition import parafac2
 import tensorly as tl
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpersMRSA_ import form_MRSA_tensor
+from ..MRSA_dataHelpers import form_MRSA_tensor
 from ..tensor import R2Xparafac2
 
 
