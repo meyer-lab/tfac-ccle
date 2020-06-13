@@ -5,11 +5,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
-import tensorly as tl
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
+from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from sklearn.metrics import roc_curve, roc_auc_score
 from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
 
 cohortID, outcomeID = get_patient_info()
@@ -57,13 +56,12 @@ def makeFigure():
     ax, f = getSetup((10, 6), (1, 1))
 
     b = sns.pointplot(data=df_var, x='Variance', y='AUC', join=False, ax=ax[0])
-    b.set_xlabel("Variance",fontsize=20)
-    b.set_ylabel("AUC",fontsize=20)
+    b.set_xlabel("Variance", fontsize=20)
+    b.set_ylabel("AUC", fontsize=20)
     b.tick_params(labelsize=15)
     b.set_xticklabels(variance_list)
     ax[0].set_ylim(0, 1)
 
-    
     # Add subplot labels
     subplotLabel(ax)
 
