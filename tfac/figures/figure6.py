@@ -5,11 +5,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
-import tensorly as tl
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
-from .figureCommon import subplotLabel, getSetup
 from sklearn.metrics import roc_curve, roc_auc_score
+from .figureCommon import subplotLabel, getSetup
 from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
 
 cohortID, outcomeID = get_patient_info()
@@ -50,7 +49,7 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((8, 8), (1, 1))
-    
+
     df = pd.DataFrame()
     df['FPR'] = fpr
     df['TPR'] = tpr
@@ -59,7 +58,7 @@ def makeFigure():
     df['FPR'] = [0, 1]
     df['TPR'] = [0, 1]
     sns.lineplot(data=df, x='FPR', y='TPR', estimator=None, ax=ax[0])
-    
+
     # Add subplot labels
     subplotLabel(ax)
 
