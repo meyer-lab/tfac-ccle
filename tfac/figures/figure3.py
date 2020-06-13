@@ -5,11 +5,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
-import tensorly as tl
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
+from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from sklearn.metrics import roc_curve, roc_auc_score
 from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
 
 cohortID, outcomeID = get_patient_info()
@@ -55,11 +54,10 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((10, 5), (1, 1))
     b = sns.scatterplot(data=df_comp, x='Components', y='AUC', ax=ax[0])
-    b.set_xlabel("Components",fontsize=20)
-    b.set_ylabel("AUC",fontsize=20)
+    b.set_xlabel("Components", fontsize=20)
+    b.set_ylabel("AUC", fontsize=20)
     b.tick_params(labelsize=14)
     ax[0].set_ylim(0, 1)
-    
 
     # Add subplot labels
     subplotLabel(ax)
