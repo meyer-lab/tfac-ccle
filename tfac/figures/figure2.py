@@ -10,7 +10,7 @@ from ..Data_Mod import form_tensor
 
 component = 5
 tensor, treatment_list, times = form_tensor()
-result = partial_tucker_decomp(tensor, [2], components)
+result = partial_tucker_decomp(tensor, [2], component)
 
 
 def makeFigure():
