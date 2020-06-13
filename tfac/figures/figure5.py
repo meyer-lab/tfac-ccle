@@ -45,21 +45,12 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((7, 7), (1, 1))
-    
     b = sns.scatterplot(data=test, x='Component', y='value', hue='variable', style='variable', ax=ax[0], s=100)
-    b.set_xlabel("Component",fontsize=20)
-    b.set_ylabel("R2X",fontsize=20)
+    b.set_xlabel("Component", fontsize=20)
+    b.set_ylabel("R2X", fontsize=20)
     b.tick_params(labelsize=15)
     plt.legend(prop={'size': 15})
     ax[0].set_ylim(0, 1)
 
     return f
 
-
-def R2Xparafac2(tensor_slices, decomposition):
-    """Calculate the R2X of parafac2 decomposition"""
-    R2X = [0, 0]
-    for idx, tensor_slice in enumerate(tensor_slices):
-        reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
-        R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
-    return R2X
