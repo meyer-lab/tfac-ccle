@@ -19,7 +19,7 @@ def makeFigure():
     # Get list of axis objects
     row = 2
     col = 6
-    ax, f = getSetup((24, 8), (row, col))
+    ax, f = getSetup((24, 11), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
     treatmentvsTimePlot(results, components, treatments, ax[1:6])
