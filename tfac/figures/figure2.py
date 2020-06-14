@@ -5,6 +5,7 @@ import numpy as np
 import seaborn as sns
 import pandas as pd
 from .figureCommon import subplotLabel, getSetup
+from .figure4 import proteinBoxPlot
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
 from ..Data_Mod import form_tensor
 
@@ -17,11 +18,16 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     row = 2
-    col = 3
-    ax, f = getSetup((12, 8), (row, col))
+    col = 6
+    ax, f = getSetup((24, 8), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
-    treatmentvsTimePlot(results, components, treatments, ax[1::])
+    treatmentvsTimePlot(results, components, treatments, ax[1:6])
+    proteinBoxPlot(ax[7], results[1][0][:, 0], 1)
+    proteinBoxPlot(ax[8], results[1][0][:, 1], 2)
+    proteinBoxPlot(ax[9], results[1][0][:, 2], 3)
+    proteinBoxPlot(ax[10], results[1][0][:, 3], 4)
+    proteinBoxPlot(ax[11], results[1][0][:, 4], 5)
 
     # Add subplot labels
     subplotLabel(ax)

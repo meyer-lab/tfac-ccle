@@ -17,9 +17,13 @@ results = partial_tucker_decomp(tensor, [2], components)
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((15, 8), (1, 1))
+    ax, f = getSetup((15, 8), (3, 2))
 
-    proteinBoxPlot(ax[0], results, components)
+    proteinBoxPlot(ax[0], results[1][0][:, 0], 1)
+    proteinBoxPlot(ax[1], results[1][0][:, 1], 2)
+    proteinBoxPlot(ax[2], results[1][0][:, 2], 3)
+    proteinBoxPlot(ax[3], results[1][0][:, 3], 4)
+    proteinBoxPlot(ax[4], results[1][0][:, 4], 5)
 
     # Add subplot labels
     subplotLabel(ax)
@@ -62,14 +66,12 @@ def outliersForPlot(dframe):
     return prots
 
 
-def proteinBoxPlot(ax, resultsIn, componentsIn):
+def proteinBoxPlot(ax, resultsIn, componentIn):
     '''Plots protein component in partial tucker factorization space with annotation of some outliers'''
-    df = pd.DataFrame(resultsIn[1][0])
+    df = pd.DataFrame(resultsIn)
     prots = outliersForPlot(df)
-    complist = range(1, (componentsIn + 1))
-    df.columns = complist
     sns.boxplot(data=df, ax=ax)
-    ax.set_xlabel("Component")
+    ax.set_xlabel("Component " + str(componentIn))
     ax.set_ylabel('Component Value')
     ax.set_title('Protein Factors')
     for component in prots:
