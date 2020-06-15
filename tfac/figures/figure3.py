@@ -5,9 +5,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import KFold
-from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
 from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, find_CV_AUC, produce_outcome_bools
 
