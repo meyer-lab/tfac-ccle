@@ -9,19 +9,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
 from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
+from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, produce_outcome_bools
 
-cohortID, outcomeID = get_patient_info()
-outcome_bools = []
+_, outcomeID = get_patient_info()
 
-for outcome in outcomeID:
-    if outcome == 'APMB':
-        outcome_bools.append(0)
-    else:
-        outcome_bools.append(1)
-
-outcomes = np.asarray(outcome_bools)
-true_y = outcomes
+true_y = produce_outcome_bools(outcomeID)
 
 values_vars = []
 variance_list = [.001, .1, 1, 2.25, 5, 29, 100, 1000, 100000]
@@ -39,13 +31,7 @@ for variance in variance_list:
     patient_matrix = parafac2tensor[1][2]
 
 
-    kf = KFold(n_splits=61)
-    decisions = []
-    for train, test in kf.split(patient_matrix):
-        clf = LogisticRegression(random_state=1, max_iter=10000).fit(patient_matrix[train], outcomes[train])
-        decisions.append(clf.decision_function(patient_matrix[test]))
-    score_y = decisions
-    auc = roc_auc_score(true_y, score_y)
+    auc = find_CV_AUC(patient_matrix, true_y)
     values_vars.append([variance, auc])
 df_var = pd.DataFrame(values_vars)
 df_var.columns = ['Variance', 'AUC']
