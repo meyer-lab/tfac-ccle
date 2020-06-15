@@ -5,8 +5,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
+from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, produce_outcome_bools, find_CV_AUC
+from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, produce_outcome_bools, find_CV_decisions
 
 _, outcomeID = get_patient_info()
 
@@ -20,15 +21,15 @@ for variance in variance_list:
     parafac2tensor = None
     best_error = np.inf
     for run in range(1):
-        decomposition, errors = parafac2(tensor_slices, components, return_errors=True)
+        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, n_iter_max=1000)
         if best_error > errors[-1]:
             best_error = errors[-1]
             parafac2tensor = decomposition
 
     patient_matrix = parafac2tensor[1][2]
 
-
-    auc = find_CV_AUC(patient_matrix, true_y)
+    score_y = find_CV_decisions(patient_matrix)
+    auc = roc_auc_score(true_y, score_y)
     values_vars.append([variance, auc])
 df_var = pd.DataFrame(values_vars)
 df_var.columns = ['Variance', 'AUC']

@@ -5,41 +5,27 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import KFold
 from sklearn.metrics import roc_curve, roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info
+from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, produce_outcome_bools, find_CV_decisions
 
-cohortID, outcomeID = get_patient_info()
-outcome_bools = []
+_, outcomeID = get_patient_info()
 
-for outcome in outcomeID:
-    if outcome == 'APMB':
-        outcome_bools.append(0)
-    else:
-        outcome_bools.append(1)
-
-outcomes = np.asarray(outcome_bools)
+true_y = produce_outcome_bools(outcomeID)
 
 tensor_slices, cytokines, geneIDs = form_MRSA_tensor(1)
 components = 38
 parafac2tensor = None
 best_error = np.inf
 for run in range(1):
-    decomposition, errors = parafac2(tensor_slices, components, return_errors=True)
+    decomposition, errors = parafac2(tensor_slices, components, return_errors=True, n_iter_max=1000)
     if best_error > errors[-1]:
         best_error = errors[-1]
         parafac2tensor = decomposition
 
 patient_matrix = parafac2tensor[1][2]
-kf = KFold(n_splits=61)
-decisions = []
-for train, test in kf.split(patient_matrix):
-    clf = LogisticRegression(random_state=1, max_iter=10000).fit(patient_matrix[train], outcomes[train])
-    decisions.append(clf.decision_function(patient_matrix[test]))
-true_y = outcomes
-score_y = decisions
+
+score_y = find_CV_decisions(patient_matrix)
 
 fpr, tpr, thresholds = roc_curve(true_y, score_y)
 auc = roc_auc_score(true_y, score_y)

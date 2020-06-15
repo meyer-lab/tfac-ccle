@@ -5,8 +5,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import parafac2
+from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, find_CV_AUC, produce_outcome_bools
+from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, find_CV_decisions, produce_outcome_bools
 
 _, outcomeID = get_patient_info()
 true_y = produce_outcome_bools(outcomeID)
@@ -24,7 +25,8 @@ for components in range(1, 39):
 
     patient_matrix = parafac2tensor[1][2]
     
-    auc = find_CV_AUC(patient_matrix, true_y)
+    score_y = find_CV_decisions(patient_matrix)
+    auc = roc_auc_score(true_y, score_y)
     values_comps.append([components, auc])
 df_comp = pd.DataFrame(values_comps)
 df_comp.columns = ['Components', 'AUC']
