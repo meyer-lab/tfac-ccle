@@ -1,12 +1,36 @@
 """Data import and processing for the MRSA data"""
 from os.path import join, dirname
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import KFold
+from sklearn.metrics import roc_auc_score
 
 path_here = dirname(dirname(__file__))
 
 
+def find_CV_AUC(patient_matrix, true_y, n_splits=61, random_state=None):
+    kf = KFold(n_splits=n_splits)
+    decisions = []
+    for train, test in kf.split(patient_matrix):
+        clf = LogisticRegression(random_state=random_state, max_iter=10000).fit(patient_matrix[train], outcomes[train])
+        decisions.append(clf.decision_function(patient_matrix[test]))
+    score_y = decisions
+    auc = roc_auc_score(true_y, score_y)
+
+def produce_outcome_bools(statusID):
+    """Returns a list of booleans for progressor/resolver status ready to use for logistic regression"""
+    outcome_bools = []
+    for outcome in statusID:
+        if outcome == 'APMB':
+            outcome_bools.append(0)
+        else:
+            outcome_bools.append(1)
+
+    return np.asarray(outcome_bools)
+
+
 def get_patient_info():
-    """Return specific patiend ID information"""
+    """Return specific patient ID information"""
     dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter="\t")
     cohortID = list(dataCohort["sample"])
     statusID = list(dataCohort["outcome_txt"])
