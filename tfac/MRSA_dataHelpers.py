@@ -9,7 +9,7 @@ from sklearn.metrics import roc_auc_score
 path_here = dirname(dirname(__file__))
 
 
-def find_CV_decisions(patient_matrix, n_splits=61, random_state=None):
+def find_CV_decisions(patient_matrix, outcomes, n_splits=61, random_state=None):
     kf = KFold(n_splits=n_splits)
     decisions = []
     for train, test in kf.split(patient_matrix):
