@@ -25,7 +25,7 @@ for components in range(1, 39):
 
     patient_matrix = parafac2tensor[1][2]
     
-    score_y = find_CV_decisions(patient_matrix)
+    score_y = find_CV_decisions(patient_matrix, true_y)
     auc = roc_auc_score(true_y, score_y)
     values_comps.append([components, auc])
 df_comp = pd.DataFrame(values_comps)
