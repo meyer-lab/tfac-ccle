@@ -1,5 +1,6 @@
 """Data import and processing for the MRSA data"""
 from os.path import join, dirname
+import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
