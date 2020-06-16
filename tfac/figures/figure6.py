@@ -25,7 +25,7 @@ for run in range(1):
 
 patient_matrix = parafac2tensor[1][2]
 
-score_y = find_CV_decisions(patient_matrix)
+score_y = find_CV_decisions(patient_matrix, true_y)
 
 fpr, tpr, thresholds = roc_curve(true_y, score_y)
 auc = roc_auc_score(true_y, score_y)
