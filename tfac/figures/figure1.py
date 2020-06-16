@@ -28,7 +28,7 @@ for variance in variance_list:
 
     patient_matrix = parafac2tensor[1][2]
 
-    score_y = find_CV_decisions(patient_matrix)
+    score_y = find_CV_decisions(patient_matrix, true_y)
     auc = roc_auc_score(true_y, score_y)
     values_vars.append([variance, auc])
 df_var = pd.DataFrame(values_vars)
