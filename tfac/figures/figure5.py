@@ -10,24 +10,17 @@ import tensorly as tl
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
 from ..MRSA_dataHelpers import form_MRSA_tensor
-from ..tensor import R2Xparafac2
+from ..tensor import R2Xparafac2, MRSA_decomposition
 
 
 tl.set_backend("numpy")
 components = 38
 variance = 1
 
-tensor_slices, cytokines, geneIDs = form_MRSA_tensor(variance)
 
 AllR2X = []
 for i in range(1, components + 1):
-    parafac2tensor = None
-    best_error = np.inf
-    for run in range(1):
-        decomposition, errors = parafac2(tensor_slices, i, return_errors=True, tol=1e-7, n_iter_max=1000)
-        if best_error > errors[-1]:
-            best_error = errors[-1]
-            parafac2tensor = decomposition
+    tensor_slices, parafac2tensor = MRSA_decomposition(variance, i)
     AllR2X.append(R2Xparafac2(tensor_slices, parafac2tensor))
 df = pd.DataFrame(AllR2X)
 

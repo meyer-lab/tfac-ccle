@@ -8,6 +8,7 @@ from tensorly.metrics.regression import variance as tl_var
 from tensorly.decomposition import parafac2
 from tensorly.parafac2_tensor import parafac2_to_slice
 from tensorly.tenalg import mode_dot
+from .MRSA_dataHelpers import form_MRSA_tensor
 
 
 tl.set_backend("numpy")  # Set the backend
@@ -65,6 +66,23 @@ def partial_tucker_decomp(tensor, mode_list, rank):
         output[1]: list of factor matrices
     """
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
+
+def MRSA_decomposition(variance, components):
+    '''Perform tensor formation and decomposition for particular variance and component number
+    ---------------------------------------------
+    Returns 
+        parafac2tensor object
+        tensor_slices list
+    '''
+    tensor_slices, cytokines, geneIDs = form_MRSA_tensor(variance)
+    parafac2tensor = None
+    best_error = np.inf
+    for run in range(1):
+        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, tol=1e-7, n_iter_max=1000, random_state=1)
+        if best_error > errors[-1]:
+            best_error = errors[-1]
+            parafac2tensor = decomposition
+    return tensor_slices, parafac2tensor
 
 
 #### For R2X Plots ###########################################################################
