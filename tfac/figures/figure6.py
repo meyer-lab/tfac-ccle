@@ -8,6 +8,7 @@ from tensorly.decomposition import parafac2
 from sklearn.metrics import roc_curve, roc_auc_score
 from .figureCommon import subplotLabel, getSetup
 from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, produce_outcome_bools, find_CV_decisions
+from ..tensor import MRSA_decomposition
 
 _, outcomeID = get_patient_info()
 
