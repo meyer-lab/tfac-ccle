@@ -74,10 +74,10 @@ def MRSA_decomposition(variance, components):
         parafac2tensor object
         tensor_slices list
     '''
-    tensor_slices, cytokines, geneIDs = form_MRSA_tensor(variance)
+    tensor_slices, _, _ = form_MRSA_tensor(variance)
     parafac2tensor = None
     best_error = np.inf
-    for run in range(1):
+    for _ in range(1):
         decomposition, errors = parafac2(tensor_slices, components, return_errors=True, tol=1e-7, n_iter_max=1000, random_state=1)
         if best_error > errors[-1]:
             best_error = errors[-1]

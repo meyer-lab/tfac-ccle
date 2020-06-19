@@ -1,15 +1,11 @@
 """
 This creates Figure 5 - MRSA R2X for parafac2.
 """
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from tensorly.decomposition import parafac2
 import tensorly as tl
-from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import form_MRSA_tensor
 from ..tensor import R2Xparafac2, MRSA_decomposition
 
 
@@ -44,6 +40,9 @@ def makeFigure():
     b.tick_params(labelsize=15)
     plt.legend(prop={'size': 15})
     ax[0].set_ylim(0, 1)
+    
+    # Add subplot labels
+    subplotLabel(ax)
 
     return f
 

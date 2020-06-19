@@ -1,13 +1,11 @@
 """
 This creates Figure 1 - Variance vs AUC
 """
-import numpy as np
 import pandas as pd
 import seaborn as sns
-from tensorly.decomposition import parafac2
 from sklearn.metrics import roc_auc_score
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import form_MRSA_tensor, get_patient_info, produce_outcome_bools, find_CV_decisions
+from ..MRSA_dataHelpers import get_patient_info, produce_outcome_bools, find_CV_decisions
 from ..tensor import MRSA_decomposition
 
 _, outcomeID = get_patient_info()
@@ -20,7 +18,7 @@ components = 38
 for variance in variance_list:
     tensor_slices, parafac2tensor = MRSA_decomposition(variance, components)
     patient_matrix = parafac2tensor[1][2]
-    
+
     score_y = find_CV_decisions(patient_matrix, true_y)
     auc = roc_auc_score(true_y, score_y)
     values_vars.append([variance, auc])
