@@ -9,9 +9,9 @@ from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
 
-components = 5
+component = 5
 tensor, treatment_list, times = form_tensor()
-results = partial_tucker_decomp(tensor, [2], components)
+result = partial_tucker_decomp(tensor, [2], component)
 
 
 def makeFigure():
@@ -22,12 +22,12 @@ def makeFigure():
     ax, f = getSetup((24, 11), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
-    treatmentvsTimePlot(results, components, treatments, ax[1:6])
-    proteinBoxPlot(ax[7], results[1][0][:, 0], 1)
-    proteinBoxPlot(ax[8], results[1][0][:, 1], 2)
-    proteinBoxPlot(ax[9], results[1][0][:, 2], 3)
-    proteinBoxPlot(ax[10], results[1][0][:, 3], 4)
-    proteinBoxPlot(ax[11], results[1][0][:, 4], 5)
+    treatmentvsTimePlot(result, component, treatment_list, ax[1:6])
+    proteinBoxPlot(ax[7], result[1][0][:, 0], 1)
+    proteinBoxPlot(ax[8], result[1][0][:, 1], 2)
+    proteinBoxPlot(ax[9], result[1][0][:, 2], 3)
+    proteinBoxPlot(ax[10], result[1][0][:, 3], 4)
+    proteinBoxPlot(ax[11], result[1][0][:, 4], 5)
 
 
     # Add subplot labels
