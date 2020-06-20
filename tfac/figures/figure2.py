@@ -11,7 +11,7 @@ from ..dataHelpers import importLINCSprotein
 
 component = 5
 tensor, treatment_list, times = form_tensor()
-result = partial_tucker_decomp(tensor, [2], component)
+results = partial_tucker_decomp(tensor, [2], component)
 
 
 def makeFigure():
