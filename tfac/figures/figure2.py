@@ -9,9 +9,9 @@ from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
 
-component = 5
+components = 5
 tensor, treatment_list, times = form_tensor()
-results = partial_tucker_decomp(tensor, [2], component)
+results = partial_tucker_decomp(tensor, [2], components)
 
 
 def makeFigure():
