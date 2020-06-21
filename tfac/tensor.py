@@ -3,7 +3,7 @@ Tensor decomposition methods
 """
 import numpy as np
 import tensorly as tl
-from tensorly.decomposition import partial_tucker
+from tensorly.decomposition import partial_tucker, parafac2
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.tenalg import mode_dot
 
@@ -53,6 +53,9 @@ def partial_tucker_decomp(tensor, mode_list, rank):
         output[1]: list of factor matrices
     """
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
+
+def OHSU_parafac2_decomp(tensorSlice, rank):
+    return parafac2(tensorSlice, rank, n_iter_max=1000, init = 'svd', return_errors=True, random_state=1)
 
 
 #### For R2X Plots ###########################################################################
