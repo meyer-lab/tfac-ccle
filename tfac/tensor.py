@@ -55,7 +55,8 @@ def partial_tucker_decomp(tensor, mode_list, rank):
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
 def OHSU_parafac2_decomp(tensorSlice, rank):
-    return parafac2(tensorSlice, rank, n_iter_max=1000, init = 'svd', return_errors=True, random_state=1)
+    decomp, error = parafac2(tensorSlice, rank, n_iter_max=1000, return_errors=True, random_state=1)
+    return decomp
 
 
 #### For R2X Plots ###########################################################################
