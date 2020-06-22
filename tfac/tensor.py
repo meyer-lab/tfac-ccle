@@ -110,6 +110,6 @@ def flip_factors(tucker_output, components, treatments_array):
         av = df.values.mean()
         if(av < 0 and tucker_output[1][0][:, component].mean() < 0):
             tucker_output[1][0][:, component] *= -1
-            for j in range(len(treatments)):
+            for j in range(len(treatments_array)):
                 tucker_output[0][j][:, component] *= -1
     return tucker_output
