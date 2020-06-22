@@ -6,6 +6,9 @@ import tensorly as tl
 from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.tenalg import mode_dot
+from tfac.Data_Mod import form_tensor
+from tfac.tensor import partial_tucker_decomp, find_R2X_partialtucker
+from tfac.dataHelpers import importLINCSprotein
 
 tl.set_backend("numpy")  # Set the backend
 
@@ -61,3 +64,20 @@ def partial_tucker_decomp(tensor, mode_list, rank):
 def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
+
+def flip_factors(tucker_output, components, treatments_array):
+    frame_list = []
+    for i in range(len(treatments_array)):
+        df = pd.DataFrame(tucker_output[0][i])
+        frame_list.append(df)
+    for component in range(components):
+        column_list = []
+        for i in range(len(treatments_array)):
+            column_list.append(pd.DataFrame(frame_list[i].iloc[:, component]))
+        df = pd.concat(column_list, axis=1)
+        av = df.values.mean()
+        if(av < 0 and tucker_output[1][0][:, component].mean() < 0):
+            tucker_output[1][0][:, component] *= -1
+            for j in range(len(treatments)):
+                tucker_output[0][j][:, component] *= -1
+    return tucker_output
