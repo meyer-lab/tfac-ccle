@@ -9,11 +9,11 @@ from sklearn.metrics import roc_auc_score
 path_here = dirname(dirname(__file__))
 
 
-def find_CV_decisions(patient_matrix, outcomes, n_splits=61, random_state=None):
+def find_CV_decisions(patient_matrix, outcomes, n_splits=61, random_state=None, C=1):
     kf = KFold(n_splits=n_splits)
     decisions = []
     for train, test in kf.split(patient_matrix):
-        clf = LogisticRegression(random_state=random_state, max_iter=10000).fit(patient_matrix[train], outcomes[train])
+        clf = LogisticRegression(penalty='l1', solver='saga', C=C, random_state=random_state, max_iter=10000, fit_intercept=False).fit(patient_matrix[train], outcomes[train])
         decisions.append(clf.decision_function(patient_matrix[test]))
     score_y = decisions
     return score_y
