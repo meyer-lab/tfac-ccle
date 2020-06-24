@@ -45,12 +45,12 @@ def form_tensor():
 def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
     """Cleaning up data for PARAFAC2 column order"""
     ind = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
-    ind = ind.drop(columns = 'File')
+    ind = ind.drop(columns='File')
     x = ['02_', '03_', '04_']
     y = ['24', '48']
     tr = ['BMP2_', 'EGF_', 'HGF_', 'IFNG_', 'OSM_', 'TGFB_', 'PBS_', 'ctrl_0']
-    for a in range(0,3):
-        for b in range(0,2):
+    for a in range(0, 3):
+        for b in range(0, 2):
             ind = ind.replace(x[a] + 'RPPA_BMP2_' + y[b], 'BMP2_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_EGF_' + y[b], 'EGF_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_HGF_' + y[b], 'HGF_' + y[b])
@@ -59,7 +59,7 @@ def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
             ind = ind.replace(x[a] + 'RPPA_TGFb_' + y[b], 'TGFb_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_pbs_' + y[b], 'PBS_' + y[b])
 
-    ind = ind.drop(columns = ['Treatment', 'Time'])
+    ind = ind.drop(columns=['Treatment', 'Time'])
     ind = ind.groupby(['Sample description']).mean()
     ind = ind.sort_values('Sample description')
     indT = ind.T
@@ -68,41 +68,41 @@ def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
     indT = indT.to_numpy()
     
     for r in range(0, 7):
-        cycIF = cycIF.drop(columns = [tr[r]+'1', tr[r]+'4', tr[r]+'8'])
-        GCP = GCP.drop(columns = [tr[r]+'4', tr[r]+'8'])
-        L1000 = L1000.drop(columns = [tr[r]+'1', tr[r]+'4', tr[r]+'8'])
-        RPPA = RPPA.drop(columns = [tr[r]+'1', tr[r]+'4', tr[r]+'8'])
+        cycIF = cycIF.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
+        GCP = GCP.drop(columns=[tr[r]+'4', tr[r]+'8'])
+        L1000 = L1000.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
+        RPPA = RPPA.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
         
-    atac = atac.drop(columns = tr[7])
-    atac = atac.sort_index(axis = 1)
+    atac = atac.drop(columns=tr[7])
+    atac = atac.sort_index(axis=1)
     chromosomes = atac['peak']
-    atac = atac.drop(columns = 'peak').to_numpy()
+    atac = atac.drop(columns='peak').to_numpy()
     
-    cycIF = cycIF.drop(columns = tr[7])
-    cycIF = cycIF.sort_index(axis = 1)
+    cycIF = cycIF.drop(columns=tr[7])
+    cycIF = cycIF.sort_index(axis=1)
     IFproteins = cycIF['feature']
-    cycIF = cycIF.drop(columns = 'feature').to_numpy()
+    cycIF = cycIF.drop(columns='feature').to_numpy()
     
-    GCP = GCP.drop(columns = tr[7])
+    GCP = GCP.drop(columns=tr[7])
     GCP = GCP.drop(GCP[(GCP['TGFB_48'] == 'NA') & (GCP['PBS_48'] == 'NA')])
-    GCP = GCP.sort_index(axis = 1)
+    GCP = GCP.sort_index(axis=1)
     histones = GCP['histone']
-    GCP = GCP.drop(columns = 'histone').to_numpy()
+    GCP = GCP.drop(columns='histone').to_numpy()
     
-    L1000 = L1000.drop(columns = tr[7])
-    L1000 = L1000.sort_index(axis = 1)
+    L1000 = L1000.drop(columns=tr[7])
+    L1000 = L1000.sort_index(axis=1)
     L1000GeneExpression = L1000['probeset']
-    L1000 = L1000.drop(columns = 'probeset').to_numpy()
+    L1000 = L1000.drop(columns='probeset').to_numpy()
     
-    RNAseq = RNAseq.drop(columns = tr[7])
-    RNAseq = RNAseq.sort_index(axis = 1)
+    RNAseq = RNAseq.drop(columns=tr[7])
+    RNAseq = RNAseq.sort_index(axis=1)
     RNAGeneSequence = RNAseq['ensembl_gene_id']
     RNAseq = RNAseq.drop(columns = 'ensembl_gene_id').to_numpy()
     
-    RPPA = RPPA.drop(columns = tr[7])
-    RPPA = RPPA.sort_index(axis = 1)
+    RPPA = RPPA.drop(columns=tr[7])
+    RPPA = RPPA.sort_index(axis=1)
     RPPAproteins = RPPA['antibody']
-    RPPA = RPPA.drop(columns = 'antibody').to_numpy()
+    RPPA = RPPA.drop(columns='antibody').to_numpy()
     
     return indT, atac, cycIF, GCP, L1000, RNAseq, RPPA, treatmentsTime, proteins, chromosomes, IFproteins, histones, L1000GeneExpression, RNAGeneSequence, RPPAproteins
 
