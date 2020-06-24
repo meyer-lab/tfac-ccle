@@ -1,7 +1,7 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
-from .dataHelpers import importLINCSprotein, ohsu_data
+from dataHelpers import importLINCSprotein, ohsu_data
 
 
 def data_mod(x, df=None):
@@ -76,37 +76,32 @@ def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
     atac = atac.drop(columns = tr[7])
     atac = atac.sort_index(axis = 1)
     chromosomes = atac['peak']
-    atac = atac.fillna(0)
     atac = atac.drop(columns = 'peak').to_numpy()
     
     cycIF = cycIF.drop(columns = tr[7])
     cycIF = cycIF.sort_index(axis = 1)
     IFproteins = cycIF['feature']
-    cycIF = cycIF.fillna(0)
     cycIF = cycIF.drop(columns = 'feature').to_numpy()
     
     GCP = GCP.drop(columns = tr[7])
+    GCP = GCP.drop(GCP[(GCP['TGFB_48'] == 'NA') & (GCP['PBS_48'] == 'NA')])
     GCP = GCP.sort_index(axis = 1)
     histones = GCP['histone']
-    GCP = GCP.fillna(0)
     GCP = GCP.drop(columns = 'histone').to_numpy()
     
     L1000 = L1000.drop(columns = tr[7])
     L1000 = L1000.sort_index(axis = 1)
     L1000GeneExpression = L1000['probeset']
-    L1000 = L1000.fillna(0)
     L1000 = L1000.drop(columns = 'probeset').to_numpy()
     
     RNAseq = RNAseq.drop(columns = tr[7])
     RNAseq = RNAseq.sort_index(axis = 1)
     RNAGeneSequence = RNAseq['ensembl_gene_id']
-    RNAseq = RNAseq.fillna(0)
     RNAseq = RNAseq.drop(columns = 'ensembl_gene_id').to_numpy()
     
     RPPA = RPPA.drop(columns = tr[7])
     RPPA = RPPA.sort_index(axis = 1)
     RPPAproteins = RPPA['antibody']
-    RPPA = RPPA.fillna(0)
     RPPA = RPPA.drop(columns = 'antibody').to_numpy()
     
     return indT, atac, cycIF, GCP, L1000, RNAseq, RPPA, treatmentsTime, proteins, chromosomes, IFproteins, histones, L1000GeneExpression, RNAGeneSequence, RPPAproteins
