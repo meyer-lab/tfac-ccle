@@ -2,18 +2,19 @@
 This creates Figure 2 - Partial Tucker Decomposition Treatment and Time Plots.
 """
 import numpy as np
-import seaborn as sns
 import pandas as pd
+import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
 
-components = 5
-tensor, treatments, times = form_tensor()
-results1 = partial_tucker_decomp(tensor, [2], components)
 
-results = flip_factors(results1, components, treatments)
+component = 5
+tensor, treatment_list, times = form_tensor()
+pre_flip_result = partial_tucker_decomp(tensor, [2], component)
+
+result = flip_factors(pre_flip_result, component, treatment_list)
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
@@ -23,15 +24,16 @@ def makeFigure():
     ax, f = getSetup((24, 11), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
-    treatmentvsTimePlot(results, components, treatments, ax[1:6])
-    proteinBoxPlot(ax[7], results[1][0][:, 0], 1)
-    proteinBoxPlot(ax[8], results[1][0][:, 1], 2)
-    proteinBoxPlot(ax[9], results[1][0][:, 2], 3)
-    proteinBoxPlot(ax[10], results[1][0][:, 3], 4)
-    proteinBoxPlot(ax[11], results[1][0][:, 4], 5)
+    treatmentvsTimePlot(result, component, treatment_list, ax[1:6])
+    proteinBoxPlot(ax[7], result[1][0][:, 0], 1)
+    proteinBoxPlot(ax[8], result[1][0][:, 1], 2)
+    proteinBoxPlot(ax[9], result[1][0][:, 2], 3)
+    proteinBoxPlot(ax[10], result[1][0][:, 3], 4)
+    proteinBoxPlot(ax[11], result[1][0][:, 4], 5)
 
     # Add subplot labels
     subplotLabel(ax)
+
     return f
 
 
@@ -68,6 +70,7 @@ def R2X_Figure_PartialTucker(ax, input_tensor):
     ax.set_title("Partial Tucker Decomposition")
     ax.set_yticks([0, .2, .4, .6, .8, 1])
 
+
 def outliersForPlot(dframe):
     '''Determines outliers based on IQR range by component and returns dictionary by component that allows annotation'''
     df = dframe.copy(deep=True)
@@ -101,6 +104,7 @@ def outliersForPlot(dframe):
                     prots[i][idx + random2 * 4][3] = False
                     prots[i][idx + 4][4] = False
     return prots
+
 
 def proteinBoxPlot(ax, resultsIn, componentIn):
     '''Plots protein component in partial tucker factorization space with annotation of some outliers'''
