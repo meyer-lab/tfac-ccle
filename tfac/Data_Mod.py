@@ -84,7 +84,7 @@ def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
     cycIF = cycIF.drop(columns='feature').to_numpy()
     
     GCP = GCP.drop(columns=tr[7])
-    GCP = GCP.drop(GCP[(GCP['TGFB_48'] == 'NA') & (GCP['PBS_48'] == 'NA')])
+    GCP = GCP.dropna()
     GCP = GCP.sort_index(axis=1)
     histones = GCP['histone']
     GCP = GCP.drop(columns='histone').to_numpy()

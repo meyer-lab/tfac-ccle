@@ -55,8 +55,17 @@ def partial_tucker_decomp(tensor, mode_list, rank):
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
 def OHSU_parafac2_decomp(tensorSlice, rank):
+    """Perform PARAFAC2 decomposition.
+    -----------------------------------------------
+    Input:
+        tensor: 3D data tensor
+        rank: rank of decomposition
+    Returns
+        output[0]: PARAFAC2 tensor, decomp[0] = weights, decomp[1] = factors, decomp[2] = projection matricies
+        output[1]: reconstruction error
+    """
     decomp, error = parafac2(tensorSlice, rank, n_iter_max=1000, return_errors=True, random_state=1)
-    return decomp
+    return decomp, error
 
 
 #### For R2X Plots ###########################################################################
