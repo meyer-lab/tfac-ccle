@@ -1,7 +1,7 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
-from .dataHelpers import importLINCSprotein, ohsu_data
+from dataHelpers import importLINCSprotein, ohsu_data
 
 
 def data_mod(x, df=None):
@@ -42,8 +42,10 @@ def form_tensor():
     return tensor, unique_treatments, times
 
 
-def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
+def dataCleanUp():
     """Cleaning up data for PARAFAC2 column order"""
+    atac, cycIF, GCP, IF, L1000, RNAseq, RPPA = ohsu_data()
+    LINCSprotein = importLINCSprotein()
     ind = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
     ind = ind.drop(columns='File')
     x = ['02_', '03_', '04_']
@@ -65,55 +67,43 @@ def dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA):
     indT = ind.T
     treatmentsTime = indT.columns.tolist()
     proteins = indT.index.tolist()
-    indT = indT.to_numpy()
-    
+    indT = indT.to_numpy() 
     for r in range(0, 7):
         cycIF = cycIF.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
         GCP = GCP.drop(columns=[tr[r]+'4', tr[r]+'8'])
         L1000 = L1000.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
-        RPPA = RPPA.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
-        
+        RPPA = RPPA.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])     
     atac = atac.drop(columns=tr[7])
     atac = atac.sort_index(axis=1)
     chromosomes = atac['peak']
-    atac = atac.drop(columns='peak').to_numpy()
-    
+    atac = atac.drop(columns='peak').to_numpy()  
     cycIF = cycIF.drop(columns=tr[7])
     cycIF = cycIF.sort_index(axis=1)
     IFproteins = cycIF['feature']
-    cycIF = cycIF.drop(columns='feature').to_numpy()
-    
+    cycIF = cycIF.drop(columns='feature').to_numpy()  
     GCP = GCP.drop(columns=tr[7])
     GCP = GCP.dropna()
     GCP = GCP.sort_index(axis=1)
     histones = GCP['histone']
     GCP = GCP.drop(columns='histone').to_numpy()
-    
     L1000 = L1000.drop(columns=tr[7])
     L1000 = L1000.sort_index(axis=1)
     L1000GeneExpression = L1000['probeset']
     L1000 = L1000.drop(columns='probeset').to_numpy()
-    
     RNAseq = RNAseq.drop(columns=tr[7])
     RNAseq = RNAseq.sort_index(axis=1)
     RNAGeneSequence = RNAseq['ensembl_gene_id']
-    RNAseq = RNAseq.drop(columns = 'ensembl_gene_id').to_numpy()
-    
+    RNAseq = RNAseq.drop(columns='ensembl_gene_id').to_numpy()
     RPPA = RPPA.drop(columns=tr[7])
     RPPA = RPPA.sort_index(axis=1)
     RPPAproteins = RPPA['antibody']
     RPPA = RPPA.drop(columns='antibody').to_numpy()
-    
     return indT, atac, cycIF, GCP, L1000, RNAseq, RPPA, treatmentsTime, proteins, chromosomes, IFproteins, histones, L1000GeneExpression, RNAGeneSequence, RPPAproteins
+
 
 def form_parafac2_tensor():
     """Creates tensor in numpy array form and returns tensor, treatment by time, LINCS proteins, ATAC chromosomes, IF proteins, GCP histones, L1000 gene expression, RNA gene sequence, and RPPA proteins"""
-    atac, cycIF, GCP, IF, L1000, RNAseq, RPPA = ohsu_data()
-    LINCSprotein = importLINCSprotein()
-    
-    indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, treatmentsTime, proteins, chromosomes, IFproteins, histones, L1000GeneExpression, RNAGeneSeq, RPPAproteins = dataCleanUp(LINCSprotein, atac, cycIF, GCP, L1000, RNAseq, RPPA)
-    
+    indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, treatmentsTime, proteins, chromosomes, IFproteins, histones, L1000GeneExpression, RNAGeneSeq, RPPAproteins = dataCleanUp()
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, L1000GeneExpression, RNAGeneSeq, RPPAproteins
-
