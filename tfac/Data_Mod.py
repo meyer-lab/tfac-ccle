@@ -1,7 +1,7 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
-from dataHelpers import importLINCSprotein, ohsu_data
+from .dataHelpers import importLINCSprotein, ohsu_data
 
 
 def data_mod(x, df=None):
