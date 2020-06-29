@@ -42,7 +42,7 @@ def form_tensor():
     return tensor, unique_treatments, times
 
 
-def LINCSCleanUp(tr):
+def LINCSCleanUp():
     """Cleaning up LINCS data for PARAFAC2 column order"""
     LINCSprotein = importLINCSprotein()
     ind = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
@@ -68,13 +68,15 @@ def LINCSCleanUp(tr):
     return indT, treatmentsTime, proteins
 
 
-def dataCleanUp(tr):
+def dataCleanUp():
+    """Cleaning up OHSU data for PARAFAC2 column order"""
     atac, cycIF, GCP, _, L1000, RNAseq, RPPA = ohsu_data()
+    tr = ['BMP2_', 'EGF_', 'HGF_', 'IFNG_', 'OSM_', 'TGFB_', 'PBS_', 'ctrl_0']
     for r in range(0, 7):
         cycIF = cycIF.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
         GCP = GCP.drop(columns=[tr[r]+'4', tr[r]+'8'])
         L1000 = L1000.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
-        RPPA = RPPA.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])     
+        RPPA = RPPA.drop(columns=[tr[r]+'1', tr[r]+'4', tr[r]+'8'])
     atac = atac.drop(columns=tr[7])
     atac = atac.sort_index(axis=1)
     chromosomes = atac['peak'].to_list()
@@ -105,8 +107,7 @@ def dataCleanUp(tr):
 
 def form_parafac2_tensor():
     """Creates tensor in numpy form and returns tensor, treatment by time, LINCS proteins, ATAC chromosomes, IF proteins, GCP histones, L1000 gene expression, RNA gene sequence, and RPPA proteins"""
-    treatments = ['BMP2_', 'EGF_', 'HGF_', 'IFNG_', 'OSM_', 'TGFB_', 'PBS_', 'ctrl_0']
-    indTM, treatmentsTime, proteins = LINCSCleanUp(treatments)
-    atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp(treatments)
+    indTM, treatmentsTime, proteins = LINCSCleanUp()
+    atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
