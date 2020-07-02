@@ -108,7 +108,7 @@ def flip_factors(tucker_output, components, treatments_array):
         for i in range(len(treatments_array)):
             column_list.append(pd.DataFrame(frame_list[i].iloc[:, component]))
         df = pd.concat(column_list, axis=1)
-        av = df.values.mean()
+        av = (df ** 5).values.mean()
         if(av < 0 and tucker_output[1][0][:, component].mean() < 0):
             tucker_output[1][0][:, component] *= -1
             for j in range(len(treatments_array)):
