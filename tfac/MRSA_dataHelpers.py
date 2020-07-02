@@ -2,6 +2,7 @@
 from os.path import join, dirname
 import numpy as np
 import pandas as pd
+from scipy.stats.mstats import gmean
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
 from sklearn.metrics import roc_auc_score
@@ -46,16 +47,24 @@ def form_MRSA_tensor(variance):
     dfCyto = clinicalCyto(dfClin, dfCoh)
     dfCyto = dfCyto.sort_values(by="sid")
     dfCyto = dfCyto.set_index("sid")
+    dfCyto = dfCyto.div(dfCyto.apply(gmean, axis=1).to_list(), axis=0)
     cytokines = dfCyto.columns
 
     dfExp = importExpressionData()
-    dfExp = dfExp.T
-    geneIDs = dfExp.iloc[0, 0:].to_list()
-    dfExp.columns = geneIDs
-    dfExp = dfExp.drop("Geneid")
-
+    geneIDs = dfExp["Geneid"].to_list()
+    dfExp = dfExp.drop(["Geneid"], axis=1)
+    ser = dfExp.var(axis=1)
+    drops = []
+    for idx, element in enumerate(ser):
+        if not element:
+            drops.append(idx)
+    dfExp = dfExp.drop(drops)
+    dfExp = (dfExp - dfExp.apply(np.mean)) / dfExp.apply(np.std)
+    #dfExp = dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)
+    #dfExp = (dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)).div(dfExp.apply(np.std, axis=1).to_list(), axis=0)
+    
     cytoNumpy = dfCyto.to_numpy().T
-    expNumpy = dfExp.to_numpy().T
+    expNumpy = dfExp.to_numpy()
 
     expNumpy = expNumpy.astype(float)
     cytoNumpy = cytoNumpy * variance

@@ -11,12 +11,12 @@ from ..tensor import MRSA_decomposition
 _, outcomeID = get_patient_info()
 
 true_y = produce_outcome_bools(outcomeID)
-variance = 1
-components = 38
+variance = .007
+components = 21
 tensor_slices, parafac2tensor = MRSA_decomposition(variance, components)
 patient_matrix = parafac2tensor[1][2]
 
-score_y = find_CV_decisions(patient_matrix, true_y)
+score_y = find_CV_decisions(patient_matrix, true_y, C=10)
 
 fpr, tpr, thresholds = roc_curve(true_y, score_y)
 auc = roc_auc_score(true_y, score_y)

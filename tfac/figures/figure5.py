@@ -11,7 +11,7 @@ from ..tensor import R2Xparafac2, MRSA_decomposition
 
 tl.set_backend("numpy")
 components = 38
-variance = 1
+variance = .007
 
 
 AllR2X = []
