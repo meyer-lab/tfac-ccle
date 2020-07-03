@@ -33,9 +33,9 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((18, 20), (4, 2))
-    for idx, comp in enumerate(components):
-        b = sns.pointplot(data=df_vars[comp], x='Variance', y='AUC', join=False, ax=ax[idx])
-        b.set_title(str(components[comp]) + " Components", fontsize=25)
+    for idx, comp in enumerate(df_vars):
+        b = sns.pointplot(data=comp, x='Variance', y='AUC', join=False, ax=ax[idx])
+        b.set_title(str(components[idx]) + " Components", fontsize=25)
         b.set_xlabel("Cytokine Weighting", fontsize=20)
         b.set_ylabel("AUC", fontsize=20)
         b.tick_params(labelsize=15)
