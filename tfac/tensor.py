@@ -99,14 +99,10 @@ def find_R2X_partialtucker(tucker_output, orig):
 
 
 def flip_factors(tucker_output, components, treatments_array):
-    frame_list = []
-    for i in range(len(treatments_array)):
-        df = pd.DataFrame(tucker_output[0][i])
-        frame_list.append(df)
     for component in range(components):
         column_list = []
         for i in range(len(treatments_array)):
-            column_list.append(pd.DataFrame(frame_list[i].iloc[:, component]))
+            column_list.append(pd.DataFrame(tucker_output[0][i][:, component]))
         df = pd.concat(column_list, axis=1)
         av = (df ** 5).values.mean()
         if(av < 0 and tucker_output[1][0][:, component].mean() < 0):
