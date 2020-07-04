@@ -12,11 +12,10 @@ _, outcomeID = get_patient_info()
 
 true_y = produce_outcome_bools(outcomeID)
 
-values_vars = []
 variance_list = [.0001, .001, .005, .007, .01, .05, .5]
 components = [4, 9, 14, 19, 24, 29, 34, 37]
-df_vars = []
 for component in components:
+    df_vars = []
     for variance in variance_list:
         tensor_slices, parafac2tensor = MRSA_decomposition(variance, component)
         patient_matrix = parafac2tensor[1][2]
