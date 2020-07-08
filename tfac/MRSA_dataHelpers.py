@@ -41,18 +41,20 @@ def get_patient_info():
     return cohortID, statusID
 
 
-def form_MRSA_tensor(variance):
+def form_MRSA_tensor(variance1, variance2):
     """Create list of data matrices for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
     dfCyto = dfCyto.sort_values(by="sid")
     dfCyto = dfCyto.set_index("sid")
+    dfCyto = dfCyto.drop(4233)
     dfCyto = dfCyto.div(dfCyto.apply(gmean, axis=1).to_list(), axis=0)
     cytokines = dfCyto.columns
 
     dfExp = importExpressionData()
     geneIDs = dfExp["Geneid"].to_list()
     dfExp = dfExp.drop(["Geneid"], axis=1)
+    dfExp = dfExp.drop(['SA04233'], axis=1)
     ser = dfExp.var(axis=1)
     drops = []
     for idx, element in enumerate(ser):
@@ -65,13 +67,24 @@ def form_MRSA_tensor(variance):
     
     cytoNumpy = dfCyto.to_numpy().T
     expNumpy = dfExp.to_numpy()
-
+    methNumpy, m_locations = import_methylation()
+    
+    methNumpy = methNumpy.astype(float)
     expNumpy = expNumpy.astype(float)
-    cytoNumpy = cytoNumpy * variance
+    cytoNumpy = cytoNumpy * variance1
+    methNumpy = methNumpy * variance2
 
-    tensor_slices = [cytoNumpy, expNumpy]
+    tensor_slices = [cytoNumpy, expNumpy, methNumpy]
 
-    return tensor_slices, cytokines, geneIDs
+    return tensor_slices, cytokines, geneIDs, m_locations
+
+
+def import_methylation():
+    """import methylation data"""
+    dataMeth = pd.read_csv(join(path_here, "tfac/data/mrsa/MRSA.Methylation.txt.xz"), delimiter=" ", compression="xz")
+    locs = dataMeth.values[:, 0]
+    dataMeth = dataMeth.iloc[:, 1:].values
+    return dataMeth, locs
 
 
 def importClinicalMRSA():

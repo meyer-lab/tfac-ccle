@@ -32,7 +32,7 @@ def R2X(reconstructed, original):
 
 def R2Xparafac2(tensor_slices, decomposition):
     """Calculate the R2X of parafac2 decomposition"""
-    R2X = [0, 0]
+    R2X = np.zeros(len(tensor_slices))
     for idx, tensor_slice in enumerate(tensor_slices):
         reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
         R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
@@ -83,18 +83,17 @@ def OHSU_parafac2_decomp(tensorSlice, rank):
     return decomp, error
 
 
-def MRSA_decomposition(variance, components, random_state=None):
+def MRSA_decomposition(tensor_slices, components, random_state=None):
     '''Perform tensor formation and decomposition for particular variance and component number
     ---------------------------------------------
     Returns
         parafac2tensor object
         tensor_slices list
     '''
-    tensor_slices, _, _ = form_MRSA_tensor(variance)
     parafac2tensor = None
     best_error = np.inf
     for _ in range(1):
-        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, random_state=random_state)
+        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, random_state=random_state, verbose=True)
         if best_error > errors[-1]:
             best_error = errors[-1]
             parafac2tensor = decomposition
