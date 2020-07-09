@@ -14,7 +14,7 @@ component = 5
 tensor, treatment_list, times = form_tensor()
 pre_flip_result = partial_tucker_decomp(tensor, [2], component)
 
-result = flip_factors(pre_flip_result, component, treatment_list)
+result = flip_factors(pre_flip_result)
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
