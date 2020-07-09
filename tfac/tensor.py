@@ -2,7 +2,6 @@
 Tensor decomposition methods
 """
 import numpy as np
-import pandas as pd
 import tensorly as tl
 from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
@@ -100,12 +99,11 @@ def find_R2X_partialtucker(tucker_output, orig):
 
 def flip_factors(tucker_output):
     for component in range(tucker_output[0].shape[2]):
-        column_list = []
+        av = 0.0
         for i in range(tucker_output[0].shape[0]):
-            column_list.append(tucker_output[0][i][:, component])
-        df = np.vstack(column_list)
-        av = (df ** 5).mean()
-        if(av < 0 and tucker_output[1][0][:, component].mean() < 0):
+            av += np.mean(tucker_output[0][i][:, component] ** 5)
+
+        if av < 0 and tucker_output[1][0][:, component].mean() < 0:
             tucker_output[1][0][:, component] *= -1
             for j in range(tucker_output[0].shape[0]):
                 tucker_output[0][j][:, component] *= -1
