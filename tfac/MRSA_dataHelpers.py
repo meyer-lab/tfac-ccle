@@ -6,11 +6,14 @@ from scipy.stats.mstats import gmean
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
 from sklearn.metrics import roc_auc_score
+from tensorly.metrics.regression import variance as tl_var
+
 
 path_here = dirname(dirname(__file__))
 
 
-def find_CV_decisions(patient_matrix, outcomes, n_splits=patient_matrix.shape[0], random_state=None, C=1):
+def find_CV_decisions(patient_matrix, outcomes, random_state=None, C=1):
+    n_splits = patient_matrix.shape[0]
     kf = KFold(n_splits=n_splits)
     decisions = []
     for train, test in kf.split(patient_matrix):
@@ -32,16 +35,73 @@ def produce_outcome_bools(statusID):
     return np.asarray(outcome_bools)
 
 
-def get_patient_info():
+def get_patient_info(paired=False):
     """Return specific patient ID information"""
-    dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter="\t")
-    cohortID = list(dataCohort["sample"])
-    statusID = list(dataCohort["outcome_txt"])
+    if paired:
+        dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter="\t")
+        singles = ["SA04233", "SA04158", "SA04255", "SA04378", "SA04469", "SA04329", "SA05300", "SA04547", "SA05030"]
+        dataCohort = dataCohort[~dataCohort["sample"].isin(singles)]
+        cohortID = list(dataCohort["sample"])
+        statusID = list(dataCohort["outcome_txt"])
+        return cohortID, statusID
+    else:
+        dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter="\t")
+        singles = ['SA04233']
+        dataCohort = dataCohort[~dataCohort["sample"].isin(singles)]
+        cohortID = list(dataCohort["sample"])
+        statusID = list(dataCohort["outcome_txt"])
+        return cohortID, statusID
 
-    return cohortID, statusID
 
+def form_paired_tensor(variance1=0, variance2=0):
+    """Create list of data matrices of paired data for parafac2"""
+    dfClin, dfCoh = importClinicalMRSA()
+    singles = [4, 7, 14, 19, 24, 25, 29, 31]
+    remove = dfCoh[dfCoh['pair'].isin(singles)]["sample"].to_list()
+    dfCoh = dfCoh[~dfCoh['pair'].isin(singles)]
+    pairs = dfCoh["pair"]
+    dfCyto = clinicalCyto(dfClin, dfCoh)
+    dfCyto = dfCyto.sort_values(by="sid")
+    dfCyto = dfCyto.set_index("sid")
+    dfCyto = dfCyto.div(dfCyto.apply(gmean, axis=1).to_list(), axis=0)
+    cytokines = dfCyto.columns
 
-def form_MRSA_tensor(variance1, variance2):
+    dfExp = importExpressionData()
+    dfExp = dfExp.drop(remove, axis=1)
+    geneIDs = dfExp["Geneid"].to_list()
+    dfExp = dfExp.drop(["Geneid"], axis=1)
+    ser = dfExp.var(axis=1)
+    drops = []
+    for idx, element in enumerate(ser):
+        if not element:
+            drops.append(idx)
+    dfExp = dfExp.drop(drops)
+    dfExp = (dfExp - dfExp.apply(np.mean)) / dfExp.apply(np.std)
+    #dfExp = dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)
+    #dfExp = (dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)).div(dfExp.apply(np.std, axis=1).to_list(), axis=0)
+
+    dataMeth, m_locations = import_methylation()
+    remove = ["4158", "4255", "4378", "4469", "4329", "5300", "4547", "5030"]
+    dataMeth = dataMeth.drop(remove, axis=1)
+
+    cytoNumpy = dfCyto.to_numpy().T
+    expNumpy = dfExp.to_numpy()
+    methNumpy = dataMeth.iloc[:, 1:].values
+
+    methNumpy = methNumpy.astype(float)
+    expNumpy = expNumpy.astype(float)
+    if variance1 and variance2:
+        cytoNumpy = cytoNumpy * variance1
+        methNumpy = methNumpy * variance2
+    else:
+        cytoNumpy = cytoNumpy * (1 / tl_var(cytoNumpy)) ** .5
+        methNumpy = methNumpy * (1 / tl_var(methNumpy)) ** .5
+
+    tensor_slices = [cytoNumpy, expNumpy, methNumpy]
+
+    return tensor_slices, cytokines, geneIDs, m_locations, pairs
+
+def form_MRSA_tensor(variance1=0, variance2=0):
     """Create list of data matrices for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
@@ -64,15 +124,21 @@ def form_MRSA_tensor(variance1, variance2):
     dfExp = (dfExp - dfExp.apply(np.mean)) / dfExp.apply(np.std)
     #dfExp = dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)
     #dfExp = (dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)).div(dfExp.apply(np.std, axis=1).to_list(), axis=0)
-    
+
+    dataMeth, m_locations = import_methylation()
+
     cytoNumpy = dfCyto.to_numpy().T
     expNumpy = dfExp.to_numpy()
-    methNumpy, m_locations = import_methylation()
-    
+    methNumpy = dataMeth.iloc[:, 1:].values
+
     methNumpy = methNumpy.astype(float)
     expNumpy = expNumpy.astype(float)
-    cytoNumpy = cytoNumpy * variance1
-    methNumpy = methNumpy * variance2
+    if variance1 and variance2:
+        cytoNumpy = cytoNumpy * variance1
+        methNumpy = methNumpy * variance2
+    else:
+        cytoNumpy = cytoNumpy * (1 / tl_var(cytoNumpy)) ** .5
+        methNumpy = methNumpy * (1 / tl_var(methNumpy)) ** .5
 
     tensor_slices = [cytoNumpy, expNumpy, methNumpy]
 
@@ -83,7 +149,6 @@ def import_methylation():
     """import methylation data"""
     dataMeth = pd.read_csv(join(path_here, "tfac/data/mrsa/MRSA.Methylation.txt.xz"), delimiter=" ", compression="xz")
     locs = dataMeth.values[:, 0]
-    dataMeth = dataMeth.iloc[:, 1:].values
     return dataMeth, locs
 
 

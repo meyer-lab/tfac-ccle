@@ -93,11 +93,11 @@ def MRSA_decomposition(tensor_slices, components, random_state=None):
     parafac2tensor = None
     best_error = np.inf
     for _ in range(1):
-        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, random_state=random_state, verbose=True)
+        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, random_state=random_state, verbose=False)
         if best_error > errors[-1]:
             best_error = errors[-1]
             parafac2tensor = decomposition
-    return tensor_slices, parafac2tensor
+    return parafac2tensor
 
 
 #### For R2X Plots ###########################################################################
