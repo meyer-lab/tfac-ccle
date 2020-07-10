@@ -5,12 +5,12 @@ import pandas as pd
 from scipy.stats.mstats import gmean
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
-from sklearn.metrics import roc_auc_score
 
 path_here = dirname(dirname(__file__))
 
 
 def find_CV_decisions(patient_matrix, outcomes, n_splits=61, random_state=None, C=1):
+    """Given the matrix of patients by components of a decomposition, returns the decision function results of logistic regression using L.O.O cross validation"""
     kf = KFold(n_splits=n_splits)
     decisions = []
     for train, test in kf.split(patient_matrix):
@@ -62,7 +62,7 @@ def form_MRSA_tensor(variance):
     dfExp = (dfExp - dfExp.apply(np.mean)) / dfExp.apply(np.std)
     #dfExp = dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)
     #dfExp = (dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)).div(dfExp.apply(np.std, axis=1).to_list(), axis=0)
-    
+
     cytoNumpy = dfCyto.to_numpy().T
     expNumpy = dfExp.to_numpy()
 

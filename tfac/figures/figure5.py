@@ -1,18 +1,17 @@
 """
 This creates Figure 5 - MRSA R2X for parafac2.
 """
+import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import tensorly as tl
-import pickle
 from .figureCommon import subplotLabel, getSetup
-from ..tensor import R2Xparafac2, MRSA_decomposition
 
 
 tl.set_backend("numpy")
 
-R2X_list = pickle.load( open( "R2X.p", "rb" ) )
+R2X_list = pickle.load(open("R2X.p", "rb"))
 components = 38
 to_plot = []
 comps = []

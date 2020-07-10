@@ -1,17 +1,14 @@
 """
 This creates Figure 3. - Components vs AUC
 """
-import pandas as pd
-import seaborn as sns
 import pickle
-from sklearn.metrics import roc_auc_score
+import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..MRSA_dataHelpers import get_patient_info, find_CV_decisions, produce_outcome_bools
-from ..tensor import MRSA_decomposition
+from ..MRSA_dataHelpers import get_patient_info, produce_outcome_bools
 
 _, outcomeID = get_patient_info()
 true_y = produce_outcome_bools(outcomeID)
-all_vars = pickle.load( open( "common_decomp.p", "rb" ) )
+all_vars = pickle.load(open("common_decomp.p", "rb"))
 
 
 def makeFigure():
@@ -20,8 +17,8 @@ def makeFigure():
     ax, f = getSetup((15, 20), (3, 1))
     for idx, var in enumerate([.0007, .007, .07]):
         b = sns.pointplot(data=all_vars[idx], x='Components', y='AUC', ax=ax[idx], s=70, join=False) # blue
-        b.set_xlabel("Components",fontsize=20)
-        b.set_ylabel("AUC",fontsize=20)
+        b.set_xlabel("Components", fontsize=20)
+        b.set_ylabel("AUC", fontsize=20)
         b.set_title("AUC with Cytokine Variance Scaling = " + str(var), fontsize=20)
         b.tick_params(labelsize=14)
         ax[idx].set_ylim(0, 1)
