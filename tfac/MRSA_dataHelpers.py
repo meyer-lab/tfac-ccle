@@ -53,7 +53,7 @@ def get_patient_info(paired=False):
         return cohortID, statusID
 
 
-def form_paired_tensor(variance1=0, variance2=0):
+def form_paired_tensor(variance1=1, variance2=1):
     """Create list of data matrices of paired data for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     singles = [4, 7, 14, 19, 24, 25, 29, 31]
@@ -94,14 +94,14 @@ def form_paired_tensor(variance1=0, variance2=0):
         cytoNumpy = cytoNumpy * variance1
         methNumpy = methNumpy * variance2
     else:
-        cytoNumpy = cytoNumpy * (1 / tl_var(cytoNumpy)) ** .5
-        methNumpy = methNumpy * (1 / tl_var(methNumpy)) ** .5
+        cytoNumpy = cytoNumpy * ((1 / tl_var(cytoNumpy)) ** .5) * variance1
+        methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance2
 
     tensor_slices = [cytoNumpy, expNumpy, methNumpy]
 
     return tensor_slices, cytokines, geneIDs, m_locations, pairs
 
-def form_MRSA_tensor(variance1=0, variance2=0):
+def form_MRSA_tensor(variance1=1, variance2=1):
     """Create list of data matrices for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
@@ -133,12 +133,8 @@ def form_MRSA_tensor(variance1=0, variance2=0):
 
     methNumpy = methNumpy.astype(float)
     expNumpy = expNumpy.astype(float)
-    if variance1 and variance2:
-        cytoNumpy = cytoNumpy * variance1
-        methNumpy = methNumpy * variance2
-    else:
-        cytoNumpy = cytoNumpy * (1 / tl_var(cytoNumpy)) ** .5
-        methNumpy = methNumpy * (1 / tl_var(methNumpy)) ** .5
+    cytoNumpy = cytoNumpy * ((1 / tl_var(cytoNumpy)) ** .5) * variance1
+    methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance2
 
     tensor_slices = [cytoNumpy, expNumpy, methNumpy]
 
