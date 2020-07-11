@@ -4,9 +4,9 @@ This creates Figure 4.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from figures.figureCommon import subplotLabel, getSetup
-from Data_Mod import form_parafac2_tensor, ohsu_var
-from tensor import OHSU_parafac2_decomp, R2Xparafac2
+from .figureCommon import subplotLabel, getSetup
+from ..Data_Mod import form_parafac2_tensor, ohsu_var
+from ..tensor import OHSU_parafac2_decomp, R2Xparafac2
 
 
 def makeFigure():
@@ -21,6 +21,7 @@ def makeFigure():
 
 
 def R2X_OHSU():
+    '''Creates R2X for OHSU PARAFAC2'''
     p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = form_parafac2_tensor()
     p2slicesB = ohsu_var(p2slices)
     r2x = []

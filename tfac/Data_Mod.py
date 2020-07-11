@@ -114,6 +114,7 @@ def form_parafac2_tensor():
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
 
 def ohsu_var(tensorSlices):
+    '''Rebalances slice variance to 1'''
     for x in range(len(tensorSlices)):
         var = tl_var(tensorSlices[x])
         tensorSlices[x] = (tensorSlices[x])/var
