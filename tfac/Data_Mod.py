@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from .dataHelpers import importLINCSprotein, ohsu_data
+from tensorly.metrics.regression import variance as tl_var
 
 
 def data_mod(x, df=None):
@@ -103,11 +104,18 @@ def dataCleanUp():
     RPPAProteins = RPPA['antibody'].tolist()
     RPPA = RPPA.drop(columns='antibody').to_numpy()
     return atac, cycIF, GCP, L1000, RNAseq, RPPA, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
-
-
+    
+    
 def form_parafac2_tensor():
     """Creates tensor in numpy form and returns tensor, treatment by time, LINCS proteins, ATAC chromosomes, IF proteins, GCP histones, L1000 gene expression, RNA gene sequence, and RPPA proteins"""
     indTM, treatmentsTime, proteins = LINCSCleanUp()
     atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
+
+def ohsu_var(tensorSlices):
+    for x in range(len(tensorSlices)):
+        var = tl_var(tensorSlices[x])
+        tensorSlices[x] = (tensorSlices[x])/var
+    return tensorSlices
+    
