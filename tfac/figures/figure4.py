@@ -12,15 +12,15 @@ from ..tensor import OHSU_parafac2_decomp, R2Xparafac2
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((15, 8), (3, 2))
-
-    # Add subplot labels
+    row = 3
+    col = 6
+    ax, f = getSetup((24, 11), (row, col))
+    R2X_OHSU(ax[0])
     subplotLabel(ax)
-
     return f
 
 
-def R2X_OHSU():
+def R2X_OHSU(ax):
     '''Creates R2X for OHSU PARAFAC2'''
     p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = form_parafac2_tensor()
     p2slicesB = ohsu_var(p2slices)
@@ -36,8 +36,7 @@ def R2X_OHSU():
     df['Component'] = comps
     df.columns = ['Proteins', 'Chromosomes', 'IFproteins', 'Histones', 'Gene Expression', 'RNA Genes', 'RPPA Proteins', 'Component']
     test = pd.melt(df, id_vars=['Component'])
-    ax, f = getSetup((7, 7), (1, 1))
-    b = sns.scatterplot(data=test, x='Component', y='value', hue='variable', style='variable', ax=ax[0], s=100)
+    b = sns.scatterplot(data=test, x='Component', y='value', hue='variable', style='variable', ax=ax, s=100)
     b.set_xlabel("Component", fontsize=20)
     b.set_ylabel("R2X", fontsize=20)
     b.set_title("OHSU PARAFAC2")

@@ -118,5 +118,7 @@ def ohsu_var(tensorSlices):
     for x in range(len(tensorSlices)):
         var = tl_var(tensorSlices[x])
         tensorSlices[x] = (tensorSlices[x])/var
+    tensorSlices[0] = tensorSlices[0] * 12
+    tensorSlices[6] = tensorSlices[6] * 12
     return tensorSlices
     
