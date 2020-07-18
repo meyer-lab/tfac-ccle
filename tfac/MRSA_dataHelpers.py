@@ -3,24 +3,31 @@ from os.path import join, dirname
 import numpy as np
 import pandas as pd
 from scipy.stats.mstats import gmean
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import KFold
+from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import cross_val_predict
 from tensorly.metrics.regression import variance as tl_var
+
 
 
 path_here = dirname(dirname(__file__))
 
 
-def find_CV_decisions(patient_matrix, outcomes, random_state=None, C=1):
-    n_splits = patient_matrix.shape[0]
-    kf = KFold(n_splits=n_splits)
-    decisions = []
-    for train, test in kf.split(patient_matrix):
-        clf = LogisticRegression(penalty='l1', solver='saga', C=C, random_state=random_state, max_iter=10000, fit_intercept=False).fit(patient_matrix[train], outcomes[train])
-        decisions.append(clf.decision_function(patient_matrix[test]))
-    score_y = decisions
-    return score_y
+def find_regularization(patient_matrix, outcomes, random_state=None):
+    clf = LogisticRegressionCV(Cs=10, cv=10, random_state=random_state, fit_intercept=False, penalty='l1', solver='saga', max_iter=100000).fit(patient_matrix, outcomes)
+    reg = clf.C_
+    return reg[0]
+
+
+def find_CV_proba(patient_matrix, outcomes, random_state=None, C=1):
+    proba = cross_val_predict(LogisticRegression(penalty='l1', solver='saga', C=C, random_state=random_state, max_iter=10000, fit_intercept=False), patient_matrix, outcomes, cv=30, method="predict_proba")
+    return proba[:, 1]
+
+
+def find_coefs(patient_matrix, outcomes, random_state=None, C=1):
+    clf = LogisticRegression(penalty='l1', solver='saga', C=C, random_state=random_state, max_iter=10000, fit_intercept=False).fit(patient_matrix, outcomes)
+    coef = clf.coef_
+    return coef
 
 
 def produce_outcome_bools(statusID):
@@ -53,7 +60,7 @@ def get_patient_info(paired=False):
         return cohortID, statusID
 
 
-def form_paired_tensor(variance1=1, variance2=1):
+def form_paired_tensor(variance1=1, variance2=1, variance3=1):
     """Create list of data matrices of paired data for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     singles = [4, 7, 14, 19, 24, 25, 29, 31]
@@ -64,6 +71,8 @@ def form_paired_tensor(variance1=1, variance2=1):
     dfCyto = dfCyto.sort_values(by="sid")
     dfCyto = dfCyto.set_index("sid")
     dfCyto = dfCyto.div(dfCyto.apply(gmean, axis=1).to_list(), axis=0)
+    dfCyto = dfCyto.apply(np.log, axis=0)
+    dfCyto = dfCyto.sub(dfCyto.apply(np.mean, axis=0).to_list(), axis=1)
     cytokines = dfCyto.columns
 
     dfExp = importExpressionData()
@@ -90,18 +99,15 @@ def form_paired_tensor(variance1=1, variance2=1):
 
     methNumpy = methNumpy.astype(float)
     expNumpy = expNumpy.astype(float)
-    if variance1 and variance2:
-        cytoNumpy = cytoNumpy * variance1
-        methNumpy = methNumpy * variance2
-    else:
-        cytoNumpy = cytoNumpy * ((1 / tl_var(cytoNumpy)) ** .5) * variance1
-        methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance2
+    cytoNumpy = cytoNumpy * ((1 / tl_var(cytoNumpy)) ** .5) * variance1
+    expNumpy = expNumpy * variance2
+    methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance3
 
     tensor_slices = [cytoNumpy, expNumpy, methNumpy]
 
     return tensor_slices, cytokines, geneIDs, m_locations, pairs
 
-def form_MRSA_tensor(variance1=1, variance2=1):
+def form_MRSA_tensor(variance1=1, variance2=1, variance3=1):
     """Create list of data matrices for parafac2"""
     dfClin, dfCoh = importClinicalMRSA()
     dfCyto = clinicalCyto(dfClin, dfCoh)
@@ -109,6 +115,8 @@ def form_MRSA_tensor(variance1=1, variance2=1):
     dfCyto = dfCyto.set_index("sid")
     dfCyto = dfCyto.drop(4233)
     dfCyto = dfCyto.div(dfCyto.apply(gmean, axis=1).to_list(), axis=0)
+    dfCyto = dfCyto.apply(np.log, axis=0)
+    dfCyto = dfCyto.sub(dfCyto.apply(np.mean, axis=0).to_list(), axis=1)
     cytokines = dfCyto.columns
 
     dfExp = importExpressionData()
@@ -134,7 +142,8 @@ def form_MRSA_tensor(variance1=1, variance2=1):
     methNumpy = methNumpy.astype(float)
     expNumpy = expNumpy.astype(float)
     cytoNumpy = cytoNumpy * ((1 / tl_var(cytoNumpy)) ** .5) * variance1
-    methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance2
+    expNumpy = expNumpy * variance2
+    methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance3
 
     tensor_slices = [cytoNumpy, expNumpy, methNumpy]
 
