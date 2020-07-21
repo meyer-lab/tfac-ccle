@@ -6,7 +6,7 @@ import tensorly as tl
 from tensorly.decomposition import partial_tucker, parafac2
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.decomposition import parafac2
-from tensorly.parafac2_tensor import parafac2_to_slice
+from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from tensorly.tenalg import mode_dot
 from .MRSA_dataHelpers import form_MRSA_tensor
 
@@ -32,7 +32,7 @@ def R2X(reconstructed, original):
 
 def R2Xparafac2(tensor_slices, decomposition):
     """Calculate the R2X of parafac2 decomposition"""
-    R2X = [0, 0]
+    R2X = np.zeros(len(tensor_slices))
     for idx, tensor_slice in enumerate(tensor_slices):
         reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
         R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
@@ -78,7 +78,7 @@ def OHSU_parafac2_decomp(tensorSlice, rank):
         output[0]: PARAFAC2 tensor, decomp[0] = weights, decomp[1] = factors, decomp[2] = projection matricies
         output[1]: reconstruction error
     """
-    decomp, error = parafac2(tensorSlice, rank, n_iter_max=1000, return_errors=True, random_state=1)
+    decomp, error = parafac2(tensorSlice, rank, n_iter_max=100, return_errors=True, random_state=1)
     return decomp, error
 
 
@@ -106,3 +106,9 @@ def MRSA_decomposition(variance, components):
 def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
+
+
+#### For PARAFAC2 Projections to Factors ####################################################
+def projections_to_factors(parafac2_decomp):
+    weights, transform = apply_parafac2_projections(parafac2_decomp)
+    return weights, transform
