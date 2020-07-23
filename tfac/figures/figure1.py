@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from .figureCommon import subplotLabel, getSetup
 
 
-AllR2X = pickle.load( open( "R2X.p", "rb" ) )
+AllR2X = pickle.load( open( "R2X_SVC.p", "rb" ) )
 components = 38
 df = pd.DataFrame(AllR2X)
 
@@ -25,6 +25,7 @@ b.set_ylabel("R2X", fontsize=20)
 b.tick_params(labelsize=15)
 plt.legend(prop={'size': 15})
 ax[0].set_ylim(0, 1)
+
 
 
 def makeFigure():

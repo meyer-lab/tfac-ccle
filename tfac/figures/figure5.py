@@ -18,6 +18,7 @@ double = np.vstack((cytoA, cytoB)).T
 clf = SVC()
 clf.fit(double, outcomes)
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
