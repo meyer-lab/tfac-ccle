@@ -31,6 +31,6 @@ def makeFigure():
 
     return f
 
-    def label_point(cyto_df, ax):
-        for i, point in cyto_df.iterrows():
-            ax.text(point['Component A']+.002, point['Component B'], str(point['Cytokines']), fontsize=15)
+def label_point(cyto_df, ax):
+    for i, point in cyto_df.iterrows():
+        ax.text(point['Component A']+.002, point['Component B'], str(point['Cytokines']), fontsize=15)
