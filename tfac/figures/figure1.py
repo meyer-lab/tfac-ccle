@@ -19,12 +19,7 @@ df['Component'] = comps
 
 df.columns = ['Cytokines', 'GeneIDs', 'Component']
 test = pd.melt(df, id_vars=['Component'])
-b = sns.scatterplot(data=test, x='Component', y='value', hue='variable', style='variable', ax=ax[0], s=100)
-b.set_xlabel("Component", fontsize=20)
-b.set_ylabel("R2X", fontsize=20)
-b.tick_params(labelsize=15)
-plt.legend(prop={'size': 15})
-ax[0].set_ylim(0, 1)
+
 
 
 
