@@ -2,12 +2,11 @@
 This creates Figure 3. - Components vs AUC
 """
 import pickle
-import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 
 
-df_comp = pickle.load( open( "LogReg.p", "rb" ) )
+df_comp = pickle.load(open("LogReg.p", "rb"))
 
 
 def makeFigure():
@@ -15,8 +14,8 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((15, 8), (1, 1))
     b = sns.pointplot(data=df_comp, x='Components', y='AUC', ax=ax[0], s=70, join=False) # blue
-    b.set_xlabel("Components",fontsize=20)
-    b.set_ylabel("AUC",fontsize=20)
+    b.set_xlabel("Components", fontsize=20)
+    b.set_ylabel("AUC", fontsize=20)
     b.tick_params(labelsize=14)
     ax[0].set_ylim(0, 1)
 

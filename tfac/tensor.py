@@ -7,7 +7,6 @@ from tensorly.decomposition import partial_tucker, parafac2
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.parafac2_tensor import parafac2_to_slice
 from tensorly.tenalg import mode_dot
-from .MRSA_dataHelpers import form_MRSA_tensor
 
 
 tl.set_backend("numpy")  # Set the backend
@@ -111,6 +110,7 @@ def find_R2X_partialtucker(tucker_output, orig):
 
 
 def flip_factors(tucker_output):
+    """For partial tucker OHSU factorization, flips protein and treatment/time factors if both negative for important values"""
     for component in range(tucker_output[0].shape[2]):
         av = 0.0
         for i in range(tucker_output[0].shape[0]):

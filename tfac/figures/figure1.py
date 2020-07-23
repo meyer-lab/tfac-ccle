@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from .figureCommon import subplotLabel, getSetup
 
 
-AllR2X = pickle.load( open( "R2X_SVC.p", "rb" ) )
+AllR2X = pickle.load(open("R2X_SVC.p", "rb"))
 components = 38
 df = pd.DataFrame(AllR2X)
 
