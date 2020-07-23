@@ -2,6 +2,7 @@
 This creates Figure 5 - SVC visualization.
 """
 import pickle
+import numpy as np
 import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
