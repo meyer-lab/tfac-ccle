@@ -88,13 +88,7 @@ def MRSA_decomposition(tensor_slices, components, random_state=None):
         parafac2tensor object
         tensor_slices list
     '''
-    parafac2tensor = None
-    best_error = np.inf
-    for _ in range(1):
-        decomposition, errors = parafac2(tensor_slices, components, return_errors=True, random_state=random_state, verbose=False)
-        if best_error > errors[-1]:
-            best_error = errors[-1]
-            parafac2tensor = decomposition
+        parafac2tensor = parafac2(tensor_slices, components, random_state=random_state, verbose=False)
     return parafac2tensor
 
 

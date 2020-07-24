@@ -1,5 +1,5 @@
 """
-This creates Figure 3. - Components vs AUC
+This creates Figure 3. - Logistic Regression Components vs AUC
 """
 import pickle
 import seaborn as sns
