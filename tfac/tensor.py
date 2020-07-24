@@ -8,7 +8,7 @@ from tensorly.metrics.regression import variance as tl_var
 from tensorly.decomposition import parafac2
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from tensorly.tenalg import mode_dot
-from MRSA_dataHelpers import form_MRSA_tensor
+from .MRSA_dataHelpers import form_MRSA_tensor
 
 
 tl.set_backend("numpy")  # Set the backend
