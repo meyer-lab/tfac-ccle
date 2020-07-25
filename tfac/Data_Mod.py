@@ -54,6 +54,7 @@ def LINCSCleanUp():
     y = ['0','24', '48']
     for a in range(0, 3):
         for b in range(0, 3):
+            ind = ind.replace(x[a] + 'RPPA_null1_' + '0' + y[b], 'cntrl' + y[b])
             ind = ind.replace(x[a] + 'RPPA_BMP2_' + y[b], 'BMP2_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_EGF_' + y[b], 'EGF_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_HGF_' + y[b], 'HGF_' + y[b])
