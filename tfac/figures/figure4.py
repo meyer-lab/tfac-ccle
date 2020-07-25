@@ -44,7 +44,7 @@ def R2X_OHSU(ax):
     b.set_title("OHSU PARAFAC2")
     b.tick_params(labelsize=15)
     plt.legend(prop={'size': 15})
-    ax[0].set_ylim(0, 1)
+    ax.set_ylim(0, 1)
 
 def OHSU_comp_plots(comps):
     p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, Rproteins = form_parafac2_tensor()
