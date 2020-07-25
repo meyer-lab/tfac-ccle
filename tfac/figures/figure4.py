@@ -7,7 +7,7 @@ import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..Data_Mod import form_parafac2_tensor, ohsu_var
 from ..tensor import OHSU_parafac2_decomp, R2Xparafac2, projections_to_factors
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
 def makeFigure():
