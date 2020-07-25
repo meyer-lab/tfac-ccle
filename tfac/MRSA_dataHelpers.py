@@ -85,14 +85,14 @@ def form_paired_tensor(variance1=1, variance2=1):
 
     dfExp = importExpressionData()
     dfExp = dfExp.drop(remove, axis=1)
-    geneIDs = dfExp["Geneid"].to_list()
-    dfExp = dfExp.drop(["Geneid"], axis=1)
     ser = dfExp.var(axis=1)
     drops = []
     for idx, element in enumerate(ser):
         if not element:
             drops.append(idx)
     dfExp = dfExp.drop(drops)
+    geneIDs = dfExp["Geneid"].to_list()
+    dfExp = dfExp.drop(["Geneid"], axis=1)
     dfExp = (dfExp - dfExp.apply(np.mean)) / dfExp.apply(np.std)
     dfExp = (dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)).div(dfExp.apply(np.std, axis=1).to_list(), axis=0)
 
@@ -127,8 +127,6 @@ def form_MRSA_tensor(variance1=1, variance2=1):
     cytokines = dfCyto.columns
 
     dfExp = importExpressionData()
-    geneIDs = dfExp["Geneid"].to_list()
-    dfExp = dfExp.drop(["Geneid"], axis=1)
     dfExp = dfExp.drop(['SA04233'], axis=1)
     ser = dfExp.var(axis=1)
     drops = []
@@ -136,6 +134,8 @@ def form_MRSA_tensor(variance1=1, variance2=1):
         if not element:
             drops.append(idx)
     dfExp = dfExp.drop(drops)
+    geneIDs = dfExp["Geneid"].to_list()
+    dfExp = dfExp.drop(["Geneid"], axis=1)
     dfExp = (dfExp - dfExp.apply(np.mean)) / dfExp.apply(np.std)
     dfExp = (dfExp.sub(dfExp.apply(np.mean, axis=1).to_list(), axis=0)).div(dfExp.apply(np.std, axis=1).to_list(), axis=0)
 
