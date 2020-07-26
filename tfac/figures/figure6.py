@@ -3,6 +3,7 @@ This creates Figure 6 - ROC Curve.
 """
 import pandas as pd
 import seaborn as sns
+import numpy as np
 from .figureCommon import subplotLabel, getSetup
 from ..Data_Mod import LINCSCleanUp, dataCleanUp, form_parafac2_tensor, ohsu_var
 from ..tensor import OHSU_parafac2_decomp, R2Xparafac2, projections_to_factors
