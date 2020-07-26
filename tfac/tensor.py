@@ -110,5 +110,6 @@ def find_R2X_partialtucker(tucker_output, orig):
 
 #### For PARAFAC2 Projections to Factors ####################################################
 def projections_to_factors(parafac2_decomp):
+    '''Computes PARAFAC2 projections into factors'''
     weights, transform = apply_parafac2_projections(parafac2_decomp)
     return weights, transform
