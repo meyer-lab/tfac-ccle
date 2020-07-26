@@ -18,7 +18,7 @@ def makeFigure():
     ax, f = getSetup((24, 11), (row, col))
     R2X_OHSU(ax[0])
     subplotLabel(ax)
-    OHSU_comp_plots(10)
+    OHSU_comp_plots(5)
     return f
 
 
@@ -57,7 +57,7 @@ def OHSU_comp_plots(comps):
     treatments = ['BMP2_24', 'BMP2_48', 'EGF_24', 'EGF_48', 'HGF_24', 'HGF_48', 'IFNg_24', 'IFNg_48', 'OSM_24', 'OSM_48','PBS_24','PBS_48','TGFb_24','TGFb_48','cntrl-0']
     df = pd.DataFrame(C, index = treatments)
     trmt = df.to_numpy()
-    for x in range(comps):
+    for x in range(5):
         BMP, EGF, HGF, IFNg, OSM, PBS, TGFb = [], [], [], [], [], [], []
         plt.figure(x)
         plt.figure(figsize=(10,10))
