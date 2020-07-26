@@ -54,7 +54,7 @@ def OHSU_comp_plots(comps):
     C = parafac2tensor[1][2]
     D = parafac2tensor[2][0]
     components = comps
-    treatments = ['BMP2_24', 'BMP2_48', 'EGF_24', 'EGF_48', 'HGF_24', 'HGF_48', 'IFNg_24', 'IFNg_48', 'OSM_24', 'OSM_48','PBS_24','PBS_48','TGFb_24','TGFb_48']
+    treatments = ['BMP2_24', 'BMP2_48', 'EGF_24', 'EGF_48', 'HGF_24', 'HGF_48', 'IFNg_24', 'IFNg_48', 'OSM_24', 'OSM_48','PBS_24','PBS_48','TGFb_24','TGFb_48','cntrl-0']
     df = pd.DataFrame(C, index = treatments)
     trmt = df.to_numpy()
     for x in range(comps):
