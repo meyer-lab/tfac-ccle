@@ -27,12 +27,12 @@ def makeFigure():
     col = 5
     ax, f = getSetup((56, 56), (row, col))
     
-    transformPlot(ax[0:4], 0, LINCSproteins, proteins)
-    transformPlot(ax[5:9], 5, atacChr, chromosomes)
-    transformPlot(ax[10:14], 10, GCPHistones, histones)
-    transformPlot(ax[15:19], 15, L1000GeneExp, geneExpression)
-    transformPlot(ax[20:24], 20, RNAGeneSeq, RNAGenes)
-    transformPlot(ax[25:29], 25, RPPAproteins, Rproteins)
+    transformPlot(ax[0:5], 0, LINCSproteins, proteins)
+    transformPlot(ax[5:10], 5, atacChr, chromosomes)
+    transformPlot(ax[10:15], 10, GCPHistones, histones)
+    transformPlot(ax[15:20], 15, L1000GeneExp, geneExpression)
+    transformPlot(ax[20:25], 20, RNAGeneSeq, RNAGenes)
+    transformPlot(ax[25:30], 25, RPPAproteins, Rproteins)
 
     # Add subplot labels
     subplotLabel(ax)
