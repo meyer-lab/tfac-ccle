@@ -27,12 +27,12 @@ def makeFigure():
     col = 5
     ax, f = getSetup((48, 56), (row, col))
     
-    transformPlot(0, LINCSproteins, proteins)
-    transformPlot(5, atacChr, chromosomes)
-    transformPlot(10, GCPHistones, histones)
-    transformPlot(15, L1000GeneExp, geneExpression)
-    transformPlot(20, RNAGeneSeq, RNAGenes)
-    transformPlot(25, RPPAproteins, Rproteins)
+    transformPlot(ax, 0, LINCSproteins, proteins)
+    transformPlot(ax, 5, atacChr, chromosomes)
+    transformPlot(ax, 10, GCPHistones, histones)
+    transformPlot(ax, 15, L1000GeneExp, geneExpression)
+    transformPlot(ax, 20, RNAGeneSeq, RNAGenes)
+    transformPlot(ax, 25, RPPAproteins, Rproteins)
 
     # Add subplot labels
     subplotLabel(ax)
@@ -42,7 +42,7 @@ def makeFigure():
 
 #R2X
 #comp plots
-def transformPlot(seed, transformSlice, sliceRow):
+def transformPlot(ax, seed, transformSlice, sliceRow):
     '''Plots box plot along each component for each slice measurement label after projection to factor transformation'''
     col = np.size(transformSlice, 1)
     for a in range(col):
