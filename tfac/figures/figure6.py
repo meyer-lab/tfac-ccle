@@ -27,13 +27,36 @@ def makeFigure():
     col = 5
     ax, f = getSetup((56, 56), (row, col))
     
-    transformPlot(ax[0:5], 0, LINCSproteins, proteins)
-    transformPlot(ax[5:10], 5, atacChr, chromosomes)
-    transformPlot(ax[10:15], 10, GCPHistones, histones)
-    transformPlot(ax[15:20], 15, L1000GeneExp, geneExpression)
-    transformPlot(ax[20:25], 20, RNAGeneSeq, RNAGenes)
-    transformPlot(ax[25:30], 25, RPPAproteins, Rproteins)
-
+    proteinBoxPlot(ax[0], LINCSproteins, 1, proteins)
+    proteinBoxPlot(ax[1], LINCSproteins, 2, proteins)
+    proteinBoxPlot(ax[2], LINCSproteins, 3, proteins)
+    proteinBoxPlot(ax[3], LINCSproteins, 4, proteins)
+    proteinBoxPlot(ax[4], LINCSproteins, 5, proteins)
+    proteinBoxPlot(ax[5], atacChr, 1, chromosomes)
+    proteinBoxPlot(ax[6], atacChr, 2, chromosomes)
+    proteinBoxPlot(ax[7], atacChr, 3, chromosomes)
+    proteinBoxPlot(ax[8], atacChr, 4, chromosomes)
+    proteinBoxPlot(ax[9], atacChr, 5, chromosomes)
+    proteinBoxPlot(ax[10], GCPHistones, 1, histones)
+    proteinBoxPlot(ax[11], GCPHistones, 2, histones)
+    proteinBoxPlot(ax[12], GCPHistones, 3, histones)
+    proteinBoxPlot(ax[13], GCPHistones, 4, histones)
+    proteinBoxPlot(ax[14], GCPHistones, 5, histones)
+    proteinBoxPlot(ax[15], L1000GeneExp, 1, geneExpression)
+    proteinBoxPlot(ax[16], L1000GeneExp, 2, geneExpression)
+    proteinBoxPlot(ax[17], L1000GeneExp, 3, geneExpression)
+    proteinBoxPlot(ax[18], L1000GeneExp, 4, geneExpression)
+    proteinBoxPlot(ax[19], L1000GeneExp, 5, geneExpression)
+    proteinBoxPlot(ax[20], RNAGeneSeq, 1, RNAGenes)
+    proteinBoxPlot(ax[21], RNAGeneSeq, 2, RNAGenes)
+    proteinBoxPlot(ax[22], RNAGeneSeq, 3, RNAGenes)
+    proteinBoxPlot(ax[23], RNAGeneSeq, 4, RNAGenes)
+    proteinBoxPlot(ax[24], RNAGeneSeq, 5, RNAGenes)
+    proteinBoxPlot(ax[25], RPPAproteins, 1, Rproteins)
+    proteinBoxPlot(ax[26], RPPAproteins, 2, Rproteins)
+    proteinBoxPlot(ax[27], RPPAproteins, 3, Rproteins)
+    proteinBoxPlot(ax[28], RPPAproteins, 4, Rproteins)
+    proteinBoxPlot(ax[29], RPPAproteins, 5, Rproteins)
     # Add subplot labels
     subplotLabel(ax)
 
@@ -42,11 +65,11 @@ def makeFigure():
 
 #R2X
 #comp plots
-def transformPlot(ax, seed, transformSlice, sliceRow):
-    '''Plots box plot along each component for each slice measurement label after projection to factor transformation'''
-    col = np.size(transformSlice, 1)
-    for a in range(col):
-        proteinBoxPlot(ax[seed + a], transformSlice[:,a], a+1, sliceRow)
+#def transformPlot(ax, seed, transformSlice, sliceRow):
+#    '''Plots box plot along each component for each slice measurement label after projection to factor transformation'''
+#    col = np.size(transformSlice, 1)
+#    for a in range(col):
+#        proteinBoxPlot(ax[seed + a], transformSlice[:,a], a+1, sliceRow)
 
         
 def proteinBoxPlot(ax, transformed, componentIn, sliceRows):
