@@ -23,7 +23,7 @@ RPPAproteins = transform[1][6]
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    row = 7
+    row = 6
     col = 5
     ax, f = getSetup((56, 56), (row, col))
     
