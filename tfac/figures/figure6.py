@@ -58,7 +58,7 @@ def makeFigure():
     proteinBoxPlot(ax[28], RPPAproteins, 4, Rproteins)
     proteinBoxPlot(ax[29], RPPAproteins, 5, Rproteins)
     # Add subplot labels
-    subplotLabel(ax)
+   # subplotLabel(ax)
 
     return f
 
