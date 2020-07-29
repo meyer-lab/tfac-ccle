@@ -4,9 +4,9 @@ This creates Figure 6 - ROC Curve.
 import pandas as pd
 import seaborn as sns
 import numpy as np
-from .figureCommon import subplotLabel, getSetup
-from ..Data_Mod import LINCSCleanUp, dataCleanUp, form_parafac2_tensor, ohsu_var
-from ..tensor import OHSU_parafac2_decomp, R2Xparafac2, projections_to_factors
+from .figureCommon import getSetup #, subplotLabel
+from ..Data_Mod import form_parafac2_tensor, ohsu_var
+from ..tensor import OHSU_parafac2_decomp, projections_to_factors
 
 p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, Rproteins = form_parafac2_tensor()
 p2slicesB = ohsu_var(p2slices)
@@ -26,37 +26,36 @@ def makeFigure():
     row = 6
     col = 5
     ax, f = getSetup((56, 56), (row, col))
-    
-    proteinBoxPlot(ax[0], LINCSproteins, 1, proteins)
-    proteinBoxPlot(ax[1], LINCSproteins, 2, proteins)
-    proteinBoxPlot(ax[2], LINCSproteins, 3, proteins)
-    proteinBoxPlot(ax[3], LINCSproteins, 4, proteins)
-    proteinBoxPlot(ax[4], LINCSproteins, 5, proteins)
-    proteinBoxPlot(ax[5], atacChr, 1, chromosomes)
-    proteinBoxPlot(ax[6], atacChr, 2, chromosomes)
-    proteinBoxPlot(ax[7], atacChr, 3, chromosomes)
-    proteinBoxPlot(ax[8], atacChr, 4, chromosomes)
-    proteinBoxPlot(ax[9], atacChr, 5, chromosomes)
-    proteinBoxPlot(ax[10], GCPHistones, 1, histones)
-    proteinBoxPlot(ax[11], GCPHistones, 2, histones)
-    proteinBoxPlot(ax[12], GCPHistones, 3, histones)
-    proteinBoxPlot(ax[13], GCPHistones, 4, histones)
-    proteinBoxPlot(ax[14], GCPHistones, 5, histones)
-    proteinBoxPlot(ax[15], L1000GeneExp, 1, geneExpression)
-    proteinBoxPlot(ax[16], L1000GeneExp, 2, geneExpression)
-    proteinBoxPlot(ax[17], L1000GeneExp, 3, geneExpression)
-    proteinBoxPlot(ax[18], L1000GeneExp, 4, geneExpression)
-    proteinBoxPlot(ax[19], L1000GeneExp, 5, geneExpression)
-    proteinBoxPlot(ax[20], RNAGeneSeq, 1, RNAGenes)
-    proteinBoxPlot(ax[21], RNAGeneSeq, 2, RNAGenes)
-    proteinBoxPlot(ax[22], RNAGeneSeq, 3, RNAGenes)
-    proteinBoxPlot(ax[23], RNAGeneSeq, 4, RNAGenes)
-    proteinBoxPlot(ax[24], RNAGeneSeq, 5, RNAGenes)
-    proteinBoxPlot(ax[25], RPPAproteins, 1, Rproteins)
-    proteinBoxPlot(ax[26], RPPAproteins, 2, Rproteins)
-    proteinBoxPlot(ax[27], RPPAproteins, 3, Rproteins)
-    proteinBoxPlot(ax[28], RPPAproteins, 4, Rproteins)
-    proteinBoxPlot(ax[29], RPPAproteins, 5, Rproteins)
+    proteinBoxPlot(ax[0], LINCSproteins[:,0], 1, proteins)
+    proteinBoxPlot(ax[1], LINCSproteins[:,1], 2, proteins)
+    proteinBoxPlot(ax[2], LINCSproteins[:,2], 3, proteins)
+    proteinBoxPlot(ax[3], LINCSproteins[:,3], 4, proteins)
+    proteinBoxPlot(ax[4], LINCSproteins[:,4], 5, proteins)
+    proteinBoxPlot(ax[5], atacChr[:,0], 1, chromosomes)
+    proteinBoxPlot(ax[6], atacChr[:,1], 2, chromosomes)
+    proteinBoxPlot(ax[7], atacChr[:,2], 3, chromosomes)
+    proteinBoxPlot(ax[8], atacChr[:,3], 4, chromosomes)
+    proteinBoxPlot(ax[9], atacChr[:,4], 5, chromosomes)
+    proteinBoxPlot(ax[10], GCPHistones[:,0], 1, histones)
+    proteinBoxPlot(ax[11], GCPHistones[:,1], 2, histones)
+    proteinBoxPlot(ax[12], GCPHistones[:,2], 3, histones)
+    proteinBoxPlot(ax[13], GCPHistones[:,3], 4, histones)
+    proteinBoxPlot(ax[14], GCPHistones[:,4], 5, histones)
+    proteinBoxPlot(ax[15], L1000GeneExp[:,0], 1, geneExpression)
+    proteinBoxPlot(ax[16], L1000GeneExp[:,1], 2, geneExpression)
+    proteinBoxPlot(ax[17], L1000GeneExp[:,2], 3, geneExpression)
+    proteinBoxPlot(ax[18], L1000GeneExp[:,3], 4, geneExpression)
+    proteinBoxPlot(ax[19], L1000GeneExp[:,4], 5, geneExpression)
+    proteinBoxPlot(ax[20], RNAGeneSeq[:,0], 1, RNAGenes)
+    proteinBoxPlot(ax[21], RNAGeneSeq[:,1], 2, RNAGenes)
+    proteinBoxPlot(ax[22], RNAGeneSeq[:,2], 3, RNAGenes)
+    proteinBoxPlot(ax[23], RNAGeneSeq[:,3], 4, RNAGenes)
+    proteinBoxPlot(ax[24], RNAGeneSeq[:,4], 5, RNAGenes)
+    proteinBoxPlot(ax[25], RPPAproteins[:,0], 1, Rproteins)
+    proteinBoxPlot(ax[26], RPPAproteins[:,1], 2, Rproteins)
+    proteinBoxPlot(ax[27], RPPAproteins[:,2], 3, Rproteins)
+    proteinBoxPlot(ax[28], RPPAproteins[:,3], 4, Rproteins)
+    proteinBoxPlot(ax[29], RPPAproteins[:,4], 5, Rproteins)
     # Add subplot labels
    # subplotLabel(ax)
 
@@ -70,8 +69,7 @@ def makeFigure():
 #    col = np.size(transformSlice, 1)
 #    for a in range(col):
 #        proteinBoxPlot(ax[seed + a], transformSlice[:,a], a+1, sliceRow)
-
-        
+    
 def proteinBoxPlot(ax, transformed, componentIn, sliceRows):
     '''Plots protein component in partial tucker factorization space with annotation of some outliers'''
     df = pd.DataFrame(transformed)
@@ -94,9 +92,9 @@ def proteinBoxPlot(ax, transformed, componentIn, sliceRows):
                 offset_side = 1 - offset_side
 
 
-def outliersForPlot(transform, sliceRows):
+def outliersForPlot(transformed, sliceRows):
     '''Determines outliers based on IQR range by component and returns dictionary by component that allows annotation for OHSU PARAFAC2 analysis'''
-    df = transform.copy(deep=True)
+    df = transformed.copy(deep=True)
     df['Proteins'] = sliceRows
     Q1 = df.quantile(.25)
     Q3 = df.quantile(.75)
