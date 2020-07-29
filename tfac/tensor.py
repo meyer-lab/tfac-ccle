@@ -30,11 +30,11 @@ def R2X(reconstructed, original):
 
 def R2Xparafac2(tensor_slices, decomposition):
     """Calculate the R2X of parafac2 decomposition"""
-    R2X = np.zeros(len(tensor_slices))
+    R2XX = np.zeros(len(tensor_slices))
     for idx, tensor_slice in enumerate(tensor_slices):
         reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
-        R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
-    return R2X
+        R2XX[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
+    return R2XX
 
 
 def reorient_factors(factors):
@@ -78,17 +78,6 @@ def OHSU_parafac2_decomp(tensorSlice, rank):
     """
     decomp, error = parafac2(tensorSlice, rank, n_iter_max=1000, return_errors=True, random_state=1)
     return decomp, error
-
-
-def MRSA_decomposition(tensor_slices, components, random_state=None):
-    '''Perform tensor formation and decomposition for particular variance and component number
-    ---------------------------------------------
-    Returns
-        parafac2tensor object
-        tensor_slices list
-    '''
-    parafac2tensor = parafac2(tensor_slices, components, random_state=random_state, verbose=False)
-    return parafac2tensor
 
 
 #### For R2X Plots ###########################################################################
