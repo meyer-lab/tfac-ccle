@@ -21,8 +21,6 @@ df.columns = ['Cytokines', 'GeneIDs', 'Component']
 test = pd.melt(df, id_vars=['Component'])
 
 
-
-
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
