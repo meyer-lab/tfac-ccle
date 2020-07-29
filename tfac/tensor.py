@@ -81,17 +81,6 @@ def OHSU_parafac2_decomp(tensorSlice, rank):
     return decomp, error
 
 
-def MRSA_decomposition(tensor_slices, components, random_state=None):
-    '''Perform tensor formation and decomposition for particular variance and component number
-    ---------------------------------------------
-    Returns
-        parafac2tensor object
-        tensor_slices list
-    '''
-    parafac2tensor = parafac2(tensor_slices, components, random_state=random_state, verbose=False)
-    return parafac2tensor
-
-
 #### For R2X Plots ###########################################################################
 
 
