@@ -27,7 +27,18 @@ def find_regularization(patient_matrix, outcomes, random_state=None):
 
 def find_CV_proba(patient_matrix, outcomes, random_state=None, C=1):
     """Given a particular patient matrix and outcomes list, performs cross validation of logistic regression and returns the decision function to be used for AUC"""
-    proba = cross_val_predict(LogisticRegression(penalty='l1', solver='saga', C=C, random_state=random_state, max_iter=10000, fit_intercept=False), patient_matrix, outcomes, cv=30, method="decision_function")
+    proba = cross_val_predict(
+        LogisticRegression(
+            penalty='l1',
+            solver='saga',
+            C=C,
+            random_state=random_state,
+            max_iter=10000,
+            fit_intercept=False),
+        patient_matrix,
+        outcomes,
+        cv=30,
+        method="decision_function")
     return proba
 
 
@@ -59,7 +70,7 @@ def get_patient_info(paired=False):
         cohortID = list(dataCohort["sample"])
         statusID = list(dataCohort["outcome_txt"])
         return cohortID, statusID
-    
+
     dataCohort = pd.read_csv(join(path_here, "tfac/data/mrsa/clinical_metadata_cohort1.txt"), delimiter="\t")
     singles = ['SA04233']
     dataCohort = dataCohort[~dataCohort["sample"].isin(singles)]
@@ -110,9 +121,10 @@ def form_paired_tensor(variance1=1, variance2=1):
     expNumpy = expNumpy * variance2
     #methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance3
 
-    tensor_slices = [cytoNumpy, expNumpy]#, methNumpy]
+    tensor_slices = [cytoNumpy, expNumpy]  # , methNumpy]
 
     return tensor_slices, cytokines, geneIDs, pairs
+
 
 def form_MRSA_tensor(variance1=1, variance2=1):
     """Create list of data matrices for parafac2"""
@@ -151,9 +163,9 @@ def form_MRSA_tensor(variance1=1, variance2=1):
     expNumpy = expNumpy * variance2
     #methNumpy = methNumpy * ((1 / tl_var(methNumpy)) ** .5) * variance3
 
-    tensor_slices = [cytoNumpy, expNumpy]#, methNumpy]
+    tensor_slices = [cytoNumpy, expNumpy]  # , methNumpy]
 
-    return tensor_slices, cytokines, geneIDs#, m_locations
+    return tensor_slices, cytokines, geneIDs  # , m_locations
 
 
 def import_methylation():
