@@ -6,7 +6,9 @@ import tensorly as tl
 from tensorly.decomposition import partial_tucker, parafac2
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.parafac2_tensor import parafac2_to_slice
+from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from tensorly.tenalg import mode_dot
+
 
 
 tl.set_backend("numpy")  # Set the backend
@@ -103,3 +105,9 @@ def flip_factors(tucker_output):
             for j in range(tucker_output[0].shape[0]):
                 tucker_output[0][j][:, component] *= -1
     return tucker_output
+
+#### For PARAFAC2 Projections to Factors ####################################################
+def projections_to_factors(parafac2_decomp):
+    '''Computes PARAFAC2 projections into factors'''
+    weights, transform = apply_parafac2_projections(parafac2_decomp)
+    return weights, transform

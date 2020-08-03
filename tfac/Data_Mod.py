@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from .dataHelpers import importLINCSprotein, ohsu_data
-
+from tensorly.metrics.regression import variance as tl_var
 
 def data_mod(x, df=None):
     """Creates a slice of the data tensor corresponding to the inputted treatment"""
@@ -111,3 +111,12 @@ def form_parafac2_tensor():
     atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
+
+def ohsu_var(tensorSlices):
+    '''Rebalances variance of all tensor slices to 1'''
+    for x in range(len(tensorSlices)):
+        var = tl_var(tensorSlices[x])
+        tensorSlices[x] = tensorSlices[x]/var
+    tensorSlices[0] = tensorSlices[0] * 12
+    tensorSlices[6] = tensorSlices[6] * 12
+    return tensorSlices
