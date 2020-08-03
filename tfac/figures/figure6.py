@@ -47,7 +47,7 @@ def makeFigure():
         proteinBoxPlot(ax[15 + comps], GCPHistones[:, comps], comps + 1, histones)
         proteinBoxPlot(ax[20 + comps], L1000GeneExp[:, comps], comps + 1, geneExpression)
         proteinBoxPlot(ax[25 + comps], RPPAproteins[:, comps], comps +1, Rproteins)
-    subplotLabel(ax)
+    #subplotLabel(ax)
     return f
 
 
