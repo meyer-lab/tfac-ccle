@@ -114,7 +114,7 @@ def ohsu_var(tensorSlices):
     '''Rebalances variance of all tensor slices to 1'''
     for x in range(len(tensorSlices)):
         var = tl_var(tensorSlices[x])
-        tensorSlices[x] = tensorSlices[x]/var
+        tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
     tensorSlices[0] = tensorSlices[0] * 12
     tensorSlices[6] = tensorSlices[6] * 12
     return tensorSlices
