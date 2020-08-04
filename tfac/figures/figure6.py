@@ -1,5 +1,5 @@
 """
-This creates Figure 4.
+This creates Figure 6. Includes OHSU R2X, treatments by components, and outliers by data slice (experiment) plots.
 """
 import matplotlib.pyplot as plt
 import numpy as np
