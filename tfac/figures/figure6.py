@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup
+from .figureCommon import getSetup #subplotLabel
 from ..Data_Mod import form_parafac2_tensor, ohsu_var
 from ..tensor import OHSU_parafac2_decomp, R2Xparafac2, projections_to_factors
 
@@ -53,16 +53,14 @@ def makeFigure():
 
 def R2X_OHSU(ax):
     '''Creates R2X for OHSU PARAFAC2'''
-    p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = form_parafac2_tensor()
-    p2slicesB = ohsu_var(p2slices)
     r2x = []
-    components = 10
-    for i in range(1, components + 1):
+    compR2X = 10
+    for i in range(1, compR2X + 1):
         parafac2tensor, error = OHSU_parafac2_decomp(p2slicesB, i)
         r2x.append(R2Xparafac2(p2slicesB, parafac2tensor))
     df = pd.DataFrame(r2x)
     comps = []
-    for i in range(1, components + 1):
+    for i in range(1, compR2X + 1):
         comps.append(i)
     df['Component'] = comps
     df.columns = ['Proteins', 'Chromosomes', 'IFproteins', 'Histones', 'Gene Expression', 'RNA Genes', 'RPPA Proteins', 'Component']
