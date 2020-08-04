@@ -1,8 +1,8 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
-from .dataHelpers import importLINCSprotein, ohsu_data
 from tensorly.metrics.regression import variance as tl_var
+from .dataHelpers import importLINCSprotein, ohsu_data
 
 
 def data_mod(x, df=None):
@@ -48,10 +48,10 @@ def LINCSCleanUp():
     LINCSprotein = importLINCSprotein()
     ind1 = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
     ind2 = LINCSprotein.loc[LINCSprotein['Time'] == 0]
-    ind = pd.concat([ind2,ind1])
+    ind = pd.concat([ind2, ind1])
     ind = ind.drop(columns='File')
     x = ['02_', '03_', '04_']
-    y = ['0','24', '48']
+    y = ['0', '24', '48']
     for a in range(0, 3):
         for b in range(0, 3):
             ind = ind.replace(x[a] + 'RPPA_null1_' + '0' + y[b], 'cntrl' + y[b])
@@ -112,7 +112,7 @@ def form_parafac2_tensor():
 
 def ohsu_var(tensorSlices):
     '''Rebalances variance of all tensor slices to 1'''
-    for x in range(len(tensorSlices)):
+    for x, val in enumerate(tensorSlices):
         var = tl_var(tensorSlices[x])
         tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
     tensorSlices[0] = tensorSlices[0] * 12

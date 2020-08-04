@@ -5,7 +5,6 @@ import numpy as np
 import tensorly as tl
 from tensorly.decomposition import partial_tucker, parafac2
 from tensorly.metrics.regression import variance as tl_var
-from tensorly.decomposition import parafac2
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from tensorly.tenalg import mode_dot
 from .MRSA_dataHelpers import form_MRSA_tensor
@@ -32,11 +31,11 @@ def R2X(reconstructed, original):
 
 def R2Xparafac2(tensor_slices, decomposition):
     """Calculate the R2X of parafac2 decomposition"""
-    R2X = np.zeros(len(tensor_slices))
+    R2Xp = np.zeros(len(tensor_slices))
     for idx, tensor_slice in enumerate(tensor_slices):
         reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
-        R2X[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
-    return R2X
+        R2Xp[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
+    return R2Xp
 
 
 def reorient_factors(factors):

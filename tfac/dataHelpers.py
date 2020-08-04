@@ -2,7 +2,6 @@
 from os.path import join, dirname
 import numpy as np
 import pandas as pd
-from tensorly.metrics.regression import variance as tl_var
 
 path_here = dirname(dirname(__file__))
 
@@ -28,7 +27,6 @@ def ohsu_data():
     L1000 = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_L1000_Level4.csv"))
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
     RPPA = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RPPA_Level4.csv"))
-    
     return atac, cycIF, GCP, IF, L1000, RNAseq, RPPA
 
 def compProteins(comps):
