@@ -36,7 +36,6 @@ def R2Xparafac2(tensor_slices, decomposition):
         R2Xp[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
     return R2Xp
 
-
 def reorient_factors(factors):
     """ Reorient factors based on the sign of the mean so that only the last factor can have negative means. """
     for index in range(len(factors) - 1):
@@ -86,9 +85,24 @@ def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
 
-
 #### For PARAFAC2 Projections to Factors ####################################################
 def projections_to_factors(parafac2_decomp):
     '''Computes PARAFAC2 projections into factors'''
     weights, transform = apply_parafac2_projections(parafac2_decomp)
     return weights, transform
+=======
+###### To Flip Factors #########################################################################
+
+
+def flip_factors(tucker_output):
+    """For partial tucker OHSU factorization, flips protein and treatment/time factors if both negative for important values"""
+    for component in range(tucker_output[0].shape[2]):
+        av = 0.0
+        for i in range(tucker_output[0].shape[0]):
+            av += np.mean(tucker_output[0][i][:, component] ** 5)
+
+        if av < 0 and tucker_output[1][0][:, component].mean() < 0:
+            tucker_output[1][0][:, component] *= -1
+            for j in range(tucker_output[0].shape[0]):
+                tucker_output[0][j][:, component] *= -1
+    return tucker_output

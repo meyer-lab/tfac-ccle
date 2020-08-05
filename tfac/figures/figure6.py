@@ -9,7 +9,6 @@ from .figureCommon import getSetup #subplotLabel
 from ..Data_Mod import form_parafac2_tensor, ohsu_var
 from ..tensor import OHSU_parafac2_decomp, R2Xparafac2, projections_to_factors
 
-
 p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, Rproteins = form_parafac2_tensor()
 p2slicesB = ohsu_var(p2slices)
 components = 5
@@ -49,7 +48,6 @@ def makeFigure():
         proteinBoxPlot(ax[25 + comps], RPPAproteins[:, comps], comps +1, Rproteins)
     #subplotLabel(ax)
     return f
-
 
 def R2X_OHSU(ax):
     '''Creates R2X for OHSU PARAFAC2'''
