@@ -1,6 +1,7 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
+from tensorly.metrics.regression import variance as tl_var
 from .dataHelpers import importLINCSprotein, ohsu_data
 
 
@@ -45,12 +46,15 @@ def form_tensor():
 def LINCSCleanUp():
     """Cleaning up LINCS data for PARAFAC2 column order"""
     LINCSprotein = importLINCSprotein()
-    ind = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
+    ind1 = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
+    ind2 = LINCSprotein.loc[LINCSprotein['Time'] == 0]
+    ind = pd.concat([ind2, ind1])
     ind = ind.drop(columns='File')
     x = ['02_', '03_', '04_']
-    y = ['24', '48']
+    y = ['0', '24', '48']
     for a in range(0, 3):
-        for b in range(0, 2):
+        for b in range(0, 3):
+            ind = ind.replace(x[a] + 'RPPA_null1_' + '0' + y[b], 'cntrl' + y[b])
             ind = ind.replace(x[a] + 'RPPA_BMP2_' + y[b], 'BMP2_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_EGF_' + y[b], 'EGF_' + y[b])
             ind = ind.replace(x[a] + 'RPPA_HGF_' + y[b], 'HGF_' + y[b])
@@ -77,28 +81,22 @@ def dataCleanUp():
         GCP = GCP.drop(columns=[tr[r] + '4', tr[r] + '8'])
         L1000 = L1000.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
         RPPA = RPPA.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-    atac = atac.drop(columns=tr[7])
     atac = atac.sort_index(axis=1)
     chromosomes = atac['peak'].to_list()
     atac = atac.drop(columns='peak').to_numpy()
-    cycIF = cycIF.drop(columns=tr[7])
     cycIF = cycIF.sort_index(axis=1)
     IFproteins = cycIF['feature'].to_list()
     cycIF = cycIF.drop(columns='feature').to_numpy()
-    GCP = GCP.drop(columns=tr[7])
     GCP = GCP.dropna()
     GCP = GCP.sort_index(axis=1)
     histones = GCP['histone'].to_list()
     GCP = GCP.drop(columns='histone').to_numpy()
-    L1000 = L1000.drop(columns=tr[7])
     L1000 = L1000.sort_index(axis=1)
     geneExpression = L1000['probeset'].to_list()
     L1000 = L1000.drop(columns='probeset').to_numpy()
-    RNAseq = RNAseq.drop(columns=tr[7])
     RNAseq = RNAseq.sort_index(axis=1)
     RNAGenes = RNAseq['ensembl_gene_id'].tolist()
     RNAseq = RNAseq.drop(columns='ensembl_gene_id').to_numpy()
-    RPPA = RPPA.drop(columns=tr[7])
     RPPA = RPPA.sort_index(axis=1)
     RPPAProteins = RPPA['antibody'].tolist()
     RPPA = RPPA.drop(columns='antibody').to_numpy()
@@ -111,3 +109,12 @@ def form_parafac2_tensor():
     atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
+
+def ohsu_var(tensorSlices):
+    '''Rebalances variance of all tensor slices to 1'''
+    for x, val in enumerate(tensorSlices):
+        var = tl_var(tensorSlices[x])
+        tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
+    tensorSlices[0] = tensorSlices[0] * 12
+    tensorSlices[6] = tensorSlices[6] * 12
+    return tensorSlices
