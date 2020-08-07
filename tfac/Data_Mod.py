@@ -110,6 +110,7 @@ def form_parafac2_tensor():
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
 
+
 def ohsu_var(tensorSlices):
     '''Rebalances variance of all tensor slices to 1'''
     for x, val in enumerate(tensorSlices):

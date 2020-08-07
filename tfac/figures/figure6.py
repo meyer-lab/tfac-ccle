@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from .figureCommon import getSetup #subplotLabel
+from .figureCommon import getSetup  # subplotLabel
 from ..Data_Mod import form_parafac2_tensor, ohsu_var
 from ..tensor import OHSU_parafac2_decomp, R2Xparafac2, projections_to_factors
 
@@ -32,6 +32,7 @@ for _ in range(7):
 df["Times"] = times
 df["Treatments"] = treatments
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -45,9 +46,10 @@ def makeFigure():
         proteinBoxPlot(ax[10 + comps], LINCSproteins[:, comps], comps + 1, proteins)
         proteinBoxPlot(ax[15 + comps], GCPHistones[:, comps], comps + 1, histones)
         proteinBoxPlot(ax[20 + comps], L1000GeneExp[:, comps], comps + 1, geneExpression)
-        proteinBoxPlot(ax[25 + comps], RPPAproteins[:, comps], comps +1, Rproteins)
-    #subplotLabel(ax)
+        proteinBoxPlot(ax[25 + comps], RPPAproteins[:, comps], comps + 1, Rproteins)
+    # subplotLabel(ax)
     return f
+
 
 def R2X_OHSU(ax):
     '''Creates R2X for OHSU PARAFAC2'''
@@ -71,10 +73,12 @@ def R2X_OHSU(ax):
     plt.legend(prop={'size': 15})
     ax.set_ylim(0, 1)
 
+
 def OHSU_comp_plots(df, comps, ax):
     sns.lineplot(data=df, x="Times", y=str(comps), hue="Treatments", ax=ax)
     ax.set_xlabel('Time (hr)')
     ax.set_title('Component ' + str(comps))
+
 
 def proteinBoxPlot(ax, transformed, componentIn, sliceRows):
     '''Plots protein component in partial tucker factorization space with annotation of some outliers'''
@@ -127,4 +131,4 @@ def outliersForPlot(transformed, sliceRows):
                     random2 = np.random.randint(0, 2)
                     prots[i][idx + random2 * 4][3] = False
                     prots[i][idx + 4][4] = False
-    return prots    
+    return prots
