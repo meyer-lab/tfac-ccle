@@ -36,7 +36,7 @@ def makeFigure():
     row = 1
     col = 5
     ax, f = getSetup((25, 25), (row, col))
-    OHSU_comp_plots(df, 4, ax[0])
+    OHSU_comp_plots(df, 5, ax[0])
     proteinBoxPlot(ax[1], LINCSproteins[:, 4], 5, proteins)
     proteinBoxPlot(ax[2], GCPHistones[:, 4], 5, histones)
     proteinBoxPlot(ax[3], L1000GeneExp[:, 4], 5, geneExpression)

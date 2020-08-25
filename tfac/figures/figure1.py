@@ -37,7 +37,7 @@ def makeFigure():
     col = 6
     ax, f = getSetup((25, 25), (row, col))
     R2X_OHSU(ax[0], p2slicesB)
-    OHSU_comp_plots(df, 0, ax[1])
+    OHSU_comp_plots(df, 1, ax[1])
     proteinBoxPlot(ax[2], LINCSproteins[:, 0], 1, proteins)
     proteinBoxPlot(ax[3], GCPHistones[:, 0], 1, histones)
     proteinBoxPlot(ax[4], L1000GeneExp[:, 0], 1, geneExpression)
