@@ -1,8 +1,7 @@
 """
 This creates Figure 6. Includes OHSU R2X, treatments by components, and outliers by data slice (experiment) plots.
 """
-import matplotlib.pyplot as plt
-import seaborn as sns
+
 from .figureCommon import getSetup, subplotLabel
 
 def makeFigure():

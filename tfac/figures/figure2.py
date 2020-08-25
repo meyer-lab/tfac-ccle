@@ -2,10 +2,7 @@
 This creates Figure 2. Includes Treatments vs Time on Component 2 and box plots for each data slice on Component 2.
 """
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
 from .figureCommon import getSetup, subplotLabel
 from ..tensor import OHSU_parafac2_decomp, projections_to_factors
 from ..Data_Mod import form_parafac2_tensor, ohsu_var, OHSU_comp_plots, proteinBoxPlot
@@ -35,7 +32,7 @@ def makeFigure():
     # Get list of axis objects
     row = 1
     col = 5
-    ax, f = getSetup((25, 25), (row, col))
+    ax, f = getSetup((12, 11), (row, col))
     OHSU_comp_plots(df, 2, ax[0])
     proteinBoxPlot(ax[1], LINCSproteins[:, 1], 2, proteins)
     proteinBoxPlot(ax[2], GCPHistones[:, 1], 2, histones)
