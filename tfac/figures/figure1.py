@@ -32,7 +32,7 @@ def makeFigure():
     # Get list of axis objects
     row = 1
     col = 6
-    ax, f = getSetup((12, 11), (row, col))
+    ax, f = getSetup((7, 11), (row, col))
     R2X_OHSU(ax[0], p2slicesB)
     OHSU_comp_plots(df, 1, ax[1])
     proteinBoxPlot(ax[2], LINCSproteins[:, 0], 1, proteins)
