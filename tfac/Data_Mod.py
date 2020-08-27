@@ -46,35 +46,6 @@ def form_tensor():
     return tensor, unique_treatments, times
 
 
-def LINCSCleanUp():
-    """Cleaning up LINCS data for PARAFAC2 column order"""
-    LINCSprotein = importLINCSprotein()
-    ind1 = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
-    ind2 = LINCSprotein.loc[LINCSprotein['Time'] == 0]
-    ind = pd.concat([ind2, ind1])
-    ind = ind.drop(columns='File')
-    x = ['02_', '03_', '04_']
-    y = ['0', '24', '48']
-    for a in range(0, 3):
-        for b in range(0, 3):
-            ind = ind.replace(x[a] + 'RPPA_null1_' + '0' + y[b], 'cntrl' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_BMP2_' + y[b], 'BMP2_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_EGF_' + y[b], 'EGF_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_HGF_' + y[b], 'HGF_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_IFNg_' + y[b], 'IFNg_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_OSM_' + y[b], 'OSM_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_TGFb_' + y[b], 'TGFb_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_pbs_' + y[b], 'PBS_' + y[b])
-    ind = ind.drop(columns=['Treatment', 'Time'])
-    ind = ind.groupby(['Sample description']).mean()
-    ind = ind.sort_values('Sample description')
-    indT = ind.T
-    treatmentsTime = indT.columns.tolist()
-    proteins = indT.index.tolist()
-    indT = indT.to_numpy()
-    return indT, treatmentsTime, proteins
-
-
 def dataCleanUp():
     """Cleaning up OHSU data for PARAFAC2 column order"""
     atac, cycIF, GCP, _, L1000, RNAseq, RPPA = ohsu_data()
@@ -108,9 +79,8 @@ def dataCleanUp():
 
 def form_parafac2_tensor():
     """Creates tensor in numpy form and returns tensor, treatment by time, LINCS proteins, ATAC chromosomes, IF proteins, GCP histones, L1000 gene expression, RNA gene sequence, and RPPA proteins"""
-    indTM, treatmentsTime, proteins = LINCSCleanUp()
     atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
-    p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
+    p2slices = [atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
 
 
@@ -119,8 +89,7 @@ def ohsu_var(tensorSlices):
     for x, val in enumerate(tensorSlices):
         var = tl_var(tensorSlices[x])
         tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
-    tensorSlices[0] = tensorSlices[0] * 12
-    tensorSlices[6] = tensorSlices[6] * 12
+    tensorSlices[5] = tensorSlices[5] * 12
     return tensorSlices
 
 def R2X_OHSU(ax, p2slicesB):

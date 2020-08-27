@@ -11,10 +11,9 @@ p2slicesB = ohsu_var(p2slices)
 components = 5
 parafac2tensor, error = OHSU_parafac2_decomp(p2slicesB, components)
 weights, transform = projections_to_factors(parafac2tensor)
-LINCSproteins = transform[1][0]
-GCPHistones = transform[1][3]
-L1000GeneExp = transform[1][4]
-RPPAproteins = transform[1][6]
+GCPHistones = transform[1][2]
+L1000GeneExp = transform[1][3]
+RPPAproteins = transform[1][5]
 C = parafac2tensor[1][2]
 df = pd.DataFrame(C[:-1, :])
 df.columns = ["1", "2", "3", "4", "5"]
@@ -34,10 +33,9 @@ def makeFigure():
     col = 5
     ax, f = getSetup((12, 6), (row, col))
     OHSU_comp_plots(df, 4, ax[0])
-    proteinBoxPlot(ax[1], LINCSproteins[:, 3], 4, proteins)
-    proteinBoxPlot(ax[2], GCPHistones[:, 3], 4, histones)
-    proteinBoxPlot(ax[3], L1000GeneExp[:, 3], 4, geneExpression)
-    proteinBoxPlot(ax[4], RPPAproteins[:, 3], 4, Rproteins)
+    proteinBoxPlot(ax[1], GCPHistones[:, 3], 4, histones)
+    proteinBoxPlot(ax[2], L1000GeneExp[:, 3], 4, geneExpression)
+    proteinBoxPlot(ax[3], RPPAproteins[:, 3], 4, Rproteins)
     subplotLabel(ax)
     return f
     
