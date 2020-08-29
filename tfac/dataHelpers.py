@@ -17,7 +17,7 @@ def ohsu_data():
     RPPA = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RPPA_Level4.csv"))
     return atac, cycIF, GCP, IF, L1000, RNAseq, RPPA
 
-
+'''
 def compProteins(comps):
     """Returns the top three weighted proteins for each component in input protein component matrix"""
     i = np.shape(comps)  # input tensor decomp output
@@ -38,11 +38,12 @@ def compProteins(comps):
             topProtein.append(rearrangedNames[z])
 
     return topProtein
+'''
 
 def proteinNames():
     """Return protein names (data columns)"""
-    data = importLINCSprotein()
-    data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
-    proteinN = data.columns.values.tolist()
-    return proteinN
+    #data = importLINCSprotein()
+    #data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
+    #proteinN = data.columns.values.tolist()
+    #return proteinN
     

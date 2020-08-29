@@ -4,12 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorly.metrics.regression import variance as tl_var
-from .dataHelpers import importLINCSprotein, ohsu_data
+from .dataHelpers import ohsu_data
 from .tensor import OHSU_parafac2_decomp, R2Xparafac2
 
 
 def data_mod(x, df=None):
     """Creates a slice of the data tensor corresponding to the inputted treatment"""
+    '''
     if not isinstance(df, pd.core.frame.DataFrame):
         df = importLINCSprotein()
     spec_df = df.loc[(df["Treatment"] == "Control") | (df["Treatment"] == x)]
@@ -17,10 +18,12 @@ def data_mod(x, df=None):
     spec_df = spec_df.drop(columns=["Sample description", "Treatment", "Time"])
     y = spec_df.to_numpy()
     return y, spec_df, times
+    '''
 
 
 def form_tensor():
     """Creates tensor in numpy array form and returns tensor, treatments, and time"""
+'''
     df = importLINCSprotein()
     tempindex = df["Sample description"]
     tempindex = tempindex[:36]
@@ -44,6 +47,7 @@ def form_tensor():
         slices.append(array)
     tensor = np.stack(slices)
     return tensor, unique_treatments, times
+'''
 
 
 def dataCleanUp():
@@ -81,7 +85,7 @@ def form_parafac2_tensor():
     """Creates tensor in numpy form and returns tensor, treatment by time, LINCS proteins, ATAC chromosomes, IF proteins, GCP histones, L1000 gene expression, RNA gene sequence, and RPPA proteins"""
     atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
     p2slices = [atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
-    return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
+    return p2slices, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
 
 
 def ohsu_var(tensorSlices):
