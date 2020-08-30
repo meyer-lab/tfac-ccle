@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorly.metrics.regression import variance as tl_var
-from dataHelpers import importLINCSprotein, ohsu_data
-from tensor import OHSU_parafac2_decomp, R2Xparafac2
+from .dataHelpers import importLINCSprotein, ohsu_data
+from .tensor import OHSU_parafac2_decomp, R2Xparafac2
 
 
 def data_mod(x, df=None):
