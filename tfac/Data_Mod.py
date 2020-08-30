@@ -108,7 +108,7 @@ def R2X_OHSU(ax, p2slicesB):
     for i in range(1, compR2X + 1):
         comps.append(i)
     df['Component'] = comps
-    df.columns = ['Proteins', 'Chromosomes', 'IFproteins', 'Histones', 'Gene Expression', 'RNA Genes', 'RPPA Proteins', 'Component']
+    df.columns = ['Chromosomes', 'IFproteins', 'Histones', 'Gene Expression', 'RNA Genes', 'RPPA Proteins', 'Component']
     test = pd.melt(df, id_vars=['Component'])
     b = sns.scatterplot(data=test, x='Component', y='value', hue='variable', style='variable', ax=ax, s=100)
     b.set_xlabel("Component", fontsize=20)
