@@ -5,7 +5,7 @@ This creates Figure 1. Includes R2X for PARAFAC2, Treatments vs Time on Componen
 import pandas as pd
 from .figureCommon import getSetup, subplotLabel
 from ..tensor import OHSU_parafac2_decomp, projections_to_factors
-from ..Data_Mod import form_parafac2_tensor, ohsu_var, OHSU_comp_plots, proteinBoxPlot, R2X_OHSU
+from ..Data_Mod import form_parafac2_tensor, ohsu_var, OHSU_comp_plots, proteinBoxPlot
 p2slices, chromosomes, IFproteins, histones, geneExpression, RNAGenes, Rproteins = form_parafac2_tensor()
 p2slicesB = ohsu_var(p2slices)
 components = 5

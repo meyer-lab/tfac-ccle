@@ -3,8 +3,8 @@ This creates Figure 6. Includes OHSU R2X.
 """
 import pandas as pd
 from .figureCommon import getSetup, subplotLabel
-from ..tensor import OHSU_parafac2_decomp, projections_to_factors
-from ..Data_Mod import form_parafac2_tensor, ohsu_var, OHSU_comp_plots, proteinBoxPlot, R2X_OHSU
+from ..tensor import OHSU_parafac2_decomp
+from ..Data_Mod import form_parafac2_tensor, ohsu_var, R2X_OHSU
 p2slices, chromosomes, IFproteins, histones, geneExpression, RNAGenes, Rproteins = form_parafac2_tensor()
 p2slicesB = ohsu_var(p2slices)
 components = 5
