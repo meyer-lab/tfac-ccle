@@ -30,12 +30,11 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     row = 1
-    col = 6
+    col = 4
     ax, f = getSetup((24, 6), (row, col))
     OHSU_comp_plots(df, 1, ax[0])
-    proteinBoxPlot(ax[1], LINCSproteins[:, 0], 1, proteins)
-    proteinBoxPlot(ax[2], GCPHistones[:, 0], 1, histones)
-    proteinBoxPlot(ax[3], L1000GeneExp[:, 0], 1, geneExpression)
-    proteinBoxPlot(ax[4], RPPAproteins[:, 0], 1, Rproteins)
+    proteinBoxPlot(ax[1], GCPHistones[:, 0], 1, histones)
+    proteinBoxPlot(ax[2], L1000GeneExp[:, 0], 1, geneExpression)
+    proteinBoxPlot(ax[3], RPPAproteins[:, 0], 1, Rproteins)
     subplotLabel(ax)
     return f
