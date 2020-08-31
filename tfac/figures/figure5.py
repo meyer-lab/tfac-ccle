@@ -29,9 +29,9 @@ df["Treatments"] = treatments
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    row = 1
-    col = 5
-    ax, f = getSetup((24, 6), (row, col))
+    row = 2
+    col = 3
+    ax, f = getSetup((30, 6), (row, col))
     OHSU_comp_plots(df, 5, ax[0])
     proteinBoxPlot(ax[1], GCPHistones[:, 4], 5, histones)
     proteinBoxPlot(ax[2], L1000GeneExp[:, 4], 5, geneExpression)
