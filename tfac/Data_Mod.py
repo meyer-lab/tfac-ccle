@@ -128,9 +128,9 @@ def ohsu_var(tensorSlices):
         var = tl_var(tensorSlices[x])
         tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
     tensorSlices[1] = tensorSlices[1] * 3
-    tensorSlices[2] = tensorSlices[2] * 25
+    tensorSlices[2] = tensorSlices[2] * 20
     tensorSlices[3] = tensorSlices[3] * 12
-    tensorSlices[5] = tensorSlices[5] * 15
+    tensorSlices[5] = tensorSlices[5] * 20
     return tensorSlices
 
 def R2X_OHSU(ax, p2slicesB):
