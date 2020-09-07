@@ -33,9 +33,9 @@ def makeFigure():
     col = 4
     ax, f = getSetup((24, 6), (row, col))
     OHSU_comp_plots(df, 4, ax[0])
-    proteinBoxPlot(ax[1], GCPHistones[:, 3], 4, histones)
-    proteinBoxPlot(ax[2], L1000GeneExp[:, 3], 4, geneExpression)
-    proteinBoxPlot(ax[3], RPPAproteins[:, 3], 4, Rproteins)
+    proteinBoxPlot(ax[1], GCPHistones[:, 3], 4, histones, 'Histones')
+    proteinBoxPlot(ax[2], L1000GeneExp[:, 3], 4, geneExpression, 'Genes')
+    proteinBoxPlot(ax[3], RPPAproteins[:, 3], 4, Rproteins, 'Protein Factors')
     subplotLabel(ax)
     return f
     

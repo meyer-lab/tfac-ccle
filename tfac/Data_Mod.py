@@ -128,9 +128,9 @@ def ohsu_var(tensorSlices):
         var = tl_var(tensorSlices[x])
         tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
     tensorSlices[1] = tensorSlices[1] * 3
-    tensorSlices[2] = tensorSlices[2] * 15
+    tensorSlices[2] = tensorSlices[2] * 30
     tensorSlices[3] = tensorSlices[3] * 12
-    tensorSlices[5] = tensorSlices[5] * 9
+    tensorSlices[5] = tensorSlices[5] * 15
     return tensorSlices
 
 def R2X_OHSU(ax, p2slicesB):
@@ -163,14 +163,14 @@ def OHSU_comp_plots(df, comps, ax):
     ax.set_title('Component ' + str(comps))
 
 
-def proteinBoxPlot(ax, transformed, componentIn, sliceRows):
+def proteinBoxPlot(ax, transformed, componentIn, sliceRows, title):
     '''Plots protein component in partial tucker factorization space with annotation of some outliers'''
     df = pd.DataFrame(transformed)
     prots = outliersForPlot(df, sliceRows)
     sns.boxplot(data=df, ax=ax)
     ax.set_xlabel("Component " + str(componentIn))
     ax.set_ylabel('Component Value')
-    ax.set_title('Protein Factors')
+    ax.set_title(title)
     for component in prots:
         offset_side = 0
         for outlier in prots[component]:
