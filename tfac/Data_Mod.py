@@ -174,15 +174,15 @@ def proteinBoxPlot(ax, transformed, componentIn, sliceRows, title):
     for component in prots:
         offset_side = 0
         for outlier in prots[component]:
-            #if outlier[3]:
-                #if offset_side == 0:
-                    #ax.text(outlier[0] + .05, outlier[1] - .005, outlier[2], horizontalalignment='left', size='large', color='black', weight=100)
-                    #offset_side = 1
-                #elif offset_side == 1:
-            ax.text(outlier[0] - .05, outlier[1] - .005, outlier[2], horizontalalignment='right', size='large', color='black', weight=100)
-                    #offset_side = 0
-            #else:
-                #offset_side = 1 - offset_side
+            if outlier[3]:
+                if offset_side == 0:
+                    ax.text(outlier[0] + .05, outlier[1] - .005, outlier[2], horizontalalignment='left', size='large', color='black', weight=100)
+                    offset_side = 1
+                elif offset_side == 1:
+                    ax.text(outlier[0] - .05, outlier[1] - .005, outlier[2], horizontalalignment='right', size='large', color='black', weight=100)
+                    offset_side = 0
+            else:
+                offset_side = 1 - offset_side
 
 
 def outliersForPlot(transformed, sliceRows):
