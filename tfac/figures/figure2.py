@@ -32,13 +32,13 @@ def makeFigure():
     # Get list of axis objects
     row = 1
     col = 2
-    ax, f = getSetup((24, 14), (row, col))
+    ax, f = getSetup((12, 7), (row, col))
     heatMap(trmtMap, "Treatment by Component", ax[0])
     subplotLabel(ax)
     return f
 
 
-def heatMap(df, title, ax):
-    plt.title(title, fontsize=12)
+def heatMap(df, map_title, ax):
+    ax.title(map_title, fontsize=12)
     sns.heatmap(df, cmap = 'RdYlGn', linewidths=0.10, xticklabels = df.columns, yticklabels = df.index, ax=ax)
     
