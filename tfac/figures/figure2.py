@@ -36,8 +36,8 @@ trmtMap_aligned = trmtMap_aligned.transpose()
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    row = 2
-    col = 1
+    row = 1
+    col = 2
     ax, f = getSetup((7, 12), (row, col))
     heatMap(trmtMap, "Treatment-Time by Component", ax[0])
     heatMap(trmtMap_aligned, "Aligned Treatment-Time by Component", ax[1])
