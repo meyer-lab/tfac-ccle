@@ -40,7 +40,7 @@ def makeFigure():
     col = 1
     ax, f = getSetup((7, 12), (row, col))
     heatMap(trmtMap, "Treatment-Time by Component", ax[0])
-    heatMap(trmtMap_aligned, "Component by Aligned Treatment-Time", ax[1])
+    heatMap(trmtMap_aligned, "Aligned Treatment-Time by Component", ax[1])
     subplotLabel(ax)
     return f
 
