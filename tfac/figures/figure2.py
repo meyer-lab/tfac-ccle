@@ -39,6 +39,6 @@ def makeFigure():
 
 
 def heatMap(df, map_title, ax):
-    ax.title(map_title, fontsize=12)
+    ax.set_title(map_title, fontsize=12)
     sns.heatmap(df, cmap = 'RdYlGn', linewidths=0.10, xticklabels = df.columns, yticklabels = df.index, ax=ax)
     
