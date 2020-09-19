@@ -1,41 +1,44 @@
 """
-This creates Figure 2. Includes Treatments vs Time on Component 2 and box plots for each data slice on Component 2.
+This creates Figure 2. This figure includes heat maps for Partial Tucker Protein/Component and Treatment/Component.
 """
-
+import numpy as np
 import pandas as pd
-from .figureCommon import getSetup, subplotLabel
-from ..tensor import OHSU_parafac2_decomp, projections_to_factors
-from ..Data_Mod import form_parafac2_tensor, ohsu_var, OHSU_comp_plots, proteinBoxPlot
-p2slices, chromosomes, IFproteins, histones, geneExpression, RNAGenes, Rproteins = form_parafac2_tensor()
-p2slicesB = ohsu_var(p2slices)
-components = 5
-parafac2tensor, error = OHSU_parafac2_decomp(p2slicesB, components)
-weights, transform = projections_to_factors(parafac2tensor)
-GCPHistones = transform[1][2]
-L1000GeneExp = transform[1][3]
-RPPAproteins = transform[1][5]
-C = parafac2tensor[1][2]
-df = pd.DataFrame(C[:-1, :])
-df.columns = ["1", "2", "3", "4", "5"]
-treatments = ['BMP2', 'BMP2', 'EGF', 'EGF', 'HGF', 'HGF', 'IFNg', 'IFNg', 'OSM', 'OSM', 'PBS', 'PBS', 'TGFb', 'TGFb', 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb']
-times = [24, 48] * 7 + [0] * 7
-zeros = pd.DataFrame(C[-1:, :])
-zeros.columns = ["1", "2", "3", "4", "5"]
-for _ in range(7):
-    df = pd.concat((df, zeros))
-df["Times"] = times
-df["Treatments"] = treatments
+import matplotlib.pyplot as plt
+import seaborn as sns
+from .figureCommon import subplotLabel, getSetup
+from ..tensor import partial_tucker_decomp, flip_factors
+from ..Data_Mod import form_tensor
+from ..dataHelpers import importLINCSprotein
+
+component = 5
+tensor, treatment_list, times = form_tensor()
+pre_flip_result = partial_tucker_decomp(tensor, [2], component)
+
+result = flip_factors(pre_flip_result)
+
+compList = ['1', '2', '3', '4', '5']
+trmtTimeList = []
+for i, name in enumerate(treatment_list):
+    for t in range(len(times)):
+        trmtTimeList.append(name + '_' + str(times[t]))
+trmtTime = np.reshape(trmtTimeList, (7, 6))
+trmtMap = pd.DataFrame()
+for y in range(len(trmtTime)):
+    temp = pd.DataFrame(data = result[0][y], index = trmtTime[y], columns = compList)
+    trmtMap = trmtMap.append(temp)
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     row = 1
-    col = 4
-    ax, f = getSetup((24, 6), (row, col))
-    OHSU_comp_plots(df, 2, ax[0])
-    proteinBoxPlot(ax[1], GCPHistones[:, 1], 2, histones, 'Histones')
-    proteinBoxPlot(ax[2], L1000GeneExp[:, 1], 2, geneExpression, 'Genes')
-    proteinBoxPlot(ax[3], RPPAproteins[:, 1], 2, Rproteins, 'Protein Factors')
+    col = 2
+    ax, f = getSetup((24, 14), (row, col))
+    heatMap(trmtMap, "Treatment by Component", ax[0])
     subplotLabel(ax)
     return f
+
+
+def heatMap(df, title, ax):
+    plt.title(title, fontsize=12)
+    sns.heatmap(df, cmap = 'RdYlGn', linewidths=0.10, xticklabels = df.columns, yticklabels = df.index, ax=ax)
     
