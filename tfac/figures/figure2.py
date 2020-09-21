@@ -23,15 +23,10 @@ for i, name in enumerate(treatment_list):
         trmtTimeList.append(name + '_' + str(times[t]))
 trmtTime = np.reshape(trmtTimeList, (7, 6))
 trmtMap = pd.DataFrame()
-trmtMap_aligned = pd.DataFrame()
 for y in range(len(trmtTime)):
     temp = pd.DataFrame(data = result[0][y], index = trmtTime[y], columns = compList)
     trmtMap = trmtMap.append(temp)
-for c in range(component + 1):
-    tempT = pd.DataFrame(data = result[0][:, c], index = trmtTime[:, c], columns = compList)
-    trmtMap_aligned = trmtMap_aligned.append(tempT)
 trmtMap = trmtMap.transpose()
-trmtMap_aligned = trmtMap_aligned.transpose()
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
@@ -40,12 +35,11 @@ def makeFigure():
     col = 1
     ax, f = getSetup((7, 12), (row, col))
     heatMap(trmtMap, "Treatment-Time by Component", ax[0])
-    heatMap(trmtMap_aligned, "Aligned Treatment-Time by Component", ax[1])
     subplotLabel(ax)
     return f
 
 
 def heatMap(df, map_title, ax):
     ax.set_title(map_title, fontsize=12)
-    sns.heatmap(df, cmap = 'RdYlGn', linewidths=0.10, xticklabels = df.columns, yticklabels = df.index, ax=ax)
+    sns.heatmap(df, cmap = 'PiYG', linewidths=0.10, xticklabels = df.columns, yticklabels = df.index, ax=ax)
     
