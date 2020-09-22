@@ -3,9 +3,8 @@ Tensor decomposition methods
 """
 import numpy as np
 import tensorly as tl
-from tensorly.decomposition import partial_tucker, parafac2
+from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
-from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from tensorly.tenalg import mode_dot
 
 
@@ -26,15 +25,6 @@ def z_score_values(A, cell_dim):
 def R2X(reconstructed, original):
     """ Calculates R2X of two tensors. """
     return 1.0 - tl_var(reconstructed - original) / tl_var(original)
-
-
-def R2Xparafac2(tensor_slices, decomposition):
-    """Calculate the R2X of parafac2 decomposition"""
-    R2Xp = np.zeros(len(tensor_slices))
-    for idx, tensor_slice in enumerate(tensor_slices):
-        reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
-        R2Xp[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
-    return R2Xp
 
 
 def reorient_factors(factors):
@@ -65,34 +55,12 @@ def partial_tucker_decomp(tensor, mode_list, rank):
     """
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
-
-def OHSU_parafac2_decomp(tensorSlice, rank):
-    """Perform PARAFAC2 decomposition.
-    -----------------------------------------------
-    Input:
-        tensor: 3D data tensor
-        rank: rank of decomposition
-    Returns
-        output[0]: PARAFAC2 tensor, decomp[0] = weights, decomp[1] = factors, decomp[2] = projection matricies
-        output[1]: reconstruction error
-    """
-    decomp, error = parafac2(tensorSlice, rank, n_iter_max=100, return_errors=True, random_state=1)
-    return decomp, error
-
 #### For R2X Plots ###########################################################################
 
 
 def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
-
-#### For PARAFAC2 Projections to Factors ####################################################
-
-
-def projections_to_factors(parafac2_decomp):
-    '''Computes PARAFAC2 projections into factors'''
-    weights, transform = apply_parafac2_projections(parafac2_decomp)
-    return weights, transform
 
 ###### To Flip Factors #########################################################################
 

@@ -1,8 +1,7 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
-from tensorly.metrics.regression import variance as tl_var
-from .dataHelpers import importLINCSprotein, ohsu_data
+from .dataHelpers import importLINCSprotein
 
 
 def data_mod(x, df=None):
@@ -41,81 +40,3 @@ def form_tensor():
         slices.append(array)
     tensor = np.stack(slices)
     return tensor, unique_treatments, times
-
-
-def LINCSCleanUp():
-    """Cleaning up LINCS data for PARAFAC2 column order"""
-    LINCSprotein = importLINCSprotein()
-    ind1 = LINCSprotein.loc[LINCSprotein['Time'] >= 24]
-    ind2 = LINCSprotein.loc[LINCSprotein['Time'] == 0]
-    ind = pd.concat([ind2, ind1])
-    ind = ind.drop(columns='File')
-    x = ['02_', '03_', '04_']
-    y = ['0', '24', '48']
-    for a in range(0, 3):
-        for b in range(0, 3):
-            ind = ind.replace(x[a] + 'RPPA_null1_' + '0' + y[b], 'cntrl' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_BMP2_' + y[b], 'BMP2_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_EGF_' + y[b], 'EGF_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_HGF_' + y[b], 'HGF_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_IFNg_' + y[b], 'IFNg_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_OSM_' + y[b], 'OSM_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_TGFb_' + y[b], 'TGFb_' + y[b])
-            ind = ind.replace(x[a] + 'RPPA_pbs_' + y[b], 'PBS_' + y[b])
-    ind = ind.drop(columns=['Treatment', 'Time'])
-    ind = ind.groupby(['Sample description']).mean()
-    ind = ind.sort_values('Sample description')
-    indT = ind.T
-    treatmentsTime = indT.columns.tolist()
-    proteins = indT.index.tolist()
-    indT = indT.to_numpy()
-    return indT, treatmentsTime, proteins
-
-
-def dataCleanUp():
-    """Cleaning up OHSU data for PARAFAC2 column order"""
-    atac, cycIF, GCP, _, L1000, RNAseq, RPPA = ohsu_data()
-    tr = ['BMP2_', 'EGF_', 'HGF_', 'IFNG_', 'OSM_', 'TGFB_', 'PBS_', 'ctrl_0']
-    for r in range(0, 7):
-        cycIF = cycIF.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-        GCP = GCP.drop(columns=[tr[r] + '4', tr[r] + '8'])
-        L1000 = L1000.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-        RPPA = RPPA.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-    atac = atac.sort_index(axis=1)
-    chromosomes = atac['peak'].to_list()
-    atac = atac.drop(columns='peak').to_numpy()
-    cycIF = cycIF.sort_index(axis=1)
-    IFproteins = cycIF['feature'].to_list()
-    cycIF = cycIF.drop(columns='feature').to_numpy()
-    GCP = GCP.dropna()
-    GCP = GCP.sort_index(axis=1)
-    histones = GCP['histone'].to_list()
-    GCP = GCP.drop(columns='histone').to_numpy()
-    L1000 = L1000.sort_index(axis=1)
-    geneExpression = L1000['probeset'].to_list()
-    L1000 = L1000.drop(columns='probeset').to_numpy()
-    RNAseq = RNAseq.sort_index(axis=1)
-    RNAGenes = RNAseq['ensembl_gene_id'].tolist()
-    RNAseq = RNAseq.drop(columns='ensembl_gene_id').to_numpy()
-    RPPA = RPPA.sort_index(axis=1)
-    RPPAProteins = RPPA['antibody'].tolist()
-    RPPA = RPPA.drop(columns='antibody').to_numpy()
-    return atac, cycIF, GCP, L1000, RNAseq, RPPA, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
-
-
-def form_parafac2_tensor():
-    """Creates tensor in numpy form and returns tensor, treatment by time, LINCS proteins, ATAC chromosomes, IF proteins, GCP histones, L1000 gene expression, RNA gene sequence, and RPPA proteins"""
-    indTM, treatmentsTime, proteins = LINCSCleanUp()
-    atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
-    p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
-    return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
-
-
-def ohsu_var(tensorSlices):
-    '''Rebalances variance of all tensor slices to 1'''
-    for x, val in enumerate(tensorSlices):
-        var = tl_var(tensorSlices[x])
-        tensorSlices[x] = (tensorSlices[x]) / (var ** 0.5)
-    tensorSlices[0] = tensorSlices[0] * 12
-    tensorSlices[6] = tensorSlices[6] * 12
-    return tensorSlices

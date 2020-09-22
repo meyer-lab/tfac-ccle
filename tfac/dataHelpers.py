@@ -52,53 +52,10 @@ def compProteins(comps):
 
     return topProtein
 
-
 def proteinNames():
     """Return protein names (data columns)"""
     data = importLINCSprotein()
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
     proteinN = data.columns.values.tolist()
     return proteinN
-
-
-def printOutliers(results):
-    """Prints most extremem protein outliers of partial tucker decomposition of OHSU data based on IQR"""
-    df = pd.DataFrame(results[1][0])
-    proteins = importLINCSprotein()
-    columns = proteins.columns[3:298]
-    df["Proteins"] = columns
-    Q1 = df.quantile(0.25)
-    Q3 = df.quantile(0.75)
-    IQR = Q3 - Q1
-    prots = {}
-    for i in range(df.columns.size - 1):
-        print("Component", str(i + 1), "1.5*IQR:", np.round((Q1[i] - 1.5 * IQR[i]), 2), np.round((Q3[i] + 1.5 * IQR[i]), 2))
-        positives = []
-        negatives = []
-        for _, col in df.iterrows():
-            if col[i] < (Q1[i] - 1.5 * IQR[i]):
-                negatives.append((col[i], col["Proteins"]))
-                if col["Proteins"] not in prots:
-                    prots[col["Proteins"]] = 1
-                else:
-                    prots[col["Proteins"]] += 1
-            elif col[i] > (Q3[i] + 1.5 * IQR[i]):
-                positives.append((col[i], col["Proteins"]))
-                if col["Proteins"] not in prots:
-                    prots[col["Proteins"]] = 1
-                else:
-                    prots[col["Proteins"]] += 1
-        print()
-        negatives = sorted(negatives)[:7]
-        positives = sorted(positives)[-7:]
-        for tup in positives:
-            print(tup[1])
-        for tup in positives:
-            print(np.round(tup[0], 2))
-        print()
-        for tup in negatives:
-            print(tup[1])
-        for tup in negatives:
-            print(np.round(tup[0], 2))
-        print()
-    print(prots)
+    
