@@ -3,6 +3,7 @@ This creates Figure 4.
 """
 from .figureCommon import getSetup, subplotLabel
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -11,4 +12,3 @@ def makeFigure():
     ax, f = getSetup((10, 10), (row, col))
     subplotLabel(ax)
     return f
-    
