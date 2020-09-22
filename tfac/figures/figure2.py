@@ -24,9 +24,10 @@ for i, name in enumerate(treatment_list):
 trmtTime = np.reshape(trmtTimeList, (7, 6))
 trmtMap = pd.DataFrame()
 for y in range(len(trmtTime)):
-    temp = pd.DataFrame(data = result[0][y], index = trmtTime[y], columns = compList)
+    temp = pd.DataFrame(data=result[0][y], index=trmtTime[y], columns=compList)
     trmtMap = trmtMap.append(temp)
 trmtMap = trmtMap.transpose()
+
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
@@ -41,5 +42,4 @@ def makeFigure():
 
 def heatMap(df, map_title, ax):
     ax.set_title(map_title, fontsize=12)
-    sns.heatmap(df, vmin = -10, vmax = 10, cmap = 'PiYG', linewidths=0.10, xticklabels = df.columns, yticklabels = df.index, ax=ax)
-    
+    sns.heatmap(df, vmin=-10, vmax=10, cmap='PiYG', linewidths=0.10, xticklabels=df.columns, yticklabels=df.index, ax=ax)
