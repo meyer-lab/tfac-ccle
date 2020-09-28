@@ -1,7 +1,7 @@
 # Improving cancer drug response prediction using tensor factorization
 
-[![Build Status](https://transduc.seas.ucla.edu/buildStatus/icon?job=meyer-lab%2Ftfac-ccle%2Fmaster)](https://transduc.seas.ucla.edu/job/meyer-lab/job/tfac-ccle/job/master/)
-[![Manuscript](https://img.shields.io/static/v1?label=manuscript&message=master&color=blue)](https://transduc.seas.ucla.edu/job/meyer-lab/job/tfac-ccle/job/master/Manuscript/)
+![Build](https://github.com/meyer-lab/tfac-ccle/workflows/Build/badge.svg)
+[![Manuscript](https://img.shields.io/static/v1?label=manuscript&message=master&color=blue)](https://meyer-lab.github.io/tfac-ccle/manuscript.html)
 
 Identifying the molecular changes that drive cancer development has led to targeted inhibitors that selectively block these processes. These agents can be remarkably effective; however, they are usually effective only in a small subset of patients. Consequently, if we can identify features that predict which patients will respond to a targeted agent, we might vastly improve the benefit of these drugs for patients.
 
