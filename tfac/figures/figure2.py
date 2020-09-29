@@ -42,4 +42,4 @@ def makeFigure():
 
 def heatMap(df, map_title, ax):
     ax.set_title(map_title, fontsize=12)
-    sns.heatmap(df, cmap='PiYG', center = 0, linewidths=0.10, xticklabels=df.columns, yticklabels=df.index, ax=ax)
+    sns.heatmap(df, cmap='PiYG', center=0, linewidths=0.10, xticklabels=df.columns, yticklabels=df.index, ax=ax)
