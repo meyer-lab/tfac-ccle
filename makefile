@@ -25,13 +25,12 @@ output/manuscript.md: venv manuscript/*.md venv/bin/activate
 output/manuscript.html: venv output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
 	. venv/bin/activate && pandoc --verbose \
 		--defaults=./common/templates/manubot/pandoc/common.yaml \
-		--defaults=./common/templates/manubot/pandoc/html.yaml output/manuscript.md
+		--defaults=./common/templates/manubot/pandoc/html.yaml
 
 output/manuscript.docx: venv output/manuscript.md $(flistFull)
 	. venv/bin/activate && pandoc --verbose -t docx $(pandocCommon) \
 		--reference-doc=common/templates/manubot/default.docx \
-		--resource-path=.:content \
-		-o $@ output/manuscript.md
+		--resource-path=.:content -o $@
 
 test: venv
 	. venv/bin/activate && pytest -s
