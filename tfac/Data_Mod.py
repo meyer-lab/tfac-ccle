@@ -111,3 +111,4 @@ def form_parafac2_tensor():
     atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins = dataCleanUp()
     p2slices = [indTM, atacM, cycIFM, GCPM, L1000M, RNAseqM, RPPAM]
     return p2slices, treatmentsTime, proteins, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins
+    
