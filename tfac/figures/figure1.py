@@ -30,7 +30,7 @@ def makeFigure():
 
     return f
 
-    
+
 def R2X_Figure_PartialTucker(ax, input_tensor):
     '''Create Partial Tucker R2X Figure'''
     R2X = np.zeros(13)

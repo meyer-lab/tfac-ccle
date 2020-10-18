@@ -32,15 +32,15 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     palette = sns.cubehelix_palette(len(trmtTime), light=.8, dark=.2, reverse=True, start=1, rot=-2)
     dict = {}
-    time_tick=[]
+    time_tick = []
     for x in range(7):
         for y in range(6):
             dict[str(trmtTime[x, y])] = palette[x]
             time_tick.append(times[y])
     colors = pd.Series(trmtTimeList, index=trmtMap.index).map(dict)
-    f = sns.clustermap(trmtMap, row_cluster = False, col_cluster = False, row_colors=colors, cmap = 'PiYG', center = 0, yticklabels = time_tick)
-    for val, label in enumerate(trmtTime[:,0]):
-        f.ax_col_dendrogram.bar(0, 0, color=dict[label],label=treatment_list[val], linewidth=0)
+    f = sns.clustermap(trmtMap, row_cluster=False, col_cluster=False, row_colors=colors, cmap='PiYG', center=0, yticklabels=time_tick)
+    for val, label in enumerate(trmtTime[:, 0]):
+        f.ax_col_dendrogram.bar(0, 0, color=dict[label], label=treatment_list[val], linewidth=0)
     f.ax_col_dendrogram.legend(loc="center left", ncol=5)
     f.fig.suptitle('Treatment-Time vs. Component')
     return f
