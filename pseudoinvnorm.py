@@ -51,7 +51,8 @@ def get_Flattened_Matrices():
     return df, genexpression
 
 def get_reconstruct(P,X):
-    return np.linalg.pinv(P.T), np.matmul(Ppinv,X.T)
+    Ppinv = np.linalg.pinv(P.T)
+    return Ppinv, np.matmul(Ppinv,X.T)
 
 def find_reconstruction_norm():
     P, X = get_Flattened_Matrices()
