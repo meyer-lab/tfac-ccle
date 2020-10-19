@@ -8,6 +8,7 @@ from tfac.tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_fact
 tl.set_backend("numpy")
 
 def get_Flattened_Matrices():
+    """return the patient matrix and the gene expression matrix as numpy arrays"""
     #decompse the tensor
     component = 5
     tensor, treatment_list, times = form_tensor()
@@ -51,9 +52,12 @@ def get_Flattened_Matrices():
     return df, genexpression
 
 def get_reconstruct(P,X):
-    return np.linalg.pinv(P.T), np.matmul(Ppinv,X.T)
+    """Return the pseudo inverse to the patient matrix as well as the pseudo inv multiplied by the gene expression matrix"""
+    Ppinv = np.linalg.pinv(P.T)
+    return Ppinv, np.matmul(Ppinv,X.T)
 
 def find_reconstruction_norm():
+    """return the norm of the difference in original and reconstructed gene expression matrices"""
     P, X = get_Flattened_Matrices()
     Ppinv, W = get_reconstruct(P,X)
     return np.linalg.norm(X.T-np.matmul(P.T,W))
