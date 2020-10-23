@@ -1,16 +1,14 @@
 """
 This creates Figure 5.
 """
-
-from .figureCommon import subplotLabel, getSetup
+from .figureCommon import getSetup, subplotLabel
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((8, 8), (1, 1))
-
-    # Add subplot labels
+    row = 1
+    col = 1
+    ax, f = getSetup((10, 10), (row, col))
     subplotLabel(ax)
-
     return f

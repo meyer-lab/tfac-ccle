@@ -7,14 +7,7 @@ from tfac.Data_Mod import form_parafac2_tensor, ohsu_var, form_tensor
 from tfac.tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
 tl.set_backend("numpy")
 
-def get_Flattened_Matrices():
-    #decompse the tensor
-    component = 5
-    tensor, treatment_list, times = form_tensor()
-    pre_flip_result = partial_tucker_decomp(tensor, [2], component)
-    result = flip_factors(pre_flip_result)
-    #load the gene expression data
-    geneexpression = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
+def get_Flattened_Matrices(result, geneexpression):
     ids = geneexpression["ensembl_gene_id"]
     geneexpression.drop("ensembl_gene_id", inplace = True, axis = 1)
     #create a 5x42 DataFrame of decompsed component values
@@ -54,7 +47,7 @@ def get_reconstruct(P,X):
     Ppinv = np.linalg.pinv(P.T)
     return Ppinv, np.matmul(Ppinv,X.T)
 
-def find_reconstruction_norm():
-    P, X = get_Flattened_Matrices()
+def find_reconstruction_norm(result, geneexpression):
+    P, X = get_Flattened_Matrices(result, geneexpression)
     Ppinv, W = get_reconstruct(P,X)
     return np.linalg.norm(X.T-np.matmul(P.T,W))
