@@ -3,11 +3,11 @@ import pandas as pd
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-from tfac.Data_Mod import form_parafac2_tensor, ohsu_var, form_tensor
+from tfac.Data_Mod import form_tensor
 from tfac.tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
 tl.set_backend("numpy")
 
-def get_Flattened_Matrices(result, geneexpression):
+def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
     ids = geneexpression["ensembl_gene_id"]
     geneexpression.drop("ensembl_gene_id", inplace = True, axis = 1)
     #create a 5x42 DataFrame of decompsed component values
@@ -44,10 +44,10 @@ def get_Flattened_Matrices(result, geneexpression):
     return df, genexpression
 
 def get_reconstruct(P,X):
-    Ppinv = np.linalg.pinv(P.T)
-    return Ppinv, np.matmul(Ppinv,X.T)
+    pinv = np.linalg.pinv(P.T)
+    return pinv, np.matmul(Ppinv,X.T)
 
-def find_reconstruction_norm(result, geneexpression):
-    P, X = get_Flattened_Matrices(result, geneexpression)
+def find_reconstruction_norm(result, geneexpression, treatment_list, times):
+    P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
     Ppinv, W = get_reconstruct(P,X)
     return np.linalg.norm(X.T-np.matmul(P.T,W))
