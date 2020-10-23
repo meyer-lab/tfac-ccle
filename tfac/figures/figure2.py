@@ -1,5 +1,5 @@
 """
-This creates Figure 2. This figure includes heat maps for Partial Tucker Protein/Component and Treatment/Component.
+This creates Figure 2. This figure includes the Partial Tucker Treatment/Component Heat Map.
 """
 import numpy as np
 import pandas as pd
@@ -26,20 +26,21 @@ trmtMap = pd.DataFrame()
 for y in range(len(trmtTime)):
     temp = pd.DataFrame(data=result[0][y], index=trmtTime[y], columns=compList)
     trmtMap = trmtMap.append(temp)
-trmtMap = trmtMap.transpose()
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
-    # Get list of axis objects
-    row = 2
-    col = 1
-    ax, f = getSetup((7, 12), (row, col))
-    heatMap(trmtMap, "Treatment-Time by Component", ax[0])
-    subplotLabel(ax)
+    palette = sns.cubehelix_palette(len(trmtTime), light=.8, dark=.2, reverse=True, start=1, rot=-2)
+    dict = {}
+    time_tick = []
+    for x in range(7):
+        for y in range(6):
+            dict[str(trmtTime[x, y])] = palette[x]
+            time_tick.append(times[y])
+    colors = pd.Series(trmtTimeList, index=trmtMap.index).map(dict)
+    f = sns.clustermap(trmtMap, row_cluster=False, col_cluster=False, row_colors=colors, cmap='PiYG', center=0, yticklabels=time_tick)
+    for val, label in enumerate(trmtTime[:, 0]):
+        f.ax_col_dendrogram.bar(0, 0, color=dict[label], label=treatment_list[val], linewidth=0)
+    f.ax_col_dendrogram.legend(loc="center left", ncol=5)
+    f.fig.suptitle('Treatment-Time vs. Component')
     return f
-
-
-def heatMap(df, map_title, ax):
-    ax.set_title(map_title, fontsize=12)
-    sns.heatmap(df, cmap='PiYG', center=0, linewidths=0.10, xticklabels=df.columns, yticklabels=df.index, ax=ax)
