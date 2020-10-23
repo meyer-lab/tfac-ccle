@@ -45,7 +45,7 @@ def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
 
 def get_reconstruct(P,X):
     pinv = np.linalg.pinv(P.T)
-    return pinv, np.matmul(Ppinv,X.T)
+    return pinv, np.matmul(pinv,X.T)
 
 def find_reconstruction_norm(result, geneexpression, treatment_list, times):
     P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
