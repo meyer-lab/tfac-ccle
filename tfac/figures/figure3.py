@@ -21,11 +21,6 @@ protMap = pd.DataFrame()
 temp = pd.DataFrame(np.concatenate(result[1]))
 protMap = temp.T #I just make the transpose so that we have each of the 5 rows as a component, and all 295 col as proteins
 pNames = proteinNames() #get a list of our protein names
-#now go an see if the weighting is significant
-for y in range(5):
-    for x in range(295):
-        if protMap[x][y] <= 0.2 and protMap[x][y] >= -0.2:
-            protMap[x][y] = 0 #if the weighting is insignificant, set it to 0 so it will appear blank in our heatmap
 
 #This is the code to remove unnecessary proteins and label everything
 n = 0 #used to search protMap
@@ -33,13 +28,13 @@ ind = 0 #keeps track of column number
 size = 295
 #loop through the entire dataframe
 while(n < size):
-    #check individually in case average somehow magically ends up being 0
-    if (protMap.iat[0, n] == 0.0 and protMap.iat[1,n] == 0.0 and protMap.iat[2,n] == 0.0 and protMap.iat[3,n] == 0.0 and protMap.iat[4,n] == 0.0):
+    #check individually to see if all of the weights are insignificant, and if so, remove the whole protein
+    if (abs(protMap.iat[0, n]) <= 0.2 and abs(protMap.iat[1,n]) <= 0.2 and abs(protMap.iat[2,n]) <= 0.2 and abs(protMap.iat[3,n]) <= 0.2 and abs(protMap.iat[4,n]) <= 0.2):
         #now we want to remove that column, reduce size, and keep moving forward
         protMap = protMap.drop(ind, axis = 1) #want to use the index to drop because of dataframe column title is ind
         ind += 1 #move index forward too
         size -= 1
-    else: #otherwise we have something significant!
+    else: #otherwise we have something significant in at least one of the components!
         protMap = protMap.rename(columns={ind : pNames[ind]}) #rename the column title, which is ind to the name from pNames
         n+=1 #now we can look at the next one and don't have to stay stagnant
         ind += 1
