@@ -10,7 +10,7 @@ from ..tensor import partial_tucker_decomp, flip_factors
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein, proteinNames
 
-def protein_heatmap():
+def protein_heatmap(m_axis):
     component = 5
     tensor, treatment_list, times = form_tensor()
     pre_flip_result = partial_tucker_decomp(tensor, [2], component)
@@ -41,7 +41,7 @@ def protein_heatmap():
             ind += 1
     #now protMap has all of the correct names and dropped proteins // transverse to make plot look better
     protMap1 = protMap.T
-    sns.heatmap(protMap1, cmap = 'PiYG', vmin = -0.5, vmax = 0.5, xticklabels = protMap.index + 1, ax = ax[0])
+    sns.heatmap(protMap1, cmap = 'PiYG', vmin = -0.5, vmax = 0.5, xticklabels = protMap.index + 1, ax = m_axis)
 
 
 def makeFigure():
@@ -51,6 +51,6 @@ def makeFigure():
     col = 1
     ax, f = getSetup((7, 12), (row, col))
     ax[0].set_title("Protein-Component Heat Plot")
-    protein_heatmap()
+    protein_heatmap(ax[0])
     subplotLabel(ax)
     return f
