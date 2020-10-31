@@ -22,23 +22,21 @@ def protein_heatmap(m_axis):
     temp = pd.DataFrame(np.concatenate(result[1]))
     protMap = temp.T #I just make the transpose so that we have each of the 5 rows as a component, and all 295 col as proteins
     pNames = proteinNames() #get a list of our protein names
+    maxValues = np.max(protMap, axis=0) #creates a np array of the max values of each of the proteins
+    boolsOfVal = np.empty((1, 295), dtype = bool) #create a boolean array to store T/F
+    np.logical_or(maxValues > 0.2, maxValues < -0.2, out = boolsOfVal) #check all of the values to see if they are significant (0.2) 
 
     #This is the code to remove unnecessary proteins and label everything
     n = 0 #used to search protMap
-    ind = 0 #keeps track of column number
     size = 295
     #loop through the entire dataframe
     while(n < size):
-        #check individually to see if all of the weights are insignificant, and if so, remove the whole protein
-        if (abs(protMap.iat[0, n]) <= 0.2 and abs(protMap.iat[1,n]) <= 0.2 and abs(protMap.iat[2,n]) <= 0.2 and abs(protMap.iat[3,n]) <= 0.2 and abs(protMap.iat[4,n]) <= 0.2):
-            #now we want to remove that column, reduce size, and keep moving forward
-            protMap = protMap.drop(ind, axis = 1) #want to use the index to drop because of dataframe column title is ind
-            ind += 1 #move index forward too
-            size -= 1
-        else: #otherwise we have something significant in at least one of the components!
-            protMap = protMap.rename(columns={ind : pNames[ind]}) #rename the column title, which is ind to the name from pNames
-            n+=1 #now we can look at the next one and don't have to stay stagnant
-            ind += 1
+        #check if we need to drop (false) or not (true)
+        if (boolsOfVal[0][n] == False): #now we want to remove that column from protMap
+            protMap = protMap.drop(n, axis = 1) #use n to drop because n is tracking in both boolsOfVal and protMap
+        else: #otherwise we have something significant!
+            protMap = protMap.rename(columns={n : pNames[n]}) #rename the column title, which is n to the name from pNames
+        n += 1
     #now protMap has all of the correct names and dropped proteins // transverse to make plot look better
     protMap1 = protMap.T
     sns.heatmap(protMap1, cmap = 'PiYG', vmin = -0.5, vmax = 0.5, xticklabels = protMap.index + 1, ax = m_axis)
