@@ -13,7 +13,7 @@ synapseclient
 matplotlib==3.3.2
 seaborn==0.11.0
 svgutils==0.3.1
-git+git://github.com/aarmey/tensorly.git@parafac2-ls
+tensorly==0.5.0
 scikit-learn==0.23.2
 pybiomart
 h5py
