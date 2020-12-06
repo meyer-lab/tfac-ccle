@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from tensorly.metrics.regression import variance as tl_var
-from dataHelpers import importLINCSprotein, dataCleanUp
+from .dataHelpers import importLINCSprotein, dataCleanUp
 
 
 def data_mod(x, df=None):
