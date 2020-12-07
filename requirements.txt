@@ -3,10 +3,11 @@ scipy==1.5.4
 pytest==6.1.2
 pytest-cov==2.10.1
 pylint==2.6.0
-manubot==0.4.1
-pandoc-fignos
-pandoc-eqnos
-pandoc-tablenos
+manubot==0.4.2
+panflute==1.12
+pandoc-fignos==2.4.0
+pandoc-eqnos==2.4.0
+pandoc-tablenos==2.3.0
 synapseclient
 matplotlib==3.3.3
 seaborn==0.11.0
