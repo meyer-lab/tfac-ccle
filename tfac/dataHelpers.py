@@ -60,32 +60,3 @@ def proteinNames():
     proteinN = data.columns.values.tolist()
     return proteinN
 
-def dataCleanUp():
-    """Cleaning up OHSU data for PARAFAC2 column order"""
-    atac, cycIF, GCP, _, L1000, RNAseq, RPPA = ohsu_data()
-    tr = ['BMP2_', 'EGF_', 'HGF_', 'IFNG_', 'OSM_', 'TGFB_', 'PBS_', 'ctrl_0']
-    for r in range(0, 7):
-        cycIF = cycIF.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-        GCP = GCP.drop(columns=[tr[r] + '4', tr[r] + '8'])
-        L1000 = L1000.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-        RPPA = RPPA.drop(columns=[tr[r] + '1', tr[r] + '4', tr[r] + '8'])
-    atac = atac.sort_index(axis=1)
-    chromosomes = atac['peak'].to_list()
-    atac = atac.drop(columns='peak').to_numpy()
-    cycIF = cycIF.sort_index(axis=1)
-    IFproteins = cycIF['feature'].to_list()
-    cycIF = cycIF.drop(columns='feature').to_numpy()
-    GCP = GCP.dropna()
-    GCP = GCP.sort_index(axis=1)
-    histones = GCP['histone'].to_list()
-    GCP = GCP.drop(columns='histone').to_numpy()
-    L1000 = L1000.sort_index(axis=1)
-    geneExpression = L1000['probeset'].to_list()
-    L1000 = L1000.drop(columns='probeset').to_numpy()
-    RNAseq = RNAseq.sort_index(axis=1)
-    RNAGenes = RNAseq['ensembl_gene_id'].tolist()
-    RNAseq = RNAseq.drop(columns='ensembl_gene_id').to_numpy()
-    RPPA = RPPA.sort_index(axis=1)
-    RPPAProteins = RPPA['antibody'].tolist()
-    RPPA = RPPA.drop(columns='antibody').to_numpy()
-    return atac, cycIF, GCP, L1000, RNAseq, RPPA, chromosomes, IFproteins, histones, geneExpression, RNAGenes, RPPAProteins

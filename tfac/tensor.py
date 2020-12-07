@@ -3,8 +3,7 @@ Tensor decomposition methods
 """
 import numpy as np
 import tensorly as tl
-from tensorly.decomposition import partial_tucker, parafac2
-from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
+from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.tenalg import mode_dot
 
@@ -78,59 +77,4 @@ def flip_factors(tucker_output):
             for j in range(tucker_output[0].shape[0]):
                 tucker_output[0][j][:, component] *= -1
     return tucker_output
-
-def R2X_OHSU(ax, p2slicesB):
-    '''Creates R2X for OHSU PARAFAC2'''
-    r2x = []
-    compR2X = 10
-    for i in range(1, compR2X + 1):
-        parafac2tensor, error = OHSU_parafac2_decomp(p2slicesB, i)
-        r2x.append(R2Xparafac2(p2slicesB, parafac2tensor))
-    df = pd.DataFrame(r2x)
-    comps = []
-    for i in range(1, compR2X + 1):
-        comps.append(i)
-    df['Component'] = comps
-    df.columns = ['Chromosomes', 'IFproteins', 'Histones', 'Gene Expression', 'RNA Genes', 'RPPA Proteins', 'Component']
-    test = pd.melt(df, id_vars=['Component'])
-    b = sns.scatterplot(data=test, x='Component', y='value', hue='variable', style='variable', ax=ax, s=100)
-    b.set_xlabel("Component", fontsize=20)
-    b.set_ylabel("R2X", fontsize=20)
-    b.set_title("OHSU PARAFAC2")
-    b.tick_params(labelsize=15)
-    plt.legend(prop={'size': 15})
-    ax.set_ylim(0, 1)
-
-def OHSU_comp_plots(df, comps, ax):
-    '''Plots treatments by each component from PARAFAC2'''
-    sns.lineplot(data=df, x="Times", y=str(comps), hue="Treatments", ax=ax)
-    ax.set_xlabel('Time (hr)')
-    ax.set_title('Component ' + str(comps))
-
-def R2Xparafac2(tensor_slices, decomposition):
-    """Calculate the R2X of parafac2 decomposition"""
-    R2Xp = np.zeros(len(tensor_slices))
-    for idx, tensor_slice in enumerate(tensor_slices):
-        reconstruction = parafac2_to_slice(decomposition, idx, validate=False)
-        R2Xp[idx] = 1.0 - tl_var(reconstruction - tensor_slice) / tl_var(tensor_slice)
-    return R2Xp
-def OHSU_parafac2_decomp(tensorSlice, rank):
-    """Perform PARAFAC2 decomposition.
-    -----------------------------------------------
-    Input:
-        tensor: 3D data tensor
-        rank: rank of decomposition
-    Returns
-        output[0]: PARAFAC2 tensor, decomp[0] = weights, decomp[1] = factors, decomp[2] = projection matricies
-        output[1]: reconstruction error
-    """
-    decomp, error = parafac2(tensorSlice, rank, n_iter_max=100, return_errors=True, random_state=1)
-    return decomp, error
-
-#### For PARAFAC2 Projections to Factors ####################################################
-
-def projections_to_factors(parafac2_decomp):
-    '''Computes PARAFAC2 projections into factors'''
-    weights, transform = apply_parafac2_projections(parafac2_decomp)
-    return weights, transform
 
