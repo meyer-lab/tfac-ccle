@@ -1,7 +1,6 @@
 """Data pre-processing and tensor formation"""
 import pandas as pd
 import numpy as np
-from tensorly.metrics.regression import variance as tl_var
 from .dataHelpers import importLINCSprotein
 
 
