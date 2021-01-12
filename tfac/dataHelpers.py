@@ -59,3 +59,4 @@ def proteinNames():
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
     proteinN = data.columns.values.tolist()
     return proteinN
+

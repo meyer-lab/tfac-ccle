@@ -40,3 +40,4 @@ def form_tensor():
         slices.append(array)
     tensor = np.stack(slices)
     return tensor, unique_treatments, times
+
