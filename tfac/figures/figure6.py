@@ -62,16 +62,15 @@ def var_diff(axis):
     RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
     P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
     Gene_redone = np.matmul(W.T, P)
-    residuals = np.zeros(10)
-    for i in range(0, 10):
-        removeGene = np.delete(W, i, 0)
-        removeTT = np.delete(P, i, 0)
+    residuals = np.zeros(11)
+    for i in range(1, 11):
+        removeGene = np.delete(W, i-1, 0)
+        removeTT = np.delete(P, i-1, 0)
         gene_reconst = np.matmul(removeGene.T, removeTT)
         residuals[i] = tl_var(np.matmul(W.T, P) - gene_reconst)/tl_var(np.matmul(W.T, P))
     sns.barplot(np.arange(len(residuals)), residuals, ax = axis)
     axis.set_xlabel("Component Removed")
     axis.set_ylabel("Difference in Percent Variance")
-    axis.set_xticks([1,2,3,4,5,6,7,8,9,10])
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
