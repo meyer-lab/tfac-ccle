@@ -1,6 +1,3 @@
-"""
-This creates Figure 4.
-"""
 from .figureCommon import subplotLabel, getSetup
 import numpy as np
 import pandas as pd
@@ -58,26 +55,31 @@ def find_gene_factors(result, geneexpression, treatment_list, times):
     Ppinv, W = get_reconstruct(P, X)
     return P, X, Ppinv, W
 
-def gene_R2X(axis):
+def var_diff(axis):
     tensor, treatment_list, times = form_tensor()
-    R2X = np.zeros(13)
-    for i in range(1, 13):
-        pre_flip_result = partial_tucker_decomp(tensor, [2], i)
-        result = flip_factors(pre_flip_result)
-        RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
-        P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
-        Gene_redone = np.matmul(W.T, P)
-        R2X[i] = 1 - tl_var(Gene_redone - X) / tl_var(RNAseq.to_numpy())
-    sns.scatterplot(np.arange(len(R2X)), R2X, ax = axis)
-
+    pre_flip_result = partial_tucker_decomp(tensor, [2], 10)
+    result = flip_factors(pre_flip_result)
+    RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
+    P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
+    Gene_redone = np.matmul(W.T, P)
+    residuals = np.zeros(10)
+    for i in range(0, 10):
+        removeGene = np.delete(W, i, 0)
+        removeTT = np.delete(P, i, 0)
+        gene_reconst = np.matmul(removeGene.T, removeTT)
+        residuals[i] = tl_var(np.matmul(W.T, P) - gene_reconst)/tl_var(np.matmul(W.T, P))
+    sns.barplot(np.arange(len(residuals)), residuals, ax = axis)
+    axis.set_xlabel("Component Removed")
+    axis.set_ylabel("Difference in Percent Variance")
+    axis.set_xticks([1,2,3,4,5,6,7,8,9,10])
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     row = 1
     col = 1
-    ax, f = getSetup((11, 11), (row, col))
+    ax, f = getSetup((4, 4), (row, col))
 
-    gene_R2X(ax[0])
+    var_diff(ax[0])
     subplotLabel(ax)
     return f
