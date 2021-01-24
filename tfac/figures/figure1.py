@@ -9,14 +9,6 @@ from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
 
-
-component = 5
-tensor, treatment_list, times = form_tensor()
-pre_flip_result = partial_tucker_decomp(tensor, [2], component)
-
-result = flip_factors(pre_flip_result)
-
-
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -24,6 +16,8 @@ def makeFigure():
     col = 1
     ax, f = getSetup((11, 11), (row, col))
 
+    component = 5
+    tensor, treatment_list, times = form_tensor()
     R2X_Figure_PartialTucker(ax[0], tensor)
     # Add subplot labels
     subplotLabel(ax)

@@ -1,17 +1,20 @@
-from .figureCommon import subplotLabel, getSetup
+"""This creates Figure 6. Bar plot for percent variance explained by each gene expression component.
+"""
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-from ..Data_Mod import form_tensor
-from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
+from ..dataHelpers import ohsu_data
+from ..tensor import decomp_to_flipped_factors, find_R2X_partialtucker
 from tensorly.metrics.regression import variance as tl_var
+from .figureCommon import subplotLabel, getSetup
 tl.set_backend("numpy")
 
 def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
-    ids = geneexpression["ensembl_gene_id"]
+    '''Flattens treatment list and times dimensions into one treatment-time axis.
+    Creates a new gene expression matrix (treatment-time x genes)'''
     geneexpression.drop("ensembl_gene_id", inplace = True, axis = 1)
     #create a 5x42 DataFrame of decompsed component values
     toflatten = result[0]
@@ -46,28 +49,27 @@ def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
     genexpression = geneexpression.to_numpy()
     return df, genexpression
 
-def get_reconstruct(P,X):
-    Ppinv = np.linalg.pinv(P.T)
-    return Ppinv, np.matmul(Ppinv,X.T)
-
 def find_gene_factors(result, geneexpression, treatment_list, times):
+    '''Calculates pseudoinverse of flattened matrix, gene expression factors, flattened matrix, and gene expression matrix.'''
     P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
-    Ppinv, W = get_reconstruct(P, X)
+    Ppinv = np.linalg.pinv(P.T)
+    W = np.matmul(Ppinv, X.T)
     return P, X, Ppinv, W
 
 def var_diff(axis):
-    tensor, treatment_list, times = form_tensor()
-    pre_flip_result = partial_tucker_decomp(tensor, [2], 10)
-    result = flip_factors(pre_flip_result)
-    RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
-    P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
-    Gene_redone = np.matmul(W.T, P)
+    '''Calculates amount of variance each variance explains from each component of gene expression factors.'''
+    result, treatment_list, times = decomp_to_flipped_factors(10)
+    _, _, _, _, _, RNAseq, _ = ohsu_data()
+    P, X, _, W  = find_gene_factors(result, RNAseq, treatment_list, times)
     residuals = np.zeros(11)
     for i in range(1, 11):
-        removeGene = np.delete(W, i-1, 0)
+        #removes respective gene expression and treatment-time per iteration
+        removeGene = np.delete(W, i-1, 0) 
         removeTT = np.delete(P, i-1, 0)
+        #reconstructs factors with removed row/col combo
         gene_reconst = np.matmul(removeGene.T, removeTT)
-        residuals[i] = tl_var(np.matmul(W.T, P) - gene_reconst)/tl_var(np.matmul(W.T, P))
+        #calculates the percent variance between remove-one factors
+        residuals[i] = tl_var(gene_reconst - X)/tl_var(RNAseq.to_numpy())
     sns.barplot(np.arange(len(residuals)), residuals, ax = axis)
     axis.set_xlabel("Component Removed")
     axis.set_ylabel("Difference in Percent Variance")
@@ -78,7 +80,6 @@ def makeFigure():
     row = 1
     col = 1
     ax, f = getSetup((4, 4), (row, col))
-
     var_diff(ax[0])
     subplotLabel(ax)
     return f

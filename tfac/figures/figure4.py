@@ -1,5 +1,5 @@
 """
-This creates Figure 4.
+This creates Figure 4. Gene expression R2X with flattened matrix dimension reconstruction.
 """
 from .figureCommon import subplotLabel, getSetup
 import numpy as np
