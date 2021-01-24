@@ -77,4 +77,3 @@ def flip_factors(tucker_output):
             for j in range(tucker_output[0].shape[0]):
                 tucker_output[0][j][:, component] *= -1
     return tucker_output
-
