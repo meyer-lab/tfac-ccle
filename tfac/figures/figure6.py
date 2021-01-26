@@ -60,16 +60,17 @@ def var_diff(axis):
     '''Calculates amount of variance each variance explains from each component of gene expression factors.'''
     result, treatment_list, times = decomp_to_flipped_factors(10)
     _, _, _, _, _, RNAseq, _ = ohsu_data()
-    P, X, _, W  = find_gene_factors(result, RNAseq, treatment_list, times)
-    residuals = np.zeros(11)
-    for i in range(1, 11):
+    P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
+    residuals = np.zeros(5)
+    for i in range(1, 6):
         #removes respective gene expression and treatment-time per iteration
         removeGene = np.delete(W, i-1, 0) 
         removeTT = np.delete(P, i-1, 0)
         #reconstructs factors with removed row/col combo
         gene_reconst = np.matmul(removeGene.T, removeTT)
         #calculates the percent variance between remove-one factors
-        residuals[i] = tl_var(gene_reconst - X)/tl_var(RNAseq.to_numpy())
+        residuals[i-1] = tl_var(gene_reconst - (np.matmul(W.T, P)))/tl_var(RNAseq.to_numpy())
+    barNames = ['Component 1', 'Component 2', 'Component 3', 'Component 4', 'Component 5']
     sns.barplot(np.arange(len(residuals)), residuals, ax = axis)
     axis.set_xlabel("Component Removed")
     axis.set_ylabel("Difference in Percent Variance")
