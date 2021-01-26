@@ -70,10 +70,10 @@ def var_diff(axis):
         gene_reconst = np.matmul(removeGene.T, removeTT)
         #calculates the percent variance between remove-one factors
         residuals[i-1] = tl_var(gene_reconst - (np.matmul(W.T, P)))/tl_var(RNAseq.to_numpy())
-    barNames = ['Component 1', 'Component 2', 'Component 3', 'Component 4', 'Component 5']
     sns.barplot(np.arange(len(residuals)), residuals, ax = axis)
     axis.set_xlabel("Component Removed")
     axis.set_ylabel("Difference in Percent Variance")
+    axis.set_xticklabels(['1', '2', '3', '4', '5'])
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
