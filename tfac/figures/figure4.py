@@ -1,5 +1,5 @@
 """
-This creates Figure 4.
+This creates Figure 4. Gene expression R2X with flattened matrix dimension reconstruction.
 """
 from .figureCommon import subplotLabel, getSetup
 import numpy as np
@@ -66,7 +66,6 @@ def gene_R2X(axis):
     tensor, treatment_list, times = form_tensor()
     R2X = np.zeros(13)
     for i in range(1, 13):
-        print(i)
         pre_flip_result = partial_tucker_decomp(tensor, [2], i)
         result = flip_factors(pre_flip_result)
         RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")

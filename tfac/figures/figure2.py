@@ -10,27 +10,26 @@ from ..tensor import partial_tucker_decomp, flip_factors
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
 
-component = 5
-tensor, treatment_list, times = form_tensor()
-pre_flip_result = partial_tucker_decomp(tensor, [2], component)
-
-result = flip_factors(pre_flip_result)
-
-compList = ['1', '2', '3', '4', '5']
-trmtTimeList = []
-for i, name in enumerate(treatment_list):
-    for t in range(len(times)):
-        trmtTimeList.append(name + '_' + str(times[t]))
-trmtTime = np.reshape(trmtTimeList, (7, 6))
-trmtMap = pd.DataFrame()
-for y in range(len(trmtTime)):
-    temp = pd.DataFrame(data=result[0][y], index=trmtTime[y], columns=compList)
-    trmtMap = trmtMap.append(temp)
-
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
-    palette = sns.cubehelix_palette(len(trmtTime), light=.8, dark=.2, reverse=True, start=1, rot=-2)
+    component = 5
+    tensor, treatment_list, times = form_tensor()
+    pre_flip_result = partial_tucker_decomp(tensor, [2], component)
+
+    result = flip_factors(pre_flip_result)
+
+    compList = ['1', '2', '3', '4', '5']
+    trmtTimeList = []
+    for i, name in enumerate(treatment_list):
+        for t in range(len(times)):
+            trmtTimeList.append(name + '_' + str(times[t]))
+    trmtTime = np.reshape(trmtTimeList, (7, 6))
+    trmtMap = pd.DataFrame()
+    for y in range(len(trmtTime)):
+        temp = pd.DataFrame(data=result[0][y], index=trmtTime[y], columns=compList)
+        trmtMap = trmtMap.append(temp)
+        palette = sns.cubehelix_palette(len(trmtTime), light=.8, dark=.2, reverse=True, start=1, rot=-2)
     dict = {}
     time_tick = []
     for x in range(7):
