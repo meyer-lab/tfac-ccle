@@ -3,11 +3,9 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
-from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from ..dataHelpers import ohsu_data
-from ..tensor import decomp_to_flipped_factors, find_R2X_partialtucker
+from ..tensor import decomp_to_flipped_factors
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
 tl.set_backend("numpy")
@@ -58,9 +56,12 @@ def find_gene_factors(result, geneexpression, treatment_list, times):
 
 def var_diff(axis):
     '''Calculates amount of variance each variance explains from each component of gene expression factors.'''
-    result, treatment_list, times = decomp_to_flipped_factors(10)
+    result, treatment_list, times = decomp_to_flipped_factors(5)
     _, _, _, _, _, RNAseq, _ = ohsu_data()
     P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
+    X_orig = RNAseq.to_numpy()
+    R2X_full = tl_var(X_orig - np.matmul(W.T, P)) / tl_var(X_orig)
+
     residuals = np.zeros(5)
     for i in range(1, 6):
         #removes respective gene expression and treatment-time per iteration
@@ -69,8 +70,8 @@ def var_diff(axis):
         #reconstructs factors with removed row/col combo
         gene_reconst = np.matmul(removeGene.T, removeTT)
         #calculates the percent variance between remove-one factors
-        residuals[i-1] = tl_var(gene_reconst - (np.matmul(W.T, P)))/tl_var(RNAseq.to_numpy())
-    sns.barplot(np.arange(len(residuals)), residuals, ax = axis)
+        residuals[i-1] = tl_var(X_orig - gene_reconst) / tl_var(X_orig)
+    sns.barplot(x=np.arange(len(residuals)), y=residuals - R2X_full, ax = axis)
     axis.set_xlabel("Component Removed")
     axis.set_ylabel("Difference in Percent Variance")
     axis.set_xticklabels(['1', '2', '3', '4', '5'])
