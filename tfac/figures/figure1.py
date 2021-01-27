@@ -9,6 +9,7 @@ from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
