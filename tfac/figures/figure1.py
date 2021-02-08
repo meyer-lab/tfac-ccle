@@ -28,7 +28,7 @@ def makeFigure():
     # Get list of axis objects
     row = 1
     col = 2
-    ax, f = getSetup((6, 6), (row, col))
+    ax, f = getSetup((6, 12), (row, col))
 
     R2X_Figure_PartialTucker(ax[0], tensor)
     gene_R2X(ax[1])
