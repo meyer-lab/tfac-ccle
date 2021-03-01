@@ -76,6 +76,4 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1):
 
 def get_flipped_tucker(tensor, components):
     pre_flip_result = partial_tucker_decomp(tensor, [2], components)
-
-    result = flip_factors(pre_flip_result)
-    return result
+    return flip_factors(pre_flip_result)
