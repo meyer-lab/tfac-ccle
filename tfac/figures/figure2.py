@@ -6,18 +6,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..tensor import partial_tucker_decomp, flip_factors
 from ..Data_Mod import form_tensor
-from ..dataHelpers import importLINCSprotein
+from ..dataHelpers import importLINCSprotein, get_flipped_tucker
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
-    component = 5
+    
     tensor, treatment_list, times = form_tensor()
-    pre_flip_result = partial_tucker_decomp(tensor, [2], component)
 
-    result = flip_factors(pre_flip_result)
+    result = get_flipped_tucker(tensor, 5)
 
     compList = ['1', '2', '3', '4', '5']
     trmtTimeList = []
