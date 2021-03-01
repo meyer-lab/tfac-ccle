@@ -6,9 +6,9 @@ import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
-from ..Data_Mod import form_tensor, get_flipped_tucker
+from ..Data_Mod import form_tensor
 from ..pseudoinvnorm import get_Flattened_Matrices, get_reconstruct, find_gene_factors
-from ..dataHelpers import importLINCSprotein
+from ..dataHelpers import importLINCSprotein, get_flipped_tucker
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections

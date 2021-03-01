@@ -2,6 +2,7 @@
 from os.path import join, dirname
 import numpy as np
 import pandas as pd
+from .tensor import partial_tucker_decomp, flip_factors
 
 path_here = dirname(dirname(__file__))
 
@@ -59,3 +60,9 @@ def proteinNames():
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
     proteinN = data.columns.values.tolist()
     return proteinN
+
+def get_flipped_tucker(tensor, components):
+    pre_flip_result = partial_tucker_decomp(tensor, [2], components)
+
+    result = flip_factors(pre_flip_result)
+    return result
