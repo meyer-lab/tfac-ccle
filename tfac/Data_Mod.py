@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from .dataHelpers import importLINCSprotein
+from .tensor import partial_tucker_decomp, flip_factors
 
 
 def data_mod(x, df=None):
@@ -40,3 +41,9 @@ def form_tensor():
         slices.append(array)
     tensor = np.stack(slices)
     return tensor, unique_treatments, times
+
+def get_flipped_tucker(tensor, components):
+    pre_flip_result = partial_tucker_decomp(tensor, [2], components)
+
+    result = flip_factors(pre_flip_result)
+    return result

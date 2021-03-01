@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
-from ..Data_Mod import form_tensor
+from ..Data_Mod import form_tensor, get_flipped_tucker
 from ..pseudoinvnorm import get_Flattened_Matrices, get_reconstruct, find_gene_factors
 from ..dataHelpers import importLINCSprotein
 from tensorly.decomposition import  partial_tucker,parafac2
@@ -15,13 +15,6 @@ from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projectio
 from ..Data_Mod import form_tensor
 from tensorly.metrics.regression import variance as tl_var
 tl.set_backend("numpy")
-
-
-component = 5
-tensor, treatment_list, times = form_tensor()
-pre_flip_result = partial_tucker_decomp(tensor, [2], component)
-
-result = flip_factors(pre_flip_result)
 
 
 def makeFigure():
@@ -56,8 +49,7 @@ def gene_R2X(axis):
     R2X = np.zeros(13)
     for i in range(1, 13):
         print(i)
-        pre_flip_result = partial_tucker_decomp(tensor, [2], i)
-        result = flip_factors(pre_flip_result)
+        result = get_flipped_tucker(tensor, i)
         RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
         P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
         Gene_redone = np.matmul(W.T, P)
