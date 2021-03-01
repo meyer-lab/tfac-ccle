@@ -16,6 +16,7 @@ from ..Data_Mod import form_tensor
 from tensorly.metrics.regression import variance as tl_var
 tl.set_backend("numpy")
 
+tensor, treatment_list, times = form_tensor()
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
