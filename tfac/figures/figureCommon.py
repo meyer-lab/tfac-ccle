@@ -6,7 +6,6 @@ import seaborn as sns
 import matplotlib
 import svgutils.transform as st
 from matplotlib import gridspec, pyplot as plt
-from ..tensor import partial_tucker_decomp, flip_factors
 
 
 matplotlib.rcParams['legend.labelspacing'] = 0.2
@@ -73,7 +72,3 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1):
 
     template.append(cartoon)
     template.save(figFile)
-
-def get_flipped_tucker(tensor, components):
-    pre_flip_result = partial_tucker_decomp(tensor, [2], components)
-    return flip_factors(pre_flip_result)

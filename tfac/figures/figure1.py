@@ -5,14 +5,13 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup, get_flipped_tucker
-from ..tensor import partial_tucker_decomp, find_R2X_partialtucker
+from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, get_flipped_tucker
 from ..Data_Mod import form_tensor
 from ..pseudoinvnorm import get_Flattened_Matrices, get_reconstruct, find_gene_factors
 from ..dataHelpers import importLINCSprotein
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-from ..Data_Mod import form_tensor
 from tensorly.metrics.regression import variance as tl_var
 tl.set_backend("numpy")
 

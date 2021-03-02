@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup, get_flipped_tucker
+from .figureCommon import subplotLabel, getSetup
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
+from ..tensor import get_flipped_tucker
 
 
 def makeFigure():
