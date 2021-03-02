@@ -4,7 +4,7 @@ This creates Figure 1 - Partial Tucker Decomposition Treatment and Time Plots.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup, get_flipped_tucker
+from .figureCommon import subplotLabel, getSetup
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, get_flipped_tucker
 from ..Data_Mod import form_tensor
 from ..pseudoinvnorm import get_Flattened_Matrices, get_reconstruct, find_gene_factors
