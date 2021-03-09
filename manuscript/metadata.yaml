@@ -11,17 +11,45 @@ authors:
     name: John Doe
     initials: JD
     orcid: XXXX-XXXX-XXXX-XXXX
-    twitter: johndoe
-    email: john.doe@something.com
     affiliations:
-      - Department of Something, University of Whatever
-    funders: Grant XXXXXXXX
+      - Department of Bioengineering, University of California, Los Angeles
   -
-    github: janeroe
-    name: Jane Roe
-    initials: JR
+    github: johndoe
+    name: John Doe
+    initials: JD
     orcid: XXXX-XXXX-XXXX-XXXX
-    email: jane.roe@whatever.edu
     affiliations:
-      - Department of Something, University of Whatever
-      - Department of Whatever, University of Something
+      - Department of Bioengineering, University of California, Los Angeles
+  -
+    github: johndoe
+    name: John Doe
+    initials: JD
+    orcid: XXXX-XXXX-XXXX-XXXX
+    affiliations:
+      - Department of Bioengineering, University of California, Los Angeles
+  -
+    github: johndoe
+    name: John Doe
+    initials: JD
+    orcid: XXXX-XXXX-XXXX-XXXX
+    affiliations:
+      - Department of Bioengineering, University of California, Los Angeles
+  -
+    github: johndoe
+    name: John Doe
+    initials: JD
+    orcid: XXXX-XXXX-XXXX-XXXX
+    affiliations:
+      - Department of Bioengineering, University of California, Los Angeles
+  -
+    github: aarmey
+    name: Aaron S. Meyer
+    initials: ASM
+    twitter: aarmey
+    orcid: 0000-0003-4513-1840
+    email: a@asmlab.org
+    affiliations:
+      - Department of Bioengineering, University of California, Los Angeles
+      - Department of Bioinformatics, University of California, Los Angeles
+      - Jonsson Comprehensive Cancer Center, University of California, Los Angeles
+      - Eli and Edythe Broad Center of Regenerative Medicine and Stem Cell Research, University of California, Los Angeles
