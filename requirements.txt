@@ -1,8 +1,8 @@
-numpy==1.20.0
-scipy==1.6.0
+numpy==1.20.1
+scipy==1.6.1
 pytest==6.2.2
 pytest-cov==2.11.1
-pylint==2.6.0
+pylint==2.7.2
 manubot==0.5.0
 panflute==1.12
 pandoc-fignos==2.4.0
@@ -11,7 +11,7 @@ pandoc-tablenos==2.3.0
 synapseclient
 matplotlib==3.3.4
 seaborn==0.11.1
-svgutils==0.3.2
+svgutils==0.3.4
 tensorly==0.5.1
 scikit-learn==0.24.1
 pybiomart
