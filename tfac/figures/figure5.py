@@ -64,69 +64,72 @@ def protein_R2X(ax):
     # data processing for protein
     tensor, treatment_list, times = form_tensor()
     R2X = np.zeros(13)
-    protein = pd.read_csv('tfac/data/ohsu/MDD_RPPA_Level4.csv')
-    protein = protein.drop('antibody', axis=1)
+    protein = pd.read_csv("tfac/data/ohsu/MDD_RPPA_Level4.csv")
+    protein = protein.drop("antibody", axis=1)
     colName = [
-        'ctrl_0',
-        'BMP2_0',
-        'BMP2_1',
-        'BMP2_4',
-        'BMP2_8',
-        'BMP2_24',
-        'BMP2_48',
-        'EGF_0',
-        'EGF_1',
-        'EGF_4',
-        'EGF_8',
-        'EGF_24',
-        'EGF_48',
-        'HGF_0',
-        'HGF_1',
-        'HGF_4',
-        'HGF_8',
-        'HGF_24',
-        'HGF_48',
-        'IFNg_0',
-        'IFNg_1',
-        'IFNg_4',
-        'IFNg_8',
-        'IFNg_24',
-        'IFNg_48',
-        'OSM_0',
-        'OSM_1',
-        'OSM_4',
-        'OSM_8',
-        'OSM_24',
-        'OSM_48',
-        'PBS_0',
-        'PBS_1',
-        'PBS_4',
-        'PBS_8',
-        'PBS_24',
-        'PBS_48',
-        'TGFb_0',
-        'TGFb_1',
-        'TGFb_4',
-        'TGFb_8',
-        'TGFb_24',
-        'TGFb_48']
-    ctrl = protein['ctrl_0']
+        "ctrl_0",
+        "BMP2_0",
+        "BMP2_1",
+        "BMP2_4",
+        "BMP2_8",
+        "BMP2_24",
+        "BMP2_48",
+        "EGF_0",
+        "EGF_1",
+        "EGF_4",
+        "EGF_8",
+        "EGF_24",
+        "EGF_48",
+        "HGF_0",
+        "HGF_1",
+        "HGF_4",
+        "HGF_8",
+        "HGF_24",
+        "HGF_48",
+        "IFNg_0",
+        "IFNg_1",
+        "IFNg_4",
+        "IFNg_8",
+        "IFNg_24",
+        "IFNg_48",
+        "OSM_0",
+        "OSM_1",
+        "OSM_4",
+        "OSM_8",
+        "OSM_24",
+        "OSM_48",
+        "PBS_0",
+        "PBS_1",
+        "PBS_4",
+        "PBS_8",
+        "PBS_24",
+        "PBS_48",
+        "TGFb_0",
+        "TGFb_1",
+        "TGFb_4",
+        "TGFb_8",
+        "TGFb_24",
+        "TGFb_48",
+    ]
+    ctrl = protein["ctrl_0"]
     for x, i in enumerate(treatment_list):
-        protein.insert(x, i + '_0', ctrl, allow_duplicates=True)
+        protein.insert(x, i + "_0", ctrl, allow_duplicates=True)
     for y in times:
         protein.rename(
             columns={
-                'TGFB_1': 'TGFb_1',
-                'TGFB_4': 'TGFb_4',
-                'TGFB_8': 'TGFb_8',
-                'TGFB_24': 'TGFb_24',
-                'TGFB_48': 'TGFb_48',
-                'IFNG_1': 'IFNg_1',
-                'IFNG_4': 'IFNg_4',
-                'IFNG_8': 'IFNg_8',
-                'IFNG_24': 'IFNg_24',
-                'IFNG_48': 'IFNg_48'},
-            inplace=True)
+                "TGFB_1": "TGFb_1",
+                "TGFB_4": "TGFb_4",
+                "TGFB_8": "TGFb_8",
+                "TGFB_24": "TGFb_24",
+                "TGFB_48": "TGFb_48",
+                "IFNG_1": "IFNg_1",
+                "IFNG_4": "IFNg_4",
+                "IFNG_8": "IFNg_8",
+                "IFNG_24": "IFNg_24",
+                "IFNG_48": "IFNg_48",
+            },
+            inplace=True,
+        )
     protein = protein.reindex(colName, axis=1)
     # R2X calculation
     for i in range(1, 13):
@@ -139,4 +142,4 @@ def protein_R2X(ax):
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("Variance Explained in Protein Data")
-    ax.set_yticks([0, .2, .4, .6, .8, 1])
+    ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])

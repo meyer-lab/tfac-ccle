@@ -26,7 +26,7 @@ def makeFigure():
 
 
 def R2X_Figure_PartialTucker(ax, input_tensor):
-    '''Create Partial Tucker R2X Figure'''
+    """Create Partial Tucker R2X Figure"""
     R2X = np.zeros(13)
     for i in range(1, 13):
         output = partial_tucker_decomp(input_tensor, [2], i)
@@ -35,4 +35,4 @@ def R2X_Figure_PartialTucker(ax, input_tensor):
     ax.set_xlabel("Rank Decomposition")
     ax.set_ylabel("R2X")
     ax.set_title("Partial Tucker Decomposition")
-    ax.set_yticks([0, .2, .4, .6, .8, 1])
+    ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
