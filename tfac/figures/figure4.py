@@ -11,6 +11,7 @@ from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projectio
 from ..Data_Mod import form_tensor
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
 from tensorly.metrics.regression import variance as tl_var
+
 tl.set_backend("numpy")
 
 
