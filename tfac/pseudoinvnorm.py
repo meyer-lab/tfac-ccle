@@ -48,3 +48,8 @@ def find_reconstruction_norm(result, geneexpression, treatment_list, times):
     P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
     Ppinv, W = get_reconstruct(P, X)
     return np.linalg.norm(X.T - np.matmul(P.T, W)), X, P, W
+
+def find_gene_factors(result, geneexpression, treatment_list, times):
+    P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
+    Ppinv, W = get_reconstruct(P, X)
+    return P, X, Ppinv, W

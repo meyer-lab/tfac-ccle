@@ -89,3 +89,7 @@ def decomp_to_flipped_factors(components):
     pre_flip_result = partial_tucker_decomp(tensor, [2], components)
     result = flip_factors(pre_flip_result)
     return result, treatment_list, times
+
+def get_flipped_tucker(tensor, components):
+    pre_flip_result = partial_tucker_decomp(tensor, [2], components)
+    return flip_factors(pre_flip_result)
