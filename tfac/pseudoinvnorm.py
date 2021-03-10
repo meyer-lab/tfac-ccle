@@ -3,8 +3,8 @@ import pandas as pd
 
 
 def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
-    ids = geneexpression['ensembl_gene_id']
-    geneexpression.drop('ensembl_gene_id', inplace=True, axis=1)
+    ids = geneexpression["ensembl_gene_id"]
+    geneexpression.drop("ensembl_gene_id", inplace=True, axis=1)
     # create a 5x42 DataFrame of decompsed component values
     toflatten = result[0]
     flattened = []

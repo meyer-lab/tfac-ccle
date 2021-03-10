@@ -56,12 +56,14 @@ def partial_tucker_decomp(tensor, mode_list, rank):
     """
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
+
 #### For R2X Plots ###########################################################################
 
 
 def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
+
 
 ###### To Flip Factors #########################################################################
 

@@ -8,12 +8,13 @@ from ..dataHelpers import ohsu_data
 from ..tensor import decomp_to_flipped_factors
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
+
 tl.set_backend("numpy")
 
 
 def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
-    '''Flattens treatment list and times dimensions into one treatment-time axis.
-    Creates a new gene expression matrix (treatment-time x genes)'''
+    """Flattens treatment list and times dimensions into one treatment-time axis.
+    Creates a new gene expression matrix (treatment-time x genes)"""
     geneexpression.drop("ensembl_gene_id", inplace=True, axis=1)
     # create a 5x42 DataFrame of decompsed component values
     toflatten = result[0]
@@ -50,7 +51,7 @@ def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
 
 
 def find_gene_factors(result, geneexpression, treatment_list, times):
-    '''Calculates pseudoinverse of flattened matrix, gene expression factors, flattened matrix, and gene expression matrix.'''
+    """Calculates pseudoinverse of flattened matrix, gene expression factors, flattened matrix, and gene expression matrix."""
     P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
     Ppinv = np.linalg.pinv(P.T)
     W = np.matmul(Ppinv, X.T)
@@ -58,7 +59,7 @@ def find_gene_factors(result, geneexpression, treatment_list, times):
 
 
 def var_diff(axis):
-    '''Calculates amount of variance each variance explains from each component of gene expression factors.'''
+    """Calculates amount of variance each variance explains from each component of gene expression factors."""
     result, treatment_list, times = decomp_to_flipped_factors(5)
     _, _, _, _, _, RNAseq, _ = ohsu_data()
     P, X, Ppinv, W = find_gene_factors(result, RNAseq, treatment_list, times)
@@ -77,7 +78,7 @@ def var_diff(axis):
     sns.barplot(x=np.arange(len(residuals)), y=residuals - R2X_full, ax=axis)
     axis.set_xlabel("Component Removed")
     axis.set_ylabel("Difference in Percent Variance")
-    axis.set_xticklabels(['1', '2', '3', '4', '5'])
+    axis.set_xticklabels(["1", "2", "3", "4", "5"])
 
 
 def makeFigure():

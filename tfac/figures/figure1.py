@@ -34,7 +34,7 @@ def makeFigure():
 
 
 def R2X_Figure_PartialTucker(ax, input_tensor):
-    '''Create Partial Tucker R2X Figure'''
+    """Create Partial Tucker R2X Figure"""
     R2X = np.zeros(13)
     for i in range(1, 13):
         output = partial_tucker_decomp(input_tensor, [2], i)

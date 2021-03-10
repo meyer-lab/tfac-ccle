@@ -22,7 +22,7 @@ def protein_heatmap(m_axis):
     protMap = protMap.loc[:, sel > 0.2]
 
     # now protMap has all of the correct names and dropped proteins // transverse to make plot look better
-    sns.heatmap(protMap.T, cmap='PiYG', vmin=-0.5, vmax=0.5, xticklabels=protMap.index + 1, ax=m_axis)
+    sns.heatmap(protMap.T, cmap="PiYG", vmin=-0.5, vmax=0.5, xticklabels=protMap.index + 1, ax=m_axis)
 
 
 def makeFigure():
