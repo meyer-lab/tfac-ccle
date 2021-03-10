@@ -50,7 +50,7 @@ def gene_R2X(axis):
     for i in range(1, 13):
         print(i)
         result = get_flipped_tucker(tensor, i)
-        RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
+        _, _, _, _, _, RNAseq, _ = ohsu_data()
         P, X, Ppinv, W  = find_gene_factors(result, RNAseq, treatment_list, times)
         Gene_redone = np.matmul(W.T, P)
         R2X[i] = 1 - tl_var(Gene_redone - X) / tl_var(RNAseq.to_numpy())
