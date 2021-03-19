@@ -8,15 +8,13 @@ import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..Data_Mod import form_tensor
 from ..dataHelpers import importLINCSprotein
-from ..tensor import get_flipped_tucker
+from ..tensor import decomp_to_flipped_factors
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     
-    tensor, treatment_list, times = form_tensor()
-
-    result = get_flipped_tucker(tensor, 5)
+    result, treatment_list, times = decomp_to_flipped_factors(5)
 
     compList = ["1", "2", "3", "4", "5"]
     trmtTimeList = []

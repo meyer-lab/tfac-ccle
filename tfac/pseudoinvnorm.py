@@ -1,10 +1,11 @@
+"""
+Functions for reverse projection.
+"""
 import numpy as np
 import pandas as pd
 
 
-def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
-    ids = geneexpression["ensembl_gene_id"]
-    geneexpression.drop("ensembl_gene_id", inplace=True, axis=1)
+def get_Flattened_Matrices(result, data, treatment_list, times):
     # create a 5x42 DataFrame of decompsed component values
     toflatten = result[0]
     flattened = []
@@ -31,12 +32,12 @@ def get_Flattened_Matrices(result, geneexpression, treatment_list, times):
 
     # sort by column name
     df = df.reindex(sorted(df.columns), axis=1)
-    geneexpression = geneexpression.reindex(sorted(geneexpression.columns), axis=1)
+    data = data.reindex(sorted(data.columns), axis=1)
 
     # make dataframes into numpy arrays
     df = df.to_numpy()
-    genexpression = geneexpression.to_numpy()
-    return df, genexpression
+    data = data.to_numpy()
+    return df, data
 
 
 def get_reconstruct(P, X):
@@ -44,12 +45,14 @@ def get_reconstruct(P, X):
     return Ppinv, np.matmul(Ppinv, X.T)
 
 
-def find_reconstruction_norm(result, geneexpression, treatment_list, times):
-    P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
-    Ppinv, W = get_reconstruct(P, X)
+def find_reconstruction_norm(result, data, treatment_list, times):
+    P, X = get_Flattened_Matrices(result, data, treatment_list, times)
+    _, W = get_reconstruct(P, X)
     return np.linalg.norm(X.T - np.matmul(P.T, W)), X, P, W
 
-def find_gene_factors(result, geneexpression, treatment_list, times):
-    P, X = get_Flattened_Matrices(result, geneexpression, treatment_list, times)
+
+def find_factors(result, data, treatment_list, times):
+    P, X = get_Flattened_Matrices(result, data, treatment_list, times)
     Ppinv, W = get_reconstruct(P, X)
     return P, X, Ppinv, W
+
