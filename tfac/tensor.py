@@ -1,5 +1,5 @@
 """
-Tensor decomposition methods
+Tensor decomposition methods.
 """
 import numpy as np
 import tensorly as tl
@@ -90,6 +90,3 @@ def decomp_to_flipped_factors(components):
     result = flip_factors(pre_flip_result)
     return result, treatment_list, times
 
-def get_flipped_tucker(tensor, components):
-    pre_flip_result = partial_tucker_decomp(tensor, [2], components)
-    return flip_factors(pre_flip_result)
