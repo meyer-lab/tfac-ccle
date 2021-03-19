@@ -29,7 +29,7 @@ def protein_R2X(ax):
     R2X = np.zeros(13)
     _, _, _, _, _, _, protein = ohsu_data()
     protein = protein.drop([
-        "antibody", 
+        "antibody",
         "BMP2_1",
         "BMP2_4",
         "BMP2_8",
@@ -51,7 +51,7 @@ def protein_R2X(ax):
         "TGFB_1",
         "TGFB_4",
         "TGFB_8",
-        ], axis=1)
+    ], axis=1)
     colName = [
         "ctrl_0",
         "BMP2_24",
@@ -72,7 +72,7 @@ def protein_R2X(ax):
     ctrl = protein["ctrl_0"]
     for x, i in enumerate(treatment_list):
         protein.insert(x, i + "_0", ctrl, allow_duplicates=True)
-    
+
     protein.rename(
         columns={
             "TGFB_1": "TGFb_1",

@@ -20,7 +20,7 @@ def makeFigure():
     gene_R2X(ax[0])
     subplotLabel(ax)
     return f
-    
+
 
 def gene_R2X(axis):
     RNAseq = pd.read_csv("tfac/data/ohsu/MDD_RNAseq_Level4.csv")
@@ -36,4 +36,3 @@ def gene_R2X(axis):
     axis.set_ylabel("Gene R2X")
     axis.set_yticks([0, .2, .4, .6, .8, 1])
     axis.set_title("Variance Explained in Gene Data")
-

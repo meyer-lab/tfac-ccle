@@ -55,4 +55,3 @@ def find_factors(result, data, treatment_list, times):
     P, X = get_Flattened_Matrices(result, data, treatment_list, times)
     Ppinv, W = get_reconstruct(P, X)
     return P, X, Ppinv, W
-
