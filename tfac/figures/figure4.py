@@ -8,7 +8,7 @@ from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
 from ..Data_Mod import form_tensor
 from ..tensor import decomp_to_flipped_factors
-from ..pseudoinvnorm import find_gene_factors
+from ..pseudoinvnorm import find_factors
 
 
 def makeFigure():
@@ -28,7 +28,7 @@ def gene_R2X(axis):
     R2X = np.zeros(13)
     for i in range(1, 13):
         result, treatment_list, times = decomp_to_flipped_factors(i)
-        P, X, _, W = find_gene_factors(result, RNAseq, treatment_list, times)
+        P, X, _, W = find_factors(result, RNAseq, treatment_list, times)
         Gene_redone = np.matmul(W.T, P)
         R2X[i] = 1 - tl_var(Gene_redone - X) / tl_var(RNAseq.to_numpy())
     sns.scatterplot(np.arange(len(R2X)), R2X, ax=axis)
