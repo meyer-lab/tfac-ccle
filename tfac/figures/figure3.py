@@ -1,6 +1,7 @@
 """
 This creates Figure 3.
 """
+
 from .figureCommon import getSetup, subplotLabel
 import numpy as np
 import pandas as pd
@@ -9,14 +10,12 @@ import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 from ..Data_Mod import form_tensor
 from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
-from ...pseudoinvnorm import get_Flattened_Matrices, get_reconstruct
+from ...pseudoinvnorm import get_Flattned_Matrices, get_reconstruct
 from pybiomart import Server
 import gseapy as gp
 import copy
 import matplotlib.pyplot as plt 
 tl.set_backend("numpy")
-
-
 
 
 
@@ -26,6 +25,7 @@ def makeFigure():
     row = 3
     col = 1
     ax, f = getSetup((50, 50), (row, col))
+
     subplotLabel(ax)
 
     filtered=[]

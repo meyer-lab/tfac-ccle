@@ -1,11 +1,12 @@
 """
-Tensor decomposition methods
+Tensor decomposition methods.
 """
 import numpy as np
 import tensorly as tl
 from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.tenalg import mode_dot
+from .Data_Mod import form_tensor
 
 
 tl.set_backend("numpy")  # Set the backend
@@ -55,12 +56,14 @@ def partial_tucker_decomp(tensor, mode_list, rank):
     """
     return partial_tucker(tensor, mode_list, rank, tol=1.0e-12)
 
+
 #### For R2X Plots ###########################################################################
 
 
 def find_R2X_partialtucker(tucker_output, orig):
     """Compute R2X for the tucker decomposition."""
     return R2X(mode_dot(tucker_output[0], tucker_output[1][0], 2), orig)
+
 
 ###### To Flip Factors #########################################################################
 
@@ -77,3 +80,13 @@ def flip_factors(tucker_output):
             for j in range(tucker_output[0].shape[0]):
                 tucker_output[0][j][:, component] *= -1
     return tucker_output
+
+
+def decomp_to_flipped_factors(components):
+    """"Parital Tucker decomposition and flipping factors.
+    Returns flipped factors, treatment list, and times."""
+    tensor, treatment_list, times = form_tensor()
+    pre_flip_result = partial_tucker_decomp(tensor, [2], components)
+    result = flip_factors(pre_flip_result)
+    return result, treatment_list, times
+
