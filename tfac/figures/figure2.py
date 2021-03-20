@@ -140,7 +140,6 @@ def makeFigure():
 
     fig, ax = plt.subplots(2, 2)
 
-
     return f
     
     
