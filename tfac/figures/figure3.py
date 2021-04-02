@@ -7,9 +7,6 @@ import pandas as pd
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-from ..Data_Mod import form_tensor
-from ..tensor import partial_tucker_decomp, find_R2X_partialtucker, flip_factors
-from ...pseudoinvnorm import get_Flattened_Matrices, get_reconstruct
 from pybiomart import Server
 import gseapy as gp
 import copy
@@ -82,9 +79,6 @@ def makeFigure():
     for i in range(6):
         for j in range(5):
             tot = pd.concat([tot, filtered[i][j]])
-    just_score = ['es']
-    size_then_score = ['geneset_size', 'es']
-    matched_size_then_score = ['matched_size', 'es']
 
     all_tots = [tot1, tot2, tot3, tot4, tot5]
 
