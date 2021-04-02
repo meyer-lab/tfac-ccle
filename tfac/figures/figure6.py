@@ -44,4 +44,3 @@ def var_diff(axis):
     axis.set_ylabel("Difference in Percent Variance")
     axis.set_xticklabels(["1", "2", "3", "4", "5"])
     axis.set_title("Percent Variance Explained Per Component")
-
