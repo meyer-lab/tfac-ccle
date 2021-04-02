@@ -124,11 +124,21 @@ def makeFigure():
     ax[0].set_xlabel("Component 4 ES") 
     ax[0].set_ylabel("Component 5 ES") 
 
-    sns.scatterplot(x = heat1["Term"], y = heat1['es'],c='red', label = 'C1', ax = ax[1])
-    sns.scatterplot(x = heat1["Term"], y = heat2['es'],c='blue', label = 'C2', ax = ax[1])
-    sns.scatterplot(x = heat1["Term"], y = heat3['es'],c='green', label = 'C3', ax = ax[1])
-    sns.scatterplot(x = heat1["Term"], y = heat4['es'],c='orange', label = 'C4', ax = ax[1])
-    sns.scatterplot(x = heat1["Term"], y = heat5['es'],c='purple', label = 'C5', ax = ax[1])
+    heat1["leg"] = "C1"
+    heat2["leg"] = "C2"
+    heat3["leg"] = "C3"
+    heat4["leg"] = "C4"
+    heat5["leg"] = "C5"
+    fin_df = heat1.append(heat2)
+    fin_df = fin_df.append(heat3)
+    fin_df = fin_df.append(heat4)
+    fin_df = fin_df.append(heat5)
+    sns.scatterplot(x = heat1["Term"], y = heat1['es'],palette=['red'], ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat2['es'],palette=['blue'], ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat3['es'],palette=['green'], ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat4['es'],palette=['orange'],  ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat5['es'],palette=['purple'],  ax = ax[1])
+    # sns.scatterplot(x="Term", y="lifeExp",hue="leg",data=fin_df, ax = ax[1])
     ax[1].set_xlabel("Set Name") 
     ax[1].set_ylabel("ES") 
 
