@@ -7,9 +7,6 @@ import pandas as pd
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-from pybiomart import Server
-import gseapy as gp
-import copy
 import matplotlib.pyplot as plt 
 tl.set_backend("numpy")
 
