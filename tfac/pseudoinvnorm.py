@@ -7,11 +7,7 @@ import pandas as pd
 
 def get_Flattened_Matrices(result, data, treatment_list, times):
     # create a 5x42 DataFrame of decompsed component values
-    toflatten = result[0]
-    flattened = []
-
-    for treatment in range(7):
-        flattened.append(pd.DataFrame(toflatten[treatment]).T)
+    flattened = [pd.DataFrame(dd).T for dd in result[0]]
 
     df = pd.concat(flattened, axis=1)
 
