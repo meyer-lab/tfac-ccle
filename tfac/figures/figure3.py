@@ -195,7 +195,7 @@ def makeFigure():
     heat2.sort_values(by=['Term'], inplace = True)  
 
     sns.scatterplot(x = heat1["es"], y = heat2['es'], ax = ax[2])
-    ax[2].xlabel("OSM ES") 
-    ax[2].ylabel("IFN ES") 
+    ax[2].set_xlabel("OSM ES") 
+    ax[2].set_ylabel("IFN ES") 
 
     return f
