@@ -7,7 +7,8 @@ import pandas as pd
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import seaborn as sns 
 tl.set_backend("numpy")
 
 
@@ -17,8 +18,8 @@ tl.set_backend("numpy")
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    row = 3
-    col = 1
+    row = 1
+    col = 3
     ax, f = getSetup((50, 50), (row, col))
     subplotLabel(ax)
 
@@ -119,21 +120,17 @@ def makeFigure():
     heat4.sort_values(by=['Term'], inplace = True)
     heat5.sort_values(by=['Term'], inplace = True)
 
-    ax[0][1].scatter(heat4["es"], heat5['es'])
-    ax[0][1].xlabel("Component 4 ES") 
-    ax[0][1].ylabel("Component 5 ES") 
-    ax[0][1].show()
+    sns.scatterplot(x = heat4["es"], y = heat5['es'], ax = ax[0])
+    ax[0].set_xlabel("Component 4 ES") 
+    ax[0].set_ylabel("Component 5 ES") 
 
-    ax[0][2].scatter(heat1["Term"], heat1['es'],c='red', label = 'C1')
-    ax[0][2].scatter(heat1["Term"], heat2['es'],c='blue', label = 'C2')
-    ax[0][2].scatter(heat1["Term"], heat3['es'],c='green', label = 'C3')
-    ax[0][2].scatter(heat1["Term"], heat4['es'],c='orange', label = 'C4')
-    ax[0][2].scatter(heat1["Term"], heat5['es'],c='purple', label = 'C5')
-    ax[0][2].legend()
-    ax[0][2].xlabel("Set Name") 
-    ax[0][2].ylabel("ES") 
-    ax[0][2].xticks(rotation=90)
-    ax[0][2].show()
+    sns.scatterplot(x = heat1["Term"], y = heat1['es'],c='red', label = 'C1', ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat2['es'],c='blue', label = 'C2', ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat3['es'],c='green', label = 'C3', ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat4['es'],c='orange', label = 'C4', ax = ax[1])
+    sns.scatterplot(x = heat1["Term"], y = heat5['es'],c='purple', label = 'C5', ax = ax[1])
+    ax[1].set_xlabel("Set Name") 
+    ax[1].set_ylabel("ES") 
 
     filtered=[]
     t_set=[]
@@ -187,9 +184,8 @@ def makeFigure():
     heat1.sort_values(by=['Term'], inplace = True)
     heat2.sort_values(by=['Term'], inplace = True)  
 
-    ax[0][2].scatter(heat1["es"], heat2['es'])
-    ax[0][2].xlabel("OSM ES") 
-    ax[0][2].ylabel("IFN ES") 
-    ax[0][2].show() 
+    sns.scatterplot(x = heat1["es"], y = heat2['es'], ax = ax[2])
+    ax[2].xlabel("OSM ES") 
+    ax[2].ylabel("IFN ES") 
 
     return f
