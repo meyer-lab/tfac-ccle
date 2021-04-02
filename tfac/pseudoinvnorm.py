@@ -45,12 +45,6 @@ def get_reconstruct(P, X):
     return Ppinv, np.matmul(Ppinv, X.T)
 
 
-def find_reconstruction_norm(result, data, treatment_list, times):
-    P, X = get_Flattened_Matrices(result, data, treatment_list, times)
-    _, W = get_reconstruct(P, X)
-    return np.linalg.norm(X.T - np.matmul(P.T, W)), X, P, W
-
-
 def find_factors(result, data, treatment_list, times):
     P, X = get_Flattened_Matrices(result, data, treatment_list, times)
     Ppinv, W = get_reconstruct(P, X)
