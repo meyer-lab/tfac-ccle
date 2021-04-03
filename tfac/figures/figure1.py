@@ -11,6 +11,7 @@ from ..Data_Mod import form_tensor
 from ..pseudoinvnorm import find_factors
 from ..dataHelpers import importLINCSprotein, ohsu_data
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -38,16 +39,17 @@ def R2X_Figure_PartialTucker(ax, input_tensor):
     ax.set_ylabel("Protein R2X")
     ax.set_yticks([0, .2, .4, .6, .8, 1])
 
+
 def gene_R2X(axis):
     _, _, _, _, _, RNAseq, _ = ohsu_data()
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
     R2X = np.zeros(13)
     for i in range(1, 13):
         result, treatment_list, times = decomp_to_flipped_factors(i)
-        P, X, _, W  = find_factors(result, RNAseq, treatment_list, times)
+        P, X, _, W = find_factors(result, RNAseq, treatment_list, times)
         Gene_redone = np.matmul(W.T, P)
         R2X[i] = 1 - tl_var(Gene_redone - X) / tl_var(RNAseq.to_numpy())
-    sns.scatterplot(np.arange(len(R2X)), R2X, ax = axis)
+    sns.scatterplot(np.arange(len(R2X)), R2X, ax=axis)
     axis.set_xlabel("Components")
     axis.set_ylabel("Gene R2X")
     axis.set_yticks([0, .2, .4, .6, .8, 1])
