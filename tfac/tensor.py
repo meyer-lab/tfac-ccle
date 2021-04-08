@@ -6,7 +6,9 @@ import tensorly as tl
 from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.tenalg import mode_dot
+from .dataHelpers import importLINCSprotein, ohsu_data
 from .Data_Mod import form_tensor
+from .pseudoinvnorm import find_factors
 
 
 tl.set_backend("numpy")  # Set the backend
@@ -89,4 +91,33 @@ def decomp_to_flipped_factors(components):
     pre_flip_result = partial_tucker_decomp(tensor, [2], components)
     result = flip_factors(pre_flip_result)
     return result, treatment_list, times
+
+#### Unit Test ###################################################################
+
+
+def check_size(comps):
+    """Imports raw data, implements tensor decomposition and reverse projection. 
+    Checks factor sizes. 
+    Returns decomp and projection sizes."""
+    #Data Import
+    proteins = importLINCSprotein()
+    _, _, _, _, _, RNAseq, _ = ohsu_data()
+    RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
+    #Tensor Decomp & Reverse Projection
+    result, treatment_list, times = decomp_to_flipped_factors(comps)
+    P_gene, _, _, W_gene = find_factors(result, RNAseq, treatment_list, times)
+    gene_recon = np.matmul(W_gene.T, P_gene)
+    if(gene_recon.shape[0] == RNAseq.shape[0] and gene_recon.shape[1] == 15):
+        print("Gene reverse projection size matches original data set (genes by treatment-time): " 
+        + str(gene_recon.shape))
+    else:
+        print("Gene reverse projection size doesn't match original data set.")
+    if(len(result[1][0][0, :]) == comps and len(result[1][0][:, 0]) == 295):
+        print("Protein factor sizes match expected values: 295 proteins by " + str(comps) + " components.")
+    else:
+        print("Protein factor size doesn't match.")
+    if(len(result[0][0][0]) == comps and len(result[0]) == (len(treatment_list)) and len(result[0][0]) == len(times)):
+        print("Core tensor size matches expected sizes of 7 treatments, 6 times, " + str(comps) + " components.")
+    else:
+        print("Core tensor size doesn't match.")
 
