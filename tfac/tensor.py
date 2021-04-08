@@ -100,7 +100,6 @@ def check_size(comps):
     Checks factor sizes. 
     Returns decomp and projection sizes."""
     #Data Import
-    proteins = importLINCSprotein()
     _, _, _, _, _, RNAseq, _ = ohsu_data()
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
     #Tensor Decomp & Reverse Projection
