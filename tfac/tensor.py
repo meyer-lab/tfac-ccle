@@ -12,18 +12,6 @@ from .Data_Mod import form_tensor
 tl.set_backend("numpy")  # Set the backend
 
 
-def reorient_factors(factors):
-    """ Reorient factors based on the sign of the mean so that only the last factor can have negative means. """
-    for index in range(len(factors) - 1):
-        meann = np.sign(np.mean(factors[index], axis=0))
-        assert meann.size == factors[0].shape[1]
-
-        factors[index] *= meann
-        factors[index + 1] *= meann
-
-    return factors
-
-
 #### Decomposition Methods ###################################################################
 
 
