@@ -12,11 +12,6 @@ from .Data_Mod import form_tensor
 tl.set_backend("numpy")  # Set the backend
 
 
-def R2X(reconstructed, original):
-    """ Calculates R2X of two tensors. """
-    return 1.0 - tl_var(reconstructed - original) / tl_var(original)
-
-
 def reorient_factors(factors):
     """ Reorient factors based on the sign of the mean so that only the last factor can have negative means. """
     for index in range(len(factors) - 1):
