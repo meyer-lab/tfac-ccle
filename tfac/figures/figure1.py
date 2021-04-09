@@ -46,10 +46,10 @@ def gene_R2X(axis):
     R2X = np.zeros(13)
     for i in range(1, 13):
         result, treatment_list, times = decomp_to_flipped_factors(i)
-        P, X, _, W = find_factors(result, RNAseq, treatment_list, times)
+        P, X, W = find_factors(result, RNAseq, treatment_list, times)
         Gene_redone = np.matmul(W.T, P)
         R2X[i] = 1 - tl_var(Gene_redone - X) / tl_var(RNAseq.to_numpy())
-    sns.scatterplot(np.arange(len(R2X)), R2X, ax=axis)
+    sns.scatterplot(x=np.arange(len(R2X)), y=R2X, ax=axis)
     axis.set_xlabel("Components")
     axis.set_ylabel("Gene R2X")
     axis.set_yticks([0, .2, .4, .6, .8, 1])
