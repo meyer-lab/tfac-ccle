@@ -36,12 +36,7 @@ def get_Flattened_Matrices(result, data, treatment_list, times):
     return df, data
 
 
-def get_reconstruct(P, X):
-    Ppinv = np.linalg.pinv(P.T)
-    return Ppinv, np.matmul(Ppinv, X.T)
-
-
 def find_factors(result, data, treatment_list, times):
     P, X = get_Flattened_Matrices(result, data, treatment_list, times)
-    Ppinv, W = get_reconstruct(P, X)
-    return P, X, Ppinv, W
+    W = np.linalg.lstsq(P.T, X.T, rcond=None)[0]
+    return P, X, W

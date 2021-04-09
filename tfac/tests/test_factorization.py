@@ -15,7 +15,7 @@ def test_check_size():
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
     # Tensor Decomp & Reverse Projection
     result, treatment_list, times = decomp_to_flipped_factors(comps)
-    P_gene, _, _, W_gene = find_factors(result, RNAseq, treatment_list, times)
+    P_gene, _, W_gene = find_factors(result, RNAseq, treatment_list, times)
     gene_recon = np.matmul(W_gene.T, P_gene)
 
     assert gene_recon.shape[0] == RNAseq.shape[0]
