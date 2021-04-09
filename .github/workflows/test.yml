@@ -13,4 +13,12 @@ jobs:
       run: make venv
     - name: Test with pytest
       run: |
-        . venv/bin/activate; pytest
+        . venv/bin/activate; pytest --cov=tfac --cov-report=xml --cov-config=.github/workflows/coveragerc
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: true
