@@ -6,7 +6,6 @@ import pandas as pd
 import seaborn as sns
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
-from ..Data_Mod import form_tensor
 from ..tensor import decomp_to_flipped_factors
 from ..pseudoinvnorm import find_factors
 
