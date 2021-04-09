@@ -12,6 +12,11 @@ from .Data_Mod import form_tensor
 tl.set_backend("numpy")  # Set the backend
 
 
+def R2X(reconstructed, original):
+    """ Calculates R2X of two tensors. """
+    return 1.0 - tl_var(reconstructed - original) / tl_var(original)
+
+
 #### Decomposition Methods ###################################################################
 
 
