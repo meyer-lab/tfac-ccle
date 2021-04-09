@@ -1,0 +1,16 @@
+name: Test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup submodule
+      run: git submodule update --init --recursive
+    - name: Install dependencies
+      run: make venv
+    - name: Test with pytest
+      run: |
+        . venv/bin/activate; pytest
