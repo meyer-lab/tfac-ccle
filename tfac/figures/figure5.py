@@ -92,7 +92,7 @@ def protein_R2X(ax):
     # R2X calculation
     for i in range(1, 13):
         result, _, _ = decomp_to_flipped_factors(i)
-        P, X, _, W = find_factors(result, protein, treatment_list, times)
+        P, X, W = find_factors(result, protein, treatment_list, times)
         protein_redone = np.matmul(W.T, P)
         R2X[i] = 1 - tl_var(protein_redone - X) / tl_var(protein.to_numpy())
     sns.scatterplot(np.arange(len(R2X)), R2X, ax=ax)

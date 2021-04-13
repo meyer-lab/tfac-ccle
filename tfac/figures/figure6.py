@@ -26,7 +26,7 @@ def var_diff(axis):
     result, treatment_list, times = decomp_to_flipped_factors(5)
     _, _, _, _, _, RNAseq, _ = ohsu_data()
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
-    P, _, _, W = find_factors(result, RNAseq, treatment_list, times)
+    P, _, W = find_factors(result, RNAseq, treatment_list, times)
     X_orig = RNAseq.to_numpy()
     R2X_full = tl_var(X_orig - np.matmul(W.T, P)) / tl_var(X_orig)
 
