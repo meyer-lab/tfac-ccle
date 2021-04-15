@@ -136,7 +136,6 @@ def makeFigure():
 
     makeCompPlots(ax[0], ax[1], ax[2])
     makeHeatMap(ax[3])
-    #makeProteinListDistribution(ax[4])
 
     fig, ax = plt.subplots(2, 2)
 
