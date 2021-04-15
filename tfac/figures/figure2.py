@@ -35,7 +35,7 @@ def makeCompPlots(axis1, axis2, axis3):
 
     #Plot the times against 
     for treatment in treatmentList:
-        sns.lineplot(times, componeDict[treatment], label=treatmentList[counter], ax=axis1, legend=True)
+        sns.lineplot(x=times, y=componeDict[treatment], label=treatmentList[counter], ax=axis1, legend=True)
         counter+=1
     axis1.set_title("Component 1 v.s. Times")
     axis1.set(xlabel='Times', ylabel='Component Values')
@@ -64,7 +64,7 @@ def makeCompPlots(axis1, axis2, axis3):
 
     #Plot the times against 
     for treatment in treatmentList:
-        sns.lineplot(times, compfourDict[treatment], label=treatmentList[counter], ax=axis2, legend=True)
+        sns.lineplot(x=times, y=compfourDict[treatment], label=treatmentList[counter], ax=axis2, legend=True)
         counter+=1
     axis2.set_title("Component 4 v.s. Times")
     axis2.set(xlabel='Times', ylabel='Component Values')
@@ -74,8 +74,6 @@ def makeCompPlots(axis1, axis2, axis3):
     treatmentTime = results[0]
 
     compfiveDict = {}
-
-    print(treatmentTime[0][3])
 
     #Initialize an empty dictionary of lists
     for treatment in treatmentList:
@@ -95,7 +93,7 @@ def makeCompPlots(axis1, axis2, axis3):
 
     #Plot the times against 
     for treatment in treatmentList:
-        sns.lineplot(times, compfiveDict[treatment], label=treatmentList[counter], ax=axis3, legend=True)
+        sns.lineplot(x=times, y=compfiveDict[treatment], label=treatmentList[counter], ax=axis3, legend=True)
         counter+=1
     axis3.set_title("Component 5 v.s. Times")
     axis3.set(xlabel='Times', ylabel='Component Values')
