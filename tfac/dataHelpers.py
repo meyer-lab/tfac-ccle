@@ -31,28 +31,6 @@ def ohsu_data():
     return atac, cycIF, GCP, IF, L1000, RNAseq, RPPA
 
 
-def compProteins(comps):
-    """Returns the top three weighted proteins for each component in input protein component matrix"""
-    i = np.shape(comps)  # input tensor decomp output
-    proteins = proteinNames()
-    _, compNum = np.shape(comps[i[0] - 1])
-    compName = []
-    topProtein = []
-
-    for x in range(0, compNum):
-        compName.append("Col" + str(x + 1))
-
-    dfComps = pd.DataFrame(data=comps[i[0] - 1], index=proteins, columns=compName)
-    for y in range(0, compNum):
-        topProtein.append(compName[y])
-        rearranged = dfComps.sort_values(by=compName[y], ascending=False)
-        rearrangedNames = list(rearranged.index.values)
-        for z in range(0, 3):
-            topProtein.append(rearrangedNames[z])
-
-    return topProtein
-
-
 def proteinNames():
     """Return protein names (data columns)"""
     data = importLINCSprotein()

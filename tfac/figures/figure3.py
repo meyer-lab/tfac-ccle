@@ -5,14 +5,13 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..tensor import partial_tucker_decomp, flip_factors
+from ..tensor import partial_tucker_decomp
 from ..Data_Mod import form_tensor
 from ..dataHelpers import proteinNames
 
 
 def protein_heatmap(m_axis):
     result = partial_tucker_decomp(form_tensor()[0], [2], rank=5)
-    result = flip_factors(result)
 
     # this takes the list of arrays from results 1, of shape 1, 295, 5 and puts it into a dataFrame of shape 295, 5 (row, col)
     protMap = pd.DataFrame(result[1][0].T, columns=proteinNames())

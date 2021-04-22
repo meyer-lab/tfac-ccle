@@ -7,11 +7,7 @@ import pandas as pd
 
 def get_Flattened_Matrices(result, data, treatment_list, times):
     # create a 5x42 DataFrame of decompsed component values
-    toflatten = result[0]
-    flattened = []
-
-    for treatment in range(7):
-        flattened.append(pd.DataFrame(toflatten[treatment]).T)
+    flattened = [pd.DataFrame(dd).T for dd in result[0]]
 
     df = pd.concat(flattened, axis=1)
 
@@ -40,19 +36,7 @@ def get_Flattened_Matrices(result, data, treatment_list, times):
     return df, data
 
 
-def get_reconstruct(P, X):
-    Ppinv = np.linalg.pinv(P.T)
-    return Ppinv, np.matmul(Ppinv, X.T)
-
-
-def find_reconstruction_norm(result, data, treatment_list, times):
-    P, X = get_Flattened_Matrices(result, data, treatment_list, times)
-    _, W = get_reconstruct(P, X)
-    return np.linalg.norm(X.T - np.matmul(P.T, W)), X, P, W
-
-
 def find_factors(result, data, treatment_list, times):
     P, X = get_Flattened_Matrices(result, data, treatment_list, times)
-    Ppinv, W = get_reconstruct(P, X)
-    return P, X, Ppinv, W
-
+    W = np.linalg.lstsq(P.T, X.T, rcond=None)[0]
+    return P, X, W

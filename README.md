@@ -2,6 +2,7 @@
 
 ![Build](https://github.com/meyer-lab/tfac-ccle/workflows/Build/badge.svg)
 [![Manuscript](https://img.shields.io/static/v1?label=manuscript&message=master&color=blue)](https://meyer-lab.github.io/tfac-ccle/manuscript.html)
+[![codecov](https://codecov.io/gh/meyer-lab/tfac-ccle/branch/master/graph/badge.svg?token=cnw7Z4XgS2)](https://codecov.io/gh/meyer-lab/tfac-ccle)
 
 Identifying the molecular changes that drive cancer development has led to targeted inhibitors that selectively block these processes. These agents can be remarkably effective; however, they are usually effective only in a small subset of patients. Consequently, if we can identify features that predict which patients will respond to a targeted agent, we might vastly improve the benefit of these drugs for patients.
 

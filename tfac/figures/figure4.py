@@ -7,7 +7,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
-from ..Data_Mod import form_tensor
 from ..tensor import decomp_to_flipped_factors
 from ..pseudoinvnorm import find_factors
 from ..dataHelpers import proteinNames
@@ -27,7 +26,6 @@ def makeFigure():
     makeProteinListDistribution(ax[0])
 
     return f
-    
 
 def makeProteinListDistribution(ax):
     components = 5
@@ -167,7 +165,3 @@ def makeProteinListDistribution(ax):
 
     ax.set_title("Component Values for Proteins")
     ax.set(xlabel='Components', ylabel='Component Values')
-
-
-
-

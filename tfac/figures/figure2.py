@@ -123,8 +123,6 @@ def makeHeatMap(axis):
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
-
-
     row = 2
     col = 2
     ax, f = getSetup((8, 4), (row, col))
@@ -136,7 +134,6 @@ def makeFigure():
     makeHeatMap(ax[3])
 
     fig, ax = plt.subplots(2, 2)
-
     return f
     
     
