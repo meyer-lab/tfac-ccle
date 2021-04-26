@@ -4,13 +4,13 @@ This creates Figure 3.
 from .figureCommon import getSetup, subplotLabel
 import numpy as np
 import pandas as pd
+
 from tensorly.decomposition import  partial_tucker,parafac2
 import tensorly as tl
 from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
 import matplotlib.pyplot as plt
 import seaborn as sns 
 tl.set_backend("numpy")
-
 
 
 

@@ -4,10 +4,8 @@ import numpy as np
 from .dataHelpers import importLINCSprotein
 
 
-def data_mod(x, df=None):
+def data_mod(x, df):
     """Creates a slice of the data tensor corresponding to the inputted treatment"""
-    if not isinstance(df, pd.core.frame.DataFrame):
-        df = importLINCSprotein()
     spec_df = df.loc[(df["Treatment"] == "Control") | (df["Treatment"] == x)]
     times = spec_df["Time"].to_numpy().tolist()
     spec_df = spec_df.drop(columns=["Sample description", "Treatment", "Time"])
