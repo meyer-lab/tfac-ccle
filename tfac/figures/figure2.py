@@ -102,8 +102,6 @@ def makeHeatMap(axis):
     """ Create a heatmap of the variety of factors """
     result, treatments, times = decomp_to_flipped_factors(5)
 
-    treatments
-
     # this takes the list of arrays from results 1, of shape 1, 295, 5 and puts it into a dataFrame of shape 295, 5 (row, col)
     protMap = pd.DataFrame(result[1][0].T, columns=proteinNames())
     sel = np.max(np.absolute(protMap.values), axis=0)  # creates a np array of the max values of each of the proteins
@@ -115,13 +113,6 @@ def makeHeatMap(axis):
     sns.heatmap(protMap.T, cmap='PiYG', vmin=-0.5, vmax=0.5, xticklabels=protMap.index + 1, ax=axis)
     axis.set_title("Protein Heatmap")
     axis.set(xlabel='Component', ylabel='Proteins')
-
-
-
-
-
-
-
 
 
 def makeFigure():
@@ -138,5 +129,3 @@ def makeFigure():
 
     fig, ax = plt.subplots(2, 2)
     return f
-
-
