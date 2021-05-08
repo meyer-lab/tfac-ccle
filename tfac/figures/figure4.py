@@ -164,5 +164,3 @@ def makeProteinListDistribution(ax):
 
     ax.set_title("Component Values for Proteins")
     ax.set(xlabel='Components', ylabel='Component Values')
-
-
