@@ -23,7 +23,7 @@ def makeFigure():
 
 
 def protein_R2X(ax):
-    """ data processing for protein """
+    """ Provides the R2X reconstruction graph for the protein subsect of data. """
     _, treatment_list, times = form_tensor()
     R2X = np.zeros(13)
     _, _, _, _, _, _, protein = ohsu_data()
