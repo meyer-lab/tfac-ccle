@@ -1,14 +1,10 @@
 """
 This creates Figure 4. Gene expression R2X with flattened matrix dimension reconstruction.
 """
-import numpy as np
-import pandas as pd
+
 import seaborn as sns
-import matplotlib.pyplot as plt
-from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import subplotLabel, getSetup
 from ..tensor import decomp_to_flipped_factors
-from ..pseudoinvnorm import find_factors
 from ..dataHelpers import proteinNames
 
 
@@ -28,8 +24,9 @@ def makeFigure():
 
 
 def makeProteinListDistribution(ax):
+    """ Create the protein list distribution with components on the x axis, component values on the y axis and outlier proteins labelled """
     components = 5
-    results, treatmentList, times = decomp_to_flipped_factors(components)
+    results, _, _ = decomp_to_flipped_factors(components)
 
     proteinFactors = results[1][0]
     proteinList = proteinNames()
