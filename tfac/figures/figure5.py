@@ -2,7 +2,6 @@
 This creates Figure 5. R2X for proteins with reverse projection reconstruction.
 """
 import numpy as np
-import pandas as pd
 import seaborn as sns
 from tensorly.metrics.regression import variance as tl_var
 from .figureCommon import getSetup, subplotLabel
@@ -24,7 +23,7 @@ def makeFigure():
 
 
 def protein_R2X(ax):
-    # data processing for protein
+    """ Provides the R2X reconstruction graph for the protein subsect of data. """
     _, treatment_list, times = form_tensor()
     R2X = np.zeros(13)
     _, _, _, _, _, _, protein = ohsu_data()

@@ -6,11 +6,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..Data_Mod import form_tensor
-from ..dataHelpers import importLINCSprotein, proteinNames
-from ..tensor import decomp_to_flipped_factors, partial_tucker_decomp
+from ..dataHelpers import proteinNames
+from ..tensor import decomp_to_flipped_factors
 
 def makeCompPlots(axis1, axis2, axis3):
+    """ Creates the component 1,4,5 plots. Component values versus time. """
     components = 5
     results, treatmentList, times = decomp_to_flipped_factors(components)
     treatmentTime = results[0]
@@ -33,7 +33,7 @@ def makeCompPlots(axis1, axis2, axis3):
 
     counter=0
 
-    #Plot the times against 
+    #Plot the times against
     for treatment in treatmentList:
         sns.lineplot(x=times, y=componeDict[treatment], label=treatmentList[counter], ax=axis1, legend=True)
         counter+=1
@@ -62,7 +62,7 @@ def makeCompPlots(axis1, axis2, axis3):
 
     counter = 0
 
-    #Plot the times against 
+    #Plot the times against
     for treatment in treatmentList:
         sns.lineplot(x=times, y=compfourDict[treatment], label=treatmentList[counter], ax=axis2, legend=True)
         counter+=1
@@ -91,7 +91,7 @@ def makeCompPlots(axis1, axis2, axis3):
 
     counter = 0
 
-    #Plot the times against 
+    #Plot the times against
     for treatment in treatmentList:
         sns.lineplot(x=times, y=compfiveDict[treatment], label=treatmentList[counter], ax=axis3, legend=True)
         counter+=1
@@ -99,6 +99,7 @@ def makeCompPlots(axis1, axis2, axis3):
     axis3.set(xlabel='Times', ylabel='Component Values')
 
 def makeHeatMap(axis):
+    """ Create a heatmap of the variety of factors """
     result, treatments, times = decomp_to_flipped_factors(5)
 
     # this takes the list of arrays from results 1, of shape 1, 295, 5 and puts it into a dataFrame of shape 295, 5 (row, col)
@@ -112,13 +113,6 @@ def makeHeatMap(axis):
     sns.heatmap(protMap.T, cmap='PiYG', vmin=-0.5, vmax=0.5, xticklabels=protMap.index + 1, ax=axis)
     axis.set_title("Protein Heatmap")
     axis.set(xlabel='Component', ylabel='Proteins')
-
-
-
-
-
-
-
 
 
 def makeFigure():
@@ -135,5 +129,3 @@ def makeFigure():
 
     fig, ax = plt.subplots(2, 2)
     return f
-    
-    
