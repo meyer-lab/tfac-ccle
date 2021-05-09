@@ -9,6 +9,7 @@ from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import proteinNames
 from ..tensor import decomp_to_flipped_factors
 
+
 def makeCompPlots(axis1, axis2, axis3):
     """ Creates the component 1,4,5 plots. Component values versus time. """
     components = 5
@@ -17,26 +18,25 @@ def makeCompPlots(axis1, axis2, axis3):
 
     componeDict = {}
 
-    #Initialize an empty dictionary of lists
+    # Initialize an empty dictionary of lists
     for treatment in treatmentList:
         componeDict[treatment] = []
 
-
     counter = 0
-    #Create a dictionary with treatments as keys and the treatment value list as the value
+    # Create a dictionary with treatments as keys and the treatment value list as the value
     for keyTreatment in componeDict:
         counter1 = 0
         for timeList in treatmentTime[counter]:
             componeDict[keyTreatment].append(timeList[0])
-            counter1+=1
-        counter+=1
+            counter1 += 1
+        counter += 1
 
-    counter=0
+    counter = 0
 
-    #Plot the times against
+    # Plot the times against
     for treatment in treatmentList:
         sns.lineplot(x=times, y=componeDict[treatment], label=treatmentList[counter], ax=axis1, legend=True)
-        counter+=1
+        counter += 1
     axis1.set_title("Component 1 v.s. Times")
     axis1.set(xlabel='Times', ylabel='Component Values')
 
@@ -46,26 +46,25 @@ def makeCompPlots(axis1, axis2, axis3):
 
     compfourDict = {}
 
-    #Initialize an empty dictionary of lists
+    # Initialize an empty dictionary of lists
     for treatment in treatmentList:
         compfourDict[treatment] = []
 
-
     counter = 0
-    #Create a dictionary with treatments as keys and the treatment value list as the value
+    # Create a dictionary with treatments as keys and the treatment value list as the value
     for keyTreatment in compfourDict:
         counter1 = 0
         for timeList in treatmentTime[counter]:
             compfourDict[keyTreatment].append(timeList[3])
-            counter1+=1
-        counter+=1
+            counter1 += 1
+        counter += 1
 
     counter = 0
 
-    #Plot the times against
+    # Plot the times against
     for treatment in treatmentList:
         sns.lineplot(x=times, y=compfourDict[treatment], label=treatmentList[counter], ax=axis2, legend=True)
-        counter+=1
+        counter += 1
     axis2.set_title("Component 4 v.s. Times")
     axis2.set(xlabel='Times', ylabel='Component Values')
 
@@ -75,28 +74,28 @@ def makeCompPlots(axis1, axis2, axis3):
 
     compfiveDict = {}
 
-    #Initialize an empty dictionary of lists
+    # Initialize an empty dictionary of lists
     for treatment in treatmentList:
         compfiveDict[treatment] = []
 
-
     counter = 0
-    #Create a dictionary with treatments as keys and the treatment value list as the value
+    # Create a dictionary with treatments as keys and the treatment value list as the value
     for keyTreatment in compfiveDict:
         counter1 = 0
         for timeList in treatmentTime[counter]:
             compfiveDict[keyTreatment].append(timeList[4])
-            counter1+=1
-        counter+=1
+            counter1 += 1
+        counter += 1
 
     counter = 0
 
-    #Plot the times against
+    # Plot the times against
     for treatment in treatmentList:
         sns.lineplot(x=times, y=compfiveDict[treatment], label=treatmentList[counter], ax=axis3, legend=True)
-        counter+=1
+        counter += 1
     axis3.set_title("Component 5 v.s. Times")
     axis3.set(xlabel='Times', ylabel='Component Values')
+
 
 def makeHeatMap(axis):
     """ Create a heatmap of the variety of factors """
