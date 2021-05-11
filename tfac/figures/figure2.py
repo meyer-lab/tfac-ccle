@@ -13,7 +13,7 @@ from ..tensor import decomp_to_flipped_factors
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
-    
+
     result, treatment_list, times = decomp_to_flipped_factors(5)
 
     compList = ["1", "2", "3", "4", "5"]

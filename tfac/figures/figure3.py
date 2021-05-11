@@ -4,14 +4,15 @@ This creates Figure 3.
 from .figureCommon import getSetup, subplotLabel
 import numpy as np
 import pandas as pd
-from tensorly.decomposition import  partial_tucker,parafac2
-import tensorly as tl
-from tensorly.parafac2_tensor import parafac2_to_slice, apply_parafac2_projections
-import matplotlib.pyplot as plt
-import seaborn as sns 
-tl.set_backend("numpy")
+import seaborn as sns
+from .figureCommon import subplotLabel, getSetup
+from ..tensor import partial_tucker_decomp
+from ..Data_Mod import form_tensor
+from ..dataHelpers import proteinNames
 
 
+def protein_heatmap(m_axis):
+    result = partial_tucker_decomp(form_tensor()[0], [2], rank=5)
 
 
 
