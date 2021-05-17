@@ -108,4 +108,4 @@ def all_data_import():
     
 
 
-    return proteins, atac, cycIF, GCP, IF, L1000, RNAseq, RPPA
+    return proteins, RNAseq
