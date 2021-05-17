@@ -20,7 +20,7 @@ def R2X(reconstructed, original):
 ###### Factorization #########################################################################
 
 
-def tensor_factor(protein, geneExp):
+def tensor_factor(protein, geneExp, component):
     """Perform Partial Tucker decomposition.
     -----------------------------------------------
     Input:
@@ -31,7 +31,6 @@ def tensor_factor(protein, geneExp):
         output[0]: core tensor
         output[1]: list of factor matrices
     """
-    component = 5
     #Protein Factors
     proteinFactors = partial_tucker(protein, [2], component, tol=1.0e-12)
     for component in range(proteinFactors[0].shape[2]):
