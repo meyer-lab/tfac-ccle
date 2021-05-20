@@ -41,10 +41,6 @@ def ohsu_data():
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
     RPPA = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RPPA_Level4.csv"))
 
-
-    #TODO ADD COLUMNS FOR HOURS 4 and 8 to be filled with NaN
-    #TODO TRANSPOSE AND THEN ZSCORE
-
     cols = RNAseq.columns
     for col in cols:
         RNAseq[col] = (RNAseq[col] - RNAseq[col].mean())/RNAseq[col].std(ddof=0)
@@ -83,14 +79,7 @@ def all_data_import():
     dataC["File"] = "C"
 
     proteins =  pd.concat([dataA, dataB, dataC])
-
-    atac = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_ATACseq_Level4.csv"))
-    cycIF = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_cycIF_Level4.csv"))
-    GCP = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_GCP_Level4.csv"))
-    IF = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_IF_Level4.csv"))
-    L1000 = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_L1000_Level4.csv"))
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
-    RPPA = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RPPA_Level4.csv"))
 
 
     treats = ["PBS","BMP2","IFNG","TGFB","HGF","OSM","EGF"]
