@@ -59,6 +59,7 @@ def proteinNames():
     proteinN = data.columns.values.tolist()
     return proteinN
 
+
 def all_data_import():
     """ Import protein characterization from LINCS and OHSU (z-scoring both)"""
     dataA = pd.read_csv(join(path_here, "tfac/data/01_Laura_Heiser__Sean_Gross_A.csv"))
@@ -105,7 +106,7 @@ def all_data_import():
     for treat in treats:
         for num in nums:
             RNAseq[treat + "_" + num] = np.nan
-    
 
 
     return proteins, RNAseq
+
