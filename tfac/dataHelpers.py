@@ -95,7 +95,7 @@ def all_data_import():
 
     treats = ["PBS","BMP2","IFNG","TGFB","HGF","OSM","EGF"]
     nums = ["0","4","8"]
-
+    RNAseq.set_index("ensembl_gene_id", inplace = True)
     temp = RNAseq.T
     cols = temp.columns
     for col in cols[1:]:
