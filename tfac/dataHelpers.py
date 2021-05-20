@@ -28,7 +28,7 @@ def importLINCSprotein():
     dataB["File"] = "B"
     dataC["File"] = "C"
 
-    return pd.concat([dataA, dataB, dataC])
+    return np.stack((dataA, dataB, dataC))
 
 
 def ohsu_data():
