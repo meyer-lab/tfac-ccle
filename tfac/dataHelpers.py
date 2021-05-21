@@ -78,7 +78,7 @@ def all_data_import():
     dataB["File"] = "B"
     dataC["File"] = "C"
 
-    proteins =  pd.concat([dataA, dataB, dataC])
+    proteins =  np.stack((dataA, dataB, dataC))
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
 
 
