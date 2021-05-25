@@ -28,7 +28,7 @@ def importLINCSprotein():
     dataB["File"] = "B"
     dataC["File"] = "C"
 
-    return np.stack((dataA, dataB, dataC))
+    return pd.concat([dataA, dataB, dataC])
 
 
 def ohsu_data():
@@ -78,7 +78,7 @@ def all_data_import():
     dataB["File"] = "B"
     dataC["File"] = "C"
 
-    proteins =  np.stack((dataA, dataB, dataC))
+    proteins =  pd.concat([dataA, dataB, dataC])
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
 
 
