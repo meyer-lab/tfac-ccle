@@ -78,7 +78,7 @@ def all_data_import():
     dataB["File"] = "B"
     dataC["File"] = "C"
 
-    proteins =  pd.concat([dataA, dataB, dataC])
+    df =  pd.concat([dataA, dataB, dataC])
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
 
 
@@ -96,6 +96,27 @@ def all_data_import():
         for num in nums:
             RNAseq[treat + "_" + num] = np.nan
 
+    tempindex = df["Sample description"]
+    tempindex = tempindex[:36]
+    i = 0
+    for a in tempindex:
+        tempindex[i] = a[3:]
+        i += 1
+    treatments = df["Treatment"][0:36]
+    times = df["Time"][0:36]
+    df = df.drop(["Sample description"], axis=1)
+    by_row_index = df.groupby(df.index)
+    df_means = by_row_index.mean()
+    df_means.insert(0, "Treatment", value=treatments)
+    df_means.insert(0, "Sample description", tempindex)
+    unique_treatments = np.unique(df_means["Treatment"].values).tolist()
+    unique_treatments.remove("Control")
 
-    return proteins, RNAseq
+    slices = []
+    for treatment in unique_treatments:
+        array, _, times = data_mod(treatment, df_means)
+        slices.append(array)
+    tensor = np.stack(slices)
+
+    return tensor, RNAseq
 
