@@ -87,11 +87,11 @@ def all_data_import():
 
     df =  pd.concat([dataA, dataB, dataC])
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
-
+    RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
 
     treats = ["PBS","BMP2","IFNG","TGFB","HGF","OSM","EGF"]
     nums = ["0","1","4","8"]
-    RNAseq.set_index("ensembl_gene_id", inplace = True)
+    
     temp = RNAseq.T
     cols = temp.columns
     for col in cols[1:]:
@@ -125,6 +125,6 @@ def all_data_import():
         slices.append(array)
     tensor = np.stack(slices)
     
-    RNAseq.reset_index(inplace = True)
+
     return tensor, RNAseq
 
