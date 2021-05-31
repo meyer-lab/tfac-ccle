@@ -55,6 +55,13 @@ def proteinNames():
     proteinN = data.columns.values.tolist()
     return proteinN
 
+def modder(x, df):
+    """Creates a slice of the data tensor corresponding to the inputted treatment"""
+    spec_df = df.loc[(df["Treatment"] == "Control") | (df["Treatment"] == x)]
+    times = spec_df["Time"].to_numpy().tolist()
+    spec_df = spec_df.drop(columns=["Sample description", "Treatment", "Time"])
+    y = spec_df.to_numpy()
+    return y, spec_df, times
 
 def all_data_import():
     """ Import protein characterization from LINCS and OHSU (z-scoring both)"""
@@ -114,7 +121,7 @@ def all_data_import():
 
     slices = []
     for treatment in unique_treatments:
-        array, _, times = data_mod(treatment, df_means)
+        array, _, times = modder(treatment, df_means)
         slices.append(array)
     tensor = np.stack(slices)
 
