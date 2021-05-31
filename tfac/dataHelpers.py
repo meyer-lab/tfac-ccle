@@ -124,6 +124,7 @@ def all_data_import():
         array, _, times = modder(treatment, df_means)
         slices.append(array)
     tensor = np.stack(slices)
-
+    
+    RNAseq.reset_index(inplace = True)
     return tensor, RNAseq
 
