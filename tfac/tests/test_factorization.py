@@ -1,6 +1,7 @@
 import numpy as np
-import pandas as pd
+import tensorly as tl
 from ..tensor import decomp_to_flipped_factors
+from ..CMTF import perform_CMTF
 from ..dataHelpers import ohsu_data
 from ..pseudoinvnorm import find_factors
 
@@ -25,3 +26,13 @@ def test_check_size():
     assert len(result[0][0][0]) == comps
     assert len(result[0]) == (len(treatment_list))
     assert len(result[0][0]) == len(times)
+
+
+def test_CMTF():
+    """ Test the CMTF method with fake data. """
+    tensor = np.random.rand(10, 20, 52)
+    matrix = np.random.rand(10, 20, 1000)
+
+    tFac = perform_CMTF(tensor, matrix, r=3)
+
+    assert isinstance(tFac, tl.cp_tensor.CPTensor)

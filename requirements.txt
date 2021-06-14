@@ -14,3 +14,5 @@ svgutils==0.3.4
 tensorly==0.5.1
 scikit-learn==0.24.1
 pybiomart
+jax==0.2.14
+jaxlib==0.1.67
