@@ -89,19 +89,19 @@ def all_data_import():
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
 
-    treats = ["PBS","BMP2","IFNG","TGFB","HGF","OSM","EGF"]
-    nums = ["0","1","4","8"]
+#     treats = ["PBS","BMP2","IFNG","TGFB","HGF","OSM","EGF"]
+#     nums = ["0","1","4","8"]
     
-    temp = RNAseq.T
-    cols = temp.columns
-    for col in cols[1:]:
-        temp[col] = (temp[col] - temp[col].mean())/temp[col].std(ddof=0)
+#     temp = RNAseq.T
+#     cols = temp.columns
+#     for col in cols[1:]:
+#         temp[col] = (temp[col] - temp[col].mean())/temp[col].std(ddof=0)
 
-    RNAseq = temp.T
+#     RNAseq = temp.T
 
-    for treat in treats:
-        for num in nums:
-            RNAseq[treat + "_" + num] = np.nan
+#     for treat in treats:
+#         for num in nums:
+#             RNAseq[treat + "_" + num] = np.nan
 
     tempindex = df["Sample description"]
     tempindex = tempindex[:36]
