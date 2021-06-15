@@ -21,14 +21,7 @@ def importLINCSprotein():
 
 def ohsu_data():
     """ Import OHSU data for PARAFAC2"""
-    atac = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_ATACseq_Level4.csv"))
-    cycIF = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_cycIF_Level4.csv"))
-    GCP = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_GCP_Level4.csv"))
-    IF = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_IF_Level4.csv"))
-    L1000 = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_L1000_Level4.csv"))
-    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
-    RPPA = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RPPA_Level4.csv"))
-    return atac, cycIF, GCP, IF, L1000, RNAseq, RPPA
+    return pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
 
 
 def proteinNames():
@@ -37,3 +30,24 @@ def proteinNames():
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
     proteinN = data.columns.values.tolist()
     return proteinN
+
+
+def form_tensor():
+    """Creates tensor in numpy array form and returns tensor, treatments, and time"""
+    df = importLINCSprotein()
+    df.drop(columns=["Sample description", "File"], inplace=True)
+    times = pd.unique(df["Time"])
+
+    # Group replicates and average
+    df = df.groupby(["Treatment", "Time"]).mean()
+
+    for treatment in df.index.unique(level=0):
+        df.loc[(treatment, 0), :] = df.loc[('Control', 0)].values
+
+    df.drop('Control', inplace=True)
+    df = df.sort_index()
+    
+    dfArray = df.to_numpy()
+    tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
+
+    return tensor, df.index.unique(level=0), times

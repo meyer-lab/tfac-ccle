@@ -24,7 +24,7 @@ def makeFigure():
 def var_diff(axis):
     """Calculates amount of variance each variance explains from each component of gene expression factors."""
     result, treatment_list, times = decomp_to_flipped_factors(5)
-    _, _, _, _, _, RNAseq, _ = ohsu_data()
+    RNAseq = ohsu_data()
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
     P, _, W = find_factors(result, RNAseq, treatment_list, times)
     X_orig = RNAseq.to_numpy()

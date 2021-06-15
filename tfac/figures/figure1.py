@@ -41,7 +41,7 @@ def R2X_Figure_PartialTucker(ax, input_tensor):
 
 
 def gene_R2X(axis):
-    _, _, _, _, _, RNAseq, _ = ohsu_data()
+    RNAseq = ohsu_data()
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
     R2X = np.zeros(13)
     for i in range(1, 13):

@@ -12,7 +12,7 @@ def test_check_size():
     Returns decomp and projection sizes."""
     # Data Import
     comps = 5  # Use 5 components
-    _, _, _, _, _, RNAseq, _ = ohsu_data()
+    RNAseq = ohsu_data()
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
     # Tensor Decomp & Reverse Projection
     result, treatment_list, times = decomp_to_flipped_factors(comps)
