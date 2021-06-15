@@ -7,15 +7,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import proteinNames, all_data_import
-from ..tensor import tensor_factor
+from ..dataHelpers import proteinNames
+from ..tensor import decomp_to_flipped_factors
 
 
-def makeCompPlots(proteinFactors, axis1, axis2, axis3):
+def makeCompPlots(axis1, axis2, axis3):
     """ Creates the component 1,4,5 plots. Component values versus time. """
-    treatmentTime = proteinFactors[0]
-    treatmentList = ["BMP2", "EGF", "HGF", "IFNg", "OSM", "PBS", "TGFb"]
-    times = ["0", "1", "4", "8", "24", "48"]
+    components = 5
+    results, treatmentList, times = decomp_to_flipped_factors(components)
+    treatmentTime = results[0]
 
     componeDict = {}
 
@@ -41,6 +41,10 @@ def makeCompPlots(proteinFactors, axis1, axis2, axis3):
     axis1.set_title("Component 1 v.s. Times")
     axis1.set(xlabel='Times', ylabel='Component Values')
 
+    components = 5
+    results, treatmentList, times = decomp_to_flipped_factors(components)
+    treatmentTime = results[0]
+
     compfourDict = {}
 
     # Initialize an empty dictionary of lists
@@ -64,6 +68,10 @@ def makeCompPlots(proteinFactors, axis1, axis2, axis3):
         counter += 1
     axis2.set_title("Component 4 v.s. Times")
     axis2.set(xlabel='Times', ylabel='Component Values')
+
+    components = 5
+    results, treatmentList, times = decomp_to_flipped_factors(components)
+    treatmentTime = results[0]
 
     compfiveDict = {}
 
@@ -90,10 +98,12 @@ def makeCompPlots(proteinFactors, axis1, axis2, axis3):
     axis3.set(xlabel='Times', ylabel='Component Values')
 
 
-def makeHeatMap(proteinFactors, axis):
+def makeHeatMap(axis):
     """ Create a heatmap of the variety of factors """
+    result, treatments, times = decomp_to_flipped_factors(5)
+
     # this takes the list of arrays from results 1, of shape 1, 295, 5 and puts it into a dataFrame of shape 295, 5 (row, col)
-    protMap = pd.DataFrame(proteinFactors[1][0].T, columns=proteinNames())
+    protMap = pd.DataFrame(result[1][0].T, columns=proteinNames())
     sel = np.max(np.absolute(protMap.values), axis=0)  # creates a np array of the max values of each of the proteins
 
     # This is the code to remove unnecessary proteins and label everything
@@ -110,11 +120,12 @@ def makeFigure():
     row = 2
     col = 2
     ax, f = getSetup((8, 4), (row, col))
-    proteins, _ = all_data_import()
-    proteinFactors, _ = tensor_factor(proteins, _, 5)
-    makeCompPlots(proteinFactors, ax[0], ax[1], ax[2])
-    makeHeatMap(proteinFactors, ax[3])
+
+    # Add subplot labels
     subplotLabel(ax)
 
-    f, ax = plt.subplots(2, 2)
+    makeCompPlots(ax[0], ax[1], ax[2])
+    makeHeatMap(ax[3])
+
+    fig, ax = plt.subplots(2, 2)
     return f
