@@ -36,8 +36,8 @@ def buildTensors(pIn, tensor, matrix, r, cost=False):
     """ Use parameter vector to build kruskal tensors. """
     assert tensor.shape[0] == matrix.shape[0]
     nN = np.cumsum(np.array(tensor.shape) * r)
-    A = jnp.reshape(pIn[:nN[0]], (tensor.shape[0], r))
-    B = jnp.reshape(pIn[nN[0]:nN[1]], (tensor.shape[1], r))
+    A = np.reshape(pIn[:nN[0]], (tensor.shape[0], r))
+    B = np.reshape(pIn[nN[0]:nN[1]], (tensor.shape[1], r))
 
     kr = tl.tenalg.khatri_rao([A, B])
     unfold = tl.unfold(tensor, 2)
@@ -47,8 +47,8 @@ def buildTensors(pIn, tensor, matrix, r, cost=False):
     selIDX = np.all(np.isfinite(unfoldM), axis=0)
 
     if cost:
-        cost = jnp.sum(jnp.linalg.lstsq(kr, unfold.T, rcond=None)[1])
-        cost += jnp.sum(jnp.linalg.lstsq(kr[selIDX, :], unfoldM[:, selIDX].T, rcond=None)[1])
+        cost = np.sum(np.linalg.lstsq(kr, unfold.T, rcond=None)[1])
+        cost += np.sum(np.linalg.lstsq(kr[selIDX, :], unfoldM[:, selIDX].T, rcond=None)[1])
         return cost
 
     C = np.linalg.lstsq(kr, unfold.T, rcond=None)[0].T
