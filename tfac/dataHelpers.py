@@ -28,8 +28,7 @@ def proteinNames():
     """Return protein names (data columns)"""
     data = importLINCSprotein()
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
-    proteinN = data.columns.values.tolist()
-    return proteinN
+    return data.columns.values.tolist()
 
 
 def form_tensor():

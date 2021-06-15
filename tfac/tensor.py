@@ -6,7 +6,7 @@ import tensorly as tl
 from tensorly.decomposition import partial_tucker
 from tensorly.metrics.regression import variance as tl_var
 from tensorly.tenalg import mode_dot
-from .Data_Mod import form_tensor
+from .dataHelpers import form_tensor
 
 
 tl.set_backend("numpy")  # Set the backend
