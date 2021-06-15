@@ -32,7 +32,8 @@ def proteinNames():
 
 
 def form_tensor():
-    """Creates tensor in numpy array form and returns tensor, treatments, and time"""
+    """ Creates tensor in numpy array form and returns tensor, treatments, and time.
+    Returns both the protein and RNAseq tensors in aligned format. """
     df = importLINCSprotein()
     df.drop(columns=["Sample description", "File"], inplace=True)
     times = pd.unique(df["Time"])
@@ -49,4 +50,23 @@ def form_tensor():
     dfArray = df.to_numpy()
     tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
 
-    return tensor, df.index.unique(level=0), times
+    RNAseq = ohsu_data()
+
+    # Copy over control
+    for treatment in df.index.unique(level=0):
+        RNAseq[treatment + "_0"] = RNAseq["ctrl_0"]
+
+    RNAseq = RNAseq.set_index("ensembl_gene_id").T
+    RNAseq.index = RNAseq.index.str.split('_',expand=True)
+    RNAseq.index = RNAseq.index.set_levels(RNAseq.index.levels[1].astype(int), level=1)
+
+    RNAseq.drop('ctrl', inplace=True)
+    RNAseq = RNAseq.reindex(index=df.index)
+
+    rArray = RNAseq.to_numpy()
+    rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
+
+    assert rTensor.shape[0] == tensor.shape[0]
+    assert rTensor.shape[1] == tensor.shape[1]
+
+    return tensor, rTensor, df.index.unique(level=0), times
