@@ -44,11 +44,14 @@ def form_tensor():
     for treatment in df.index.unique(level=0):
         df.loc[(treatment, 0), :] = df.loc[('Control', 0)].values
 
-    df.drop('Control', inplace=True)
+    df.drop('Control', inplace=True, level=0)
     df = df.sort_index()
     
     dfArray = df.to_numpy()
     tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
+
+    # Subtract off control
+    tensor -= tensor[0, 0, :]
 
     RNAseq = ohsu_data()
 
@@ -60,11 +63,17 @@ def form_tensor():
     RNAseq.index = RNAseq.index.str.split('_',expand=True)
     RNAseq.index = RNAseq.index.set_levels(RNAseq.index.levels[1].astype(int), level=1)
 
-    RNAseq.drop('ctrl', inplace=True)
+    RNAseq.drop('ctrl', inplace=True, level=0)
     RNAseq = RNAseq.reindex(index=df.index)
 
     rArray = RNAseq.to_numpy()
     rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
+
+    # TODO: Need to normalize the RNAseq data
+
+    # Match variance of both datasets
+    tensor /= np.nansum(np.square(tensor))
+    RNAseq /= np.nansum(np.square(RNAseq))
 
     assert rTensor.shape[0] == tensor.shape[0]
     assert rTensor.shape[1] == tensor.shape[1]
