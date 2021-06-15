@@ -30,8 +30,8 @@ def test_check_size():
 
 def test_CMTF():
     """ Test the CMTF method with fake data. """
-    tensor = np.random.rand(10, 20, 52)
-    matrix = np.random.rand(10, 20, 1000)
+    tensor = np.random.rand(5, 8, 23)
+    matrix = np.random.rand(5, 8, 45)
 
     tFac = perform_CMTF(tensor, matrix, r=3)
 

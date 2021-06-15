@@ -4,37 +4,22 @@ import numpy as np
 from .dataHelpers import importLINCSprotein
 
 
-def data_mod(x, df):
-    """Creates a slice of the data tensor corresponding to the inputted treatment"""
-    spec_df = df.loc[(df["Treatment"] == "Control") | (df["Treatment"] == x)]
-    times = spec_df["Time"].to_numpy().tolist()
-    spec_df = spec_df.drop(columns=["Sample description", "Treatment", "Time"])
-    y = spec_df.to_numpy()
-    return y, spec_df, times
-
-
 def form_tensor():
     """Creates tensor in numpy array form and returns tensor, treatments, and time"""
     df = importLINCSprotein()
-    tempindex = df["Sample description"]
-    tempindex = tempindex[:36]
-    i = 0
-    for a in tempindex:
-        tempindex[i] = a[3:]
-        i += 1
-    treatments = df["Treatment"][0:36]
-    times = df["Time"][0:36]
-    df = df.drop(["Sample description"], axis=1)
-    by_row_index = df.groupby(df.index)
-    df_means = by_row_index.mean()
-    df_means.insert(0, "Treatment", value=treatments)
-    df_means.insert(0, "Sample description", tempindex)
-    unique_treatments = np.unique(df_means["Treatment"].values).tolist()
-    unique_treatments.remove("Control")
+    df.drop(columns=["Sample description", "File"], inplace=True)
+    times = pd.unique(df["Time"])
 
-    slices = []
-    for treatment in unique_treatments:
-        array, _, times = data_mod(treatment, df_means)
-        slices.append(array)
-    tensor = np.stack(slices)
-    return tensor, unique_treatments, times
+    # Group replicates and average
+    df = df.groupby(["Treatment", "Time"]).mean()
+
+    for treatment in df.index.unique(level=0):
+        df.loc[(treatment, 0), :] = df.loc[('Control', 0)].values
+
+    df.drop('Control', inplace=True)
+    df = df.sort_index()
+    
+    dfArray = df.to_numpy()
+    tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
+
+    return tensor, df.index.unique(level=0), times
