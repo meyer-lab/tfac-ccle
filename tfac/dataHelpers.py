@@ -46,7 +46,7 @@ def form_tensor():
 
     df.drop('Control', inplace=True, level=0)
     df = df.sort_index()
-    
+
     dfArray = df.to_numpy()
     tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
 
@@ -60,7 +60,7 @@ def form_tensor():
         RNAseq[treatment + "_0"] = RNAseq["ctrl_0"]
 
     RNAseq = RNAseq.set_index("ensembl_gene_id").T
-    RNAseq.index = RNAseq.index.str.split('_',expand=True)
+    RNAseq.index = RNAseq.index.str.split('_', expand=True)
     RNAseq.index = RNAseq.index.set_levels(RNAseq.index.levels[1].astype(int), level=1)
 
     RNAseq.drop('ctrl', inplace=True, level=0)

@@ -15,7 +15,7 @@ def makeCompPlots(axis1, axis2, axis3):
     components = 5
     results, treatmentList, times = decomp_to_flipped_factors(components)
     treatmentTime = results[0]
-    
+
     for ii, treat in enumerate(treatmentList):
         sns.lineplot(x=times, y=treatmentTime[ii, :, 0], label=treat, ax=axis1, legend=True)
     axis1.set_title("Component 1 v.s. Times")
