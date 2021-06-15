@@ -35,7 +35,7 @@ output/manuscript.docx: venv output/manuscript.md $(flistFull)
 		output/manuscript.md
 
 test: venv
-	. venv/bin/activate && JAX_PLATFORM_NAME=cpu pytest -s
+	. venv/bin/activate && JAX_PLATFORM_NAME=cpu pytest -s -x -v
 
 coverage.xml: venv
 	. venv/bin/activate && JAX_PLATFORM_NAME=cpu pytest --junitxml=junit.xml --cov=tfac --cov-report xml:coverage.xml
