@@ -23,9 +23,8 @@ def makeFigure():
 
 def makeProteinListDistribution(ax):
     """ Create the protein list distribution with components on the x axis, component values on the y axis and outlier proteins labelled """
-    components = 5
     tensor, rTensor, _, _ = form_tensor()
-    results = perform_CMTF(tensor, rTensor, r=components)
+    results = perform_CMTF(tensor, rTensor)
 
     proteinFactors = results[1][0]
     proteinList = proteinNames()
