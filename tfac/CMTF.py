@@ -77,6 +77,13 @@ def perform_CMTF(tOrig: np.ndarray, mOrig: np.ndarray, r=5):
     res = minimize(lambda x: cost(x, tOrig, mOrig, r), x0, method="L-BFGS-B", options={"maxiter": 8000})
 
     tFac = buildTensors(res.x, tOrig, mOrig, r)
+
+    tFac.mFactor.normalize()
+    mFactor = tl.cp_tensor.cp_flip_sign(tFac.mFactor, mode=2)
+    tFac.normalize()
+    tFac = tl.cp_tensor.cp_flip_sign(tFac, mode=2)
+    tFac.mFactor = mFactor
+
     tFac.R2X = calcR2X(tFac, tOrig, mOrig)
     print(tFac.R2X)
 
