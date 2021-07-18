@@ -108,3 +108,4 @@ venv.bak/
 # Apple finder files
 .DS_Store
 **.sublime-workspace
+output/*.svg
