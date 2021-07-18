@@ -62,41 +62,7 @@ def cost(pIn, tOrig, mOrig, r):
     return buildTensors(pIn, tOrig, mOrig, r, cost=True)
 
 
-def initialize_cp(tensor, matrix, rank):
-    r"""Initialize factors used in `parafac`.
-    Parameters
-    ----------
-    tensor : ndarray
-    rank : int
-    Returns
-    -------
-    factors : CPTensor
-        An initial cp tensor.
-    """
-    factors = []
-    for mode in range(tl.ndim(tensor)):
-        unfold = tl.unfold(tensor, mode)
-        unfoldM = tl.unfold(matrix, mode)
-
-        if mode < 2:
-            unfold = np.hstack((unfold, unfoldM))
-
-        # Remove completely missing columns
-        unfold = unfold[:, ~np.all(np.isnan(unfold), axis=0)]
-
-        U = np.linalg.svd(np.nan_to_num(unfold), full_matrices=False)[0]
-
-        if U.shape[1] < rank:
-            # This is a hack but it seems to do the job for now
-            pad_part = np.zeros((U.shape[0], rank - U.shape[1]))
-            U = tl.concatenate([U, pad_part], axis=1)
-
-        factors.append(U[:, :rank])
-
-    return tl.cp_tensor.CPTensor((None, factors))
-
-
-def perform_CMTF(tOrig: np.ndarray, mOrig: np.ndarray, r=10):
+def perform_CMTF(tOrig: np.ndarray, mOrig: np.ndarray, r=5):
     """ Perform CMTF decomposition by direct optimization. """
     # Checks
     tOrig = np.array(tOrig, dtype=float, order="C")
@@ -106,9 +72,9 @@ def perform_CMTF(tOrig: np.ndarray, mOrig: np.ndarray, r=10):
     assert tOrig.shape[0] == mOrig.shape[0]
     assert tOrig.shape[1] == mOrig.shape[1]
 
-    tFac = initialize_cp(tOrig, mOrig, r)
+    tFac = tl.cp_tensor.CPTensor((None, [np.random.rand(tOrig.shape[i], r) for i in range(tOrig.ndim)]))
     x0 = cp_to_vec(tFac)
-    res = minimize(lambda x: cost(x, tOrig, mOrig, r), x0, method="Nelder-Mead", options={"maxiter": 100})
+    res = minimize(lambda x: cost(x, tOrig, mOrig, r), x0, method="L-BFGS-B", options={"maxiter": 8000})
 
     tFac = buildTensors(res.x, tOrig, mOrig, r)
     tFac.R2X = calcR2X(tFac, tOrig, mOrig)

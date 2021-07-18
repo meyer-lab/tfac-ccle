@@ -16,7 +16,7 @@ venv/bin/activate: requirements.txt
 
 output/figure%.svg: genFigures.py tfac/figures/figure%.py venv
 	@ mkdir -p ./output
-	. venv/bin/activate && JAX_PLATFORM_NAME=cpu ./genFigures.py $*
+	. venv/bin/activate && ./genFigures.py $*
 
 output/manuscript.md: venv manuscript/*.md venv/bin/activate
 	. venv/bin/activate && manubot process --content-directory=manuscript --output-directory=output --cache-directory=cache --skip-citations --log-level=INFO

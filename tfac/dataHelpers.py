@@ -69,7 +69,9 @@ def form_tensor():
     rArray = RNAseq.to_numpy()
     rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
 
-    # TODO: Need to normalize the RNAseq data
+    # Normalize the data
+    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)
+    rTensor -= np.mean(rTensor, axis=(0, 1), keepdims=True)
 
     # Match variance of both datasets
     tensor /= np.nansum(np.square(tensor))
