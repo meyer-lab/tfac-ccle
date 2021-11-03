@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..CMTF import perform_CMTF
+from tensorpac.ccle import perform_CMTF
 from ..dataHelpers import proteinNames, form_tensor
 
 

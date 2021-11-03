@@ -1,5 +1,5 @@
 import tensorly as tl
-from ..CMTF import perform_CMTF
+from tensorpac.ccle import perform_CMTF
 from ..dataHelpers import form_tensor
 
 
