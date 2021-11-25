@@ -16,7 +16,6 @@ def makeFigure():
     #tensor, rTensor, _, _ = form_tensor()
     #R2X_fig(ax[0], tensor, rTensor)
 
-
     ## With new figure making function in tensorpack
     t = Decomposition(form_bigtensor())
     t.perform_tfac()
