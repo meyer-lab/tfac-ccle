@@ -4,16 +4,25 @@ This creates Figure 1 - Partial Tucker R2X and Gene Projected Factors R2X.
 import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from tensorpack import perform_CMTF
-from ..dataHelpers import form_tensor
+from tensorpack import perform_CMTF, Decomposition
+from tensorpack.plot import *
+from ..dataHelpers import form_tensor, form_bigtensor
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((8, 4), (1, 2))
-    tensor, rTensor, _, _ = form_tensor()
-    R2X_fig(ax[0], tensor, rTensor)
+    #tensor, rTensor, _, _ = form_tensor()
+    #R2X_fig(ax[0], tensor, rTensor)
+
+
+    ## With new figure making function in tensorpack
+    t = Decomposition(form_bigtensor())
+    t.perform_tfac()
+    t.perform_PCA()
+    tfacr2x(ax[0], t)
+    reduction(ax[1], t)
 
     # Add subplot labels
     subplotLabel(ax)
