@@ -8,10 +8,10 @@ panflute==2.1.0
 pandoc-fignos==2.4.0
 pandoc-eqnos==2.5.0
 pandoc-tablenos==2.3.0
-matplotlib==3.4.3
+matplotlib>=3.4.3
 seaborn==0.11.2
 svgutils==0.3.4
-tensorly==0.6.0
-scikit-learn==1.0
+tensorly>=0.6.0
+scikit-learn>=1.0
 pybiomart
-git+https://github.com/meyer-lab/tensorPack.git@main
+git+https://github.com/meyer-lab/tensorpack.git@main
