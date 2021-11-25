@@ -4,7 +4,7 @@ This creates Figure 1 - Partial Tucker R2X and Gene Projected Factors R2X.
 import numpy as np
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from tensorpac.ccle import perform_CMTF
+from tensorpack import perform_CMTF
 from ..dataHelpers import form_tensor
 
 

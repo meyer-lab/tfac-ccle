@@ -4,7 +4,7 @@ This creates Figure 2. This figure includes the Partial Tucker Treatment/Compone
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import form_tensor
-from tensorpac.ccle import perform_CMTF
+from tensorpack import perform_CMTF
 
 
 def makeFigure():
