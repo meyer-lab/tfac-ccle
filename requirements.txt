@@ -14,4 +14,4 @@ svgutils==0.3.4
 tensorly>=0.6.0
 scikit-learn>=1.0
 pybiomart
-git+https://github.com/meyer-lab/tensorPack.git@main
+git+https://github.com/meyer-lab/tensorpack.git@main
