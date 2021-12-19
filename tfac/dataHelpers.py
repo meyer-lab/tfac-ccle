@@ -70,50 +70,19 @@ def form_tensor():
     rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
 
     # Normalize the data
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)
-    rTensor -= np.mean(rTensor, axis=(0, 1), keepdims=True)
+    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True) # proteins
+    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True) # genes
 
     # Match variance of both datasets
     tensor /= np.nansum(np.square(tensor))
-    RNAseq /= np.nansum(np.square(RNAseq))
+    rTensor /= np.nansum(np.square(rTensor))
 
     assert rTensor.shape[0] == tensor.shape[0]
     assert rTensor.shape[1] == tensor.shape[1]
 
-    return tensor, rTensor, df.index.unique(level=0), times
+    return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
 "Will give a tensor of shape (7, 6, 57662)"
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
 "295 protein data points + 57367 gene data points = 57662 total data points"
-def form_bigtensor():
-    tensor, _, _, _ = form_tensor()
-    RNAseq = ohsu_data()
-    "change the rna sequence data to be the same as tensor protein data (7, 6)"
-    RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
-    cols = [ 'BMP2_24', 'BMP2_48', 'EGF_24', 'EGF_48','HGF_24', 'HGF_48', 'IFNg_24',   'IFNg_48', 'OSM_24', 'OSM_48',  'PBS_24','PBS_48', 'TGFb_24',
-        'TGFb_48', 'ctrl_0']
-    RNAseq = RNAseq[cols]
-    RNAseq = RNAseq.drop(["ctrl_0"], axis=1)
-    RNAseqnp = RNAseq.to_numpy()
-    RNAseqnp = RNAseqnp.T
-    "take the rna sequence and break out the time periods to be similar on two axes to the protein"
-    RNAtensor = np.zeros((7,6,57367))
-    "copy over the values from our rna sequence to the appropriate rows in the tensor"
-    np.copyto(RNAtensor[0][4], RNAseqnp[0])
-    np.copyto(RNAtensor[0][5], RNAseqnp[1])
-    np.copyto(RNAtensor[1][4], RNAseqnp[2])
-    np.copyto(RNAtensor[1][5], RNAseqnp[3])
-    np.copyto(RNAtensor[2][4], RNAseqnp[4])
-    np.copyto(RNAtensor[2][5], RNAseqnp[5])
-    np.copyto(RNAtensor[3][4], RNAseqnp[6])
-    np.copyto(RNAtensor[3][5], RNAseqnp[7])
-    np.copyto(RNAtensor[4][4], RNAseqnp[8])
-    np.copyto(RNAtensor[4][5], RNAseqnp[9])
-    np.copyto(RNAtensor[5][4], RNAseqnp[10])
-    np.copyto(RNAtensor[5][5], RNAseqnp[11])
-    np.copyto(RNAtensor[6][4], RNAseqnp[12])
-    np.copyto(RNAtensor[6][5], RNAseqnp[13])
-    "finally append the two tensors together, with the protein data coming first"
-    finaltensor = np.append(tensor, RNAtensor, axis=2)
-    return finaltensor
