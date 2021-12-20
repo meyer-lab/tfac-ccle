@@ -1,30 +1,19 @@
 """
-This creates Figure 3.
+This creates Figure 3 - plot clustergram for proteins.
 """
-import numpy as np
 import pandas as pd
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup
-from tensorpack import perform_CMTF
+import matplotlib.pyplot as plt
+from tensorpack import perform_CP
 from ..dataHelpers import proteinNames, form_tensor
 
 
-def protein_heatmap(m_axis):
-    tensor, rTensor, _, _ = form_tensor()
-    result = perform_CMTF(tensor, rTensor)
-
-    # this takes the list of arrays from results 1, of shape 1, 295, 5 and puts it into a dataFrame of shape 295, 5 (row, col)
-    protMap = pd.DataFrame(result.factors[2].T, columns=proteinNames())
-
-    # now protMap has all of the correct names and dropped proteins // transverse to make plot look better
-    sns.heatmap(protMap.T, cmap="PiYG", xticklabels=protMap.index + 1, ax=m_axis)
-
-
-def makeFigure():
+def clustergram_proteins():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((7, 12), (1, 1))
-    ax[0].set_title("Protein-Component Heat Plot")
-    protein_heatmap(ax[0])
-    subplotLabel(ax)
-    return f
+    tensor, _, _ = form_tensor()
+    tFac = perform_CP(tensor, r=6)
+
+    proteins = pd.DataFrame(tFac.factors[2][57367:], index = proteinNames(), columns=["comp1", "comp2", "comp3", "comp4", "comp5", "comp6"])
+    g = sns.clustermap(proteins, cmap="bwr", method="centroid", figsize=(14, 14))
+    plt.savefig("output/clustergram_proteins.svg")

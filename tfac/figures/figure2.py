@@ -1,23 +1,42 @@
 """
-This creates Figure 2. This figure includes the Partial Tucker Treatment/Component Heat Map.
+This creates Figure 2 - protein factors.
+(a) heatmap of the proteins in four subplots
+(b) ?
+(c-e) components vs time for various treatments.
 """
+import numpy as np
+import pandas as pd
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from ..dataHelpers import form_tensor
-from tensorpack import perform_CMTF
+from tensorpack import perform_CP
+from ..dataHelpers import form_tensor, proteinNames
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
-    ax, f = getSetup((8, 4), (2, 2))
+    # Get list of axis objects
+    ax, f = getSetup((20, 20), (3, 4))
+
+    tensor, drugs, times = form_tensor()
+
+    tFac = perform_CP(tensor, r=6)
+
+    # proteins - subplot (a)
+    proteins = [pd.DataFrame(tFac.factors[2][57367:57450], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[0:83]),
+    pd.DataFrame(tFac.factors[2][57450:57520], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[83:153]),
+    pd.DataFrame(tFac.factors[2][57520:57590], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[153:223]),
+    pd.DataFrame(tFac.factors[2][57590:], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[223:])]
+
+    for i in range(4):
+        g = sns.heatmap(proteins[i], cmap="PRGn", center=0, yticklabels=True, cbar=True, vmin=-0.01, vmax=0.01, ax=ax[i])
+        g.set_yticklabels(g.get_yticklabels(), rotation = 0)
+        g.set_title("proteins")
+
+    # ? - subplot (b)
+
+    # components vs time - subplots (c-f)
 
     # Add subplot labels
     subplotLabel(ax)
-
-    tensor, rTensor, _, times = form_tensor()
-    result = perform_CMTF(tensor, rTensor)
-
-    sns.heatmap(result.factors[0], cmap="PiYG", ax=ax[0])
-    ax[1].plot(times, result.factors[1])
 
     return f
