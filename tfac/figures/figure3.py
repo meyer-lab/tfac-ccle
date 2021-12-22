@@ -15,5 +15,6 @@ def clustergram_proteins():
     tFac = perform_CP(tensor, r=6)
 
     proteins = pd.DataFrame(tFac.factors[2][57367:], index = proteinNames(), columns=["comp1", "comp2", "comp3", "comp4", "comp5", "comp6"])
-    g = sns.clustermap(proteins, cmap="bwr", method="centroid", figsize=(14, 14))
+    decreased_proteins = proteins.loc[((-0.001>=proteins).any(1) | (proteins>= 0.001).any(1))]
+    g = sns.clustermap(decreased_proteins, cmap="bwr", method="centroid", figsize=(14, 20))
     plt.savefig("output/clustergram_proteins.svg")
