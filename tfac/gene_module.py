@@ -89,7 +89,7 @@ def main():
     data = pd.read_csv(
         input_data,
         index_col=0,
-        delimiter='\t'
+        delimiter=','
     )
 
     ############################################################################
