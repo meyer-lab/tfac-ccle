@@ -7,8 +7,8 @@ from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import form_tensor
 
 
-"""def makeFigure():
-    Get a list of the axis objects and create a figure.
+def makeFigure():
+    """Get a list of the axis objects and create a figure.
     # Get list of axis objects
     ax, f = getSetup((8, 4), (1, 2))
     tensor, rTensor, _, _ = form_tensor()
