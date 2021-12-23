@@ -6,8 +6,8 @@ from .figureCommon import subplotLabel, getSetup
 from ..dataHelpers import form_tensor
 
 
-def makeFigure():
-    """ Get a list of the axis objects and create a figure. """
+"""def makeFigure():
+    Get a list of the axis objects and create a figure.
     ax, f = getSetup((8, 4), (2, 2))
 
     # Add subplot labels
@@ -19,4 +19,4 @@ def makeFigure():
     sns.heatmap(result.factors[0], cmap="PiYG", ax=ax[0])
     ax[1].plot(times, result.factors[1])
 
-    return f
+    return f"""
