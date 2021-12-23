@@ -1,5 +1,6 @@
 """Contains function for importing and handling OHSU data"""
 from os.path import join, dirname
+from scipy.stats import zscore
 import numpy as np
 import pandas as pd
 
@@ -88,6 +89,7 @@ def form_tensor():
 "295 protein data points + 57367 gene data points = 57662 total data points"
 def form_bigtensor():
     tensor, _, _, _ = form_tensor()
+    ztensor = zscore(tensor, axis=1)
     RNAseq = ohsu_data()
     "change the rna sequence data to be the same as tensor protein data (7, 6)"
     RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
@@ -97,23 +99,26 @@ def form_bigtensor():
     RNAseq = RNAseq.drop(["ctrl_0"], axis=1)
     RNAseqnp = RNAseq.to_numpy()
     RNAseqnp = RNAseqnp.T
+    zRNAseqnp = zscore(RNAseqnp)
     "take the rna sequence and break out the time periods to be similar on two axes to the protein"
     RNAtensor = np.zeros((7,6,57367))
     "copy over the values from our rna sequence to the appropriate rows in the tensor"
-    np.copyto(RNAtensor[0][4], RNAseqnp[0])
-    np.copyto(RNAtensor[0][5], RNAseqnp[1])
-    np.copyto(RNAtensor[1][4], RNAseqnp[2])
-    np.copyto(RNAtensor[1][5], RNAseqnp[3])
-    np.copyto(RNAtensor[2][4], RNAseqnp[4])
-    np.copyto(RNAtensor[2][5], RNAseqnp[5])
-    np.copyto(RNAtensor[3][4], RNAseqnp[6])
-    np.copyto(RNAtensor[3][5], RNAseqnp[7])
-    np.copyto(RNAtensor[4][4], RNAseqnp[8])
-    np.copyto(RNAtensor[4][5], RNAseqnp[9])
-    np.copyto(RNAtensor[5][4], RNAseqnp[10])
-    np.copyto(RNAtensor[5][5], RNAseqnp[11])
-    np.copyto(RNAtensor[6][4], RNAseqnp[12])
-    np.copyto(RNAtensor[6][5], RNAseqnp[13])
+    np.copyto(RNAtensor[0][4], zRNAseqnp[0])
+    np.copyto(RNAtensor[0][5], zRNAseqnp[1])
+    np.copyto(RNAtensor[1][4], zRNAseqnp[2])
+    np.copyto(RNAtensor[1][5], zRNAseqnp[3])
+    np.copyto(RNAtensor[2][4], zRNAseqnp[4])
+    np.copyto(RNAtensor[2][5], zRNAseqnp[5])
+    np.copyto(RNAtensor[3][4], zRNAseqnp[6])
+    np.copyto(RNAtensor[3][5], zRNAseqnp[7])
+    np.copyto(RNAtensor[4][4], zRNAseqnp[8])
+    np.copyto(RNAtensor[4][5], zRNAseqnp[9])
+    np.copyto(RNAtensor[5][4], zRNAseqnp[10])
+    np.copyto(RNAtensor[5][5], zRNAseqnp[11])
+    np.copyto(RNAtensor[6][4], zRNAseqnp[12])
+    np.copyto(RNAtensor[6][5], zRNAseqnp[13])
     "finally append the two tensors together, with the protein data coming first"
-    finaltensor = np.append(tensor, RNAtensor, axis=2)
+    "multiply the ztensor by 1.41 to equalize total variance. sqrt(57367/295)"
+    ztensor = ztensor*1.41
+    finaltensor = np.append(ztensor, RNAtensor, axis=2)
     return finaltensor
