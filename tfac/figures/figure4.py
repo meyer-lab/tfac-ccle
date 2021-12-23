@@ -4,7 +4,7 @@ This creates Figure 4. Gene expression R2X with flattened matrix dimension recon
 
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
-from tensorpac.ccle import perform_CMTF
+"""from tensorpac.ccle import perform_CMTF"""
 from ..dataHelpers import form_tensor, proteinNames
 
 
@@ -16,13 +16,13 @@ def makeFigure():
     # Add subplot labels
     subplotLabel(ax)
 
-    makeProteinListDistribution(ax[0])
+    """makeProteinListDistribution(ax[0])"""
 
     return f
 
 
 def makeProteinListDistribution(ax):
-    """ Create the protein list distribution with components on the x axis, component values on the y axis and outlier proteins labelled """
+    """ Create the protein list distribution with components on the x axis, component values on the y axis and outlier proteins labelled
     tensor, rTensor, _, _ = form_tensor()
     results = perform_CMTF(tensor, rTensor)
 
@@ -152,4 +152,4 @@ def makeProteinListDistribution(ax):
     sns.scatterplot(x=comp5, y=comp5Vals, ax=ax, color='red', alpha=.05)
 
     ax.set_title("Component Values for Proteins")
-    ax.set(xlabel='Components', ylabel='Component Values')
+    ax.set(xlabel='Components', ylabel='Component Values')"""
