@@ -1,3 +1,5 @@
+# This file uses functions from tfac-MRSA repository.
+
 from argparse import Namespace
 import os
 from os.path import abspath, dirname
@@ -13,7 +15,8 @@ import seaborn as sns
 
 COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 PATH_HERE = dirname(abspath(__file__))
-
+working_dir = f'{PATH_HERE}/module_output'  # This is where Python will save output
+input_data = f'{PATH_HERE}/data/ohsu/RNAseq_Level4.txt'  # Path to the input file
 
 def get_modules(genes):
     """Maps each gene to its respective module.
@@ -73,72 +76,66 @@ def fix_label(label):
 
     return first + last
 
-def main():
-    ############################################################################
-    # DATA IMPORT
-    ############################################################################
+#######################################
+# DATA IMPORT AND MODULE IDENTIFICATION
+#######################################
+def ns_RNAseq_data():
     # Note that input_data will need to be a .txt file to work with WGCNA, but
     # it's structured just like a .csv, so you can probably save the .csv of
-    # your data as a .txt file and it should work.
-    # If you need help with what this file should look like, refer to the
-    # example file 'data/test.txt'.
-    working_dir = f'{PATH_HERE}/output'  # This is where Python will save output
-    input_data = f'{PATH_HERE}/data/ohsu/MDD_RNAseq_Level4.txt'  # Path to your DNA file
+    # your data as a .txt file and make sure it is tab-delimited.
     os.makedirs(working_dir, exist_ok=True)
 
     data = pd.read_csv(
         input_data,
         index_col=0,
-        delimiter=','
+        delimiter='\t'
     )
 
-    ############################################################################
-    # MODULE IDENTIFICATION
-    ############################################################################
-    if 'final-membership.txt' in os.listdir(working_dir):
-        modules = pd.read_csv(
-            f'{working_dir}/final-membership.txt',
-            index_col=0,
-            sep='\t'
-        )
-        modules = modules.dropna()
-    else:
-        wgcna_args = {
-            'inputFile': input_data,
-            'workingDir': working_dir,
-            'verbose': False,
-            'debug': False,
-            'wgcnaParameters': {
-                'numericLabels': True,
-                'networkType': 'signed',
-                'minKMEtoStay': 0.8,
-                'minCoreKME': 0.8,
-                'minModuleSize': 20,
-                'reassignThreshold': 0.05,
-                'power': 6,
-                'saveTOMs': False
-            },
-            'enableWGCNAThreads': True,
-            'skipSaveBlocks': False,
-            'finalMergeCutHeight': 0.05,
-            'gzipTOMs': False
-        }
-        ns = Namespace(**wgcna_args)
-        wgcna = IterativeWGCNA(ns)
-        wgcna.run()
-        modules = get_modules(wgcna.genes.genes)
-        modules = modules.rename(columns={'module': 'Module'})
+    wgcna_args = {
+        'inputFile': input_data,
+        'workingDir': working_dir,
+        'verbose': False,
+        'debug': False,
+        'wgcnaParameters': {
+            'numericLabels': True,
+            'networkType': 'signed',
+            'minKMEtoStay': 0.8,
+            'minCoreKME': 0.8,
+            'minModuleSize': 20,
+            'reassignThreshold': 0.05,
+            'power': 6,
+            'saveTOMs': False
+        },
+        'enableWGCNAThreads': True,
+        'skipSaveBlocks': False,
+        'finalMergeCutHeight': 0.05,
+        'gzipTOMs': False
+    }
+    ns = Namespace(**wgcna_args)
+    return ns, data
 
-    ############################################################################
-    # MODULE PLOTTING
-    ############################################################################
-    names = sorted(list(set(modules.loc[:, 'Module'])))
+################
+# RUN THE MODULE
+################
+def run_module(ns, data):
+
+    wgcna = IterativeWGCNA(ns)
+    wgcna.run()
+    modules = get_modules(wgcna.genes.genes)
+    
+    return modules
+
+#################
+# MODULE PLOTTING
+#################
+def plot_modules(modules, data):
+    names = sorted(list(set(modules.loc[:, 'module'])))
     module_expression = pd.DataFrame(
         index=names,
         columns=data.columns
     )
     for name in names:
-        in_module = modules.loc[modules.loc[:, 'Module'] == name]
+        in_module = modules.loc[modules.loc[:, 'module'] == name]
         module = data.loc[in_module.index, :]
         module_expression.loc[name, :] = module.mean()
 
@@ -170,14 +167,16 @@ def main():
         right=0.9,
         top=0.95
     )
-    plt.savefig(f'{working_dir}/modules_v_components.png')
+    plt.savefig(f'{working_dir}/modules_v_components.svg')
 
-    ############################################################################
-    # ENRICHMENT ANALYSIS
-    ############################################################################
+#####################
+# ENRICHMENT ANALYSIS
+#####################
+def enrishment_analysis(modules):
     # The below list picks the gene sets that are run as part of the enrichment.
     # These provide a decent general search, but you can pick more specific
     # sets from the options here: https://maayanlab.cloud/Enrichr/#libraries
+    names = sorted(list(set(modules.loc[:, 'module'])))
     gene_sets = [
         'GO_Biological_Process_2021',
         'GO_Cellular_Component_2021',
@@ -187,7 +186,7 @@ def main():
     for name in names:
         # The code below performs the enrichment analysis and saves the result
         # to a .csv in the working_dir
-        module = modules.loc[modules.loc[:, 'Module'] == name]
+        module = modules.loc[modules.loc[:, 'module'] == name]
         ensembl = list(module.index)
 
         # The step below may not be necessary for you; our genes were labeled
@@ -299,4 +298,4 @@ def main():
             ax_p.set_xlabel('Fisher Exact Test P-value')
 
         fig.suptitle(name)
-        fig.savefig(f'{working_dir}/{name}_GO.png')
+        fig.savefig(f'{working_dir}/{name}_GO.svg')
