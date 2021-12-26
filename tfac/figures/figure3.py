@@ -3,6 +3,7 @@ This creates Figure 3 - plot clustergram for proteins.
 """
 import pandas as pd
 import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 from tensorpack import perform_CP
 from ..dataHelpers import proteinNames, form_tensor
