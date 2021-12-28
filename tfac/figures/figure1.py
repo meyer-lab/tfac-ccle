@@ -4,7 +4,7 @@ This creates Figure 1:
 (b) tensor_svg.svg from the data folder
 (c) R2X of the whole data, including gene expressions and protein levels.
 """
-from .figureCommon import subplotLabel, getSetup
+from .common import subplotLabel, getSetup
 from tensorpack import Decomposition
 from tensorpack.plot import *
 from ..dataHelpers import form_tensor

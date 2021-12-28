@@ -1,11 +1,16 @@
 """
 This file contains functions that are used in multiple figures.
 """
+import sys
+import logging
+import time
 from string import ascii_lowercase
 import seaborn as sns
 import matplotlib
 import svgutils.transform as st
 from matplotlib import gridspec, pyplot as plt
+import matplotlib
+matplotlib.use('AGG')
 
 
 matplotlib.rcParams["legend.labelspacing"] = 0.2
@@ -67,3 +72,17 @@ def overlayCartoon(figFile, cartoonFile, x, y, scale=1):
 
     template.append(cartoon)
     template.save(figFile)
+
+
+def genFigure():
+    """ Main figure generation function. """
+    fdir = './output/'
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+    start = time.time()
+    nameOut = 'figure' + sys.argv[1]
+
+    exec('from tfac.figures.' + nameOut + ' import makeFigure', globals())
+    ff = makeFigure()
+    ff.savefig(fdir + nameOut + '.svg', dpi=300, bbox_inches='tight', pad_inches=0)
+
+    logging.info(f'Figure {sys.argv[1]} is done after {time.time() - start} seconds.')

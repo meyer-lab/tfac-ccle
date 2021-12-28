@@ -3,7 +3,7 @@ This creates Figure 4. Gene expression R2X with flattened matrix dimension recon
 """
 
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup
+from .common import subplotLabel, getSetup
 from tensorpack import perform_CMTF
 from ..dataHelpers import form_tensor, proteinNames
 
