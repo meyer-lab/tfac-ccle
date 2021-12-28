@@ -21,7 +21,10 @@ def makeFigure():
     # perform tensor decomposition from tensorpack with 8 components
     t = Decomposition(tensor, max_rr=8)
     t.perform_tfac()
-    tfacr2x(ax[2], t)
+    t.perform_PCA()
+
+    tfacr2x(ax[1], t)
+    reduction(ax[2], t)
 
     # Add subplot labels
     subplotLabel(ax)
