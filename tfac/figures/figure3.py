@@ -24,8 +24,8 @@ def gene_module_enrichm_plot():
     """ Plots the gene module analysis in heatmap, in the tfac/output folder as modules_v_components.svg """
     ns, data = ns_RNAseq_data()
     # z-scoring each column of the data
-    for col in data.columns[1:]:
-        data[col] = (data[col] - np.mean(data[col])) / np.std(data[col])
+    # for col in data.columns[1:]:
+    #     data[col] = (data[col] - np.mean(data[col])) / np.std(data[col])
     # running the module
     modules = run_module(ns, data)
     plot_modules(modules, data)
