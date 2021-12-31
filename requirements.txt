@@ -15,3 +15,6 @@ tensorly>=0.7.0
 scikit-learn>=1.0.1
 pybiomart
 git+https://github.com/meyer-lab/tensorpack.git@main
+mygene
+iterativeWGCNA
+gseapy
