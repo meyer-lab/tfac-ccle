@@ -21,7 +21,7 @@ def importLINCSprotein():
 
 def ohsu_data():
     """ Import OHSU data for PARAFAC2"""
-    return pd.read_csv(join(path_here, "tfac/data/ohsu/RNAseq_Level4.txt"), delimiter="\t")
+    return pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.txt"), delimiter="\t")
 
 
 def proteinNames():
