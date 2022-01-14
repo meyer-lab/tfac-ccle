@@ -10,8 +10,7 @@ jobs:
     - name: Install dependencies
       run: poetry install --no-root
     - name: Test with pytest
-      run: |
-        . venv/bin/activate; pytest --cov=tfac --cov-report=xml --cov-config=.github/workflows/coveragerc
+      run: make coverage.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

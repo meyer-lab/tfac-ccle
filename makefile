@@ -14,7 +14,7 @@ test:
 	poetry run pytest -s -x -v
 
 coverage.xml:
-	poetry run pytest --junitxml=junit.xml --cov=tfac --cov-report xml:coverage.xml
+	poetry run pytest --cov=tfac --cov-report xml:coverage.xml
 
 clean:
 	rm -rf coverage.xml junit.xml output
