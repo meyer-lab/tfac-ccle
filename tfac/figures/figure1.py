@@ -4,7 +4,7 @@ This creates Figure 1:
 (b) tensor_svg.svg from the data folder
 (c) R2X of the whole data, including gene expressions and protein levels.
 """
-from .figureCommon import subplotLabel, getSetup
+from .common import subplotLabel, getSetup
 from tensorpack import Decomposition
 from tensorpack.plot import *
 from ..dataHelpers import form_tensor
@@ -21,7 +21,10 @@ def makeFigure():
     # perform tensor decomposition from tensorpack with 8 components
     t = Decomposition(tensor, max_rr=8)
     t.perform_tfac()
+    # t.perform_PCA()
+
     tfacr2x(ax[2], t)
+    # reduction(ax[2], t)
 
     # Add subplot labels
     subplotLabel(ax)
