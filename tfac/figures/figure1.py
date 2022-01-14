@@ -24,7 +24,7 @@ def makeFigure():
     t.perform_PCA(flattenon=1)
 
     tfacr2x(ax[2], t)
-    # reduction(ax[2], t)
+    reduction(ax[2], t)
 
     # Add subplot labels
     subplotLabel(ax)
