@@ -25,5 +25,19 @@ def gene_module_enrichm_plot():
     ns, data = ns_RNAseq_data()
     # running the module
     modules = run_module(ns, data)
-    plot_modules(modules, data)
+    # prepare for saving and 
+    names = sorted(list(set(modules.loc[:, 'module'])))
+    module_expression = pd.DataFrame(
+        index=names,
+        columns=data.columns
+    )
+    for name in names:
+        in_module = modules.loc[modules.loc[:, 'module'] == name]
+        module = data.loc[in_module.index, :]
+        module_expression.loc[name, :] = module.mean()
+
+    # write the module expression into a csv file
+    module_expression.to_csv("module_expression.csv")
+    modules.to_csv("modules.csv")
+    plot_modules(module_expression)
     enrishment_analysis(modules)
