@@ -10,6 +10,7 @@ python = ">=3.9,<3.11"
 numpy = "1.21"
 tensorpack = {git = "https://github.com/meyer-lab/tensorpack.git", rev = "main"}
 svgutils = "^0.3"
+gseapy = "^0.10.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "6.2"
