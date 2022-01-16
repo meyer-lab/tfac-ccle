@@ -128,17 +128,8 @@ def run_module(ns, data):
 #################
 # MODULE PLOTTING
 #################
-def plot_modules(modules, data):
-    names = sorted(list(set(modules.loc[:, 'module'])))
-    module_expression = pd.DataFrame(
-        index=names,
-        columns=data.columns
-    )
-    for name in names:
-        in_module = modules.loc[modules.loc[:, 'module'] == name]
-        module = data.loc[in_module.index, :]
-        module_expression.loc[name, :] = module.mean()
 
+def plot_modules(module_expression):
     plt.figure(figsize=(6, 6))
     bound = module_expression.abs().max().max()
     sns.heatmap(

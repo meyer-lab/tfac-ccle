@@ -7,7 +7,7 @@ This creates Figure 2 - protein factors.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from .figureCommon import subplotLabel, getSetup
+from .common import subplotLabel, getSetup
 from tensorpack import perform_CP
 from ..dataHelpers import form_tensor, proteinNames
 
