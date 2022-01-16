@@ -16,7 +16,7 @@ import seaborn as sns
 COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 PATH_HERE = dirname(abspath(__file__))
 working_dir = f'{PATH_HERE}/module_output'  # This is where Python will save output
-input_data = f'{PATH_HERE}/data/ohsu/MDD_RNAseq_Level4.txt'  # Path to the input file
+input_data = f'{PATH_HERE}/data/ohsu/MDD_RNAseq_Level4_fixed.txt'  # Path to the input file
 
 def get_modules(genes):
     """Maps each gene to its respective module.
