@@ -13,7 +13,7 @@ from ..dataHelpers import form_tensor
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((8, 10), (3, 1))
+    ax, f = getSetup((8, 3), (1, 3))
     ax[0].axis("off")
     ax[1].axis("off")
 
@@ -23,7 +23,7 @@ def makeFigure():
     t.perform_tfac()
     t.perform_PCA(flattenon=1)
 
-    tfacr2x(ax[2], t)
+    tfacr2x(ax[1], t)
     reduction(ax[2], t)
 
     # Add subplot labels
