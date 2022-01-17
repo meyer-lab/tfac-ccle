@@ -53,15 +53,14 @@ def form_tensor():
     # Subtract off control
     tensor -= tensor[0, 0, :]
 
-    # RNAseq = ohsu_data()
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), delimiter=",")
-    RNAseq.rename(columns={"Unnamed: 0": "ensembl_gene_id"})
+    RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
     # Copy over control
     for treatment in df.index.unique(level=0):
         RNAseq[treatment + "_0"] = RNAseq["ctrl_0"]
 
-    RNAseq = RNAseq.set_index("ensembl_gene_id").T
+    RNAseq = RNAseq.set_index("gene_modules").T
     RNAseq.index = RNAseq.index.str.split('_', expand=True)
     RNAseq.index = RNAseq.index.set_levels(RNAseq.index.levels[1].astype(int), level=1)
 
@@ -82,9 +81,9 @@ def form_tensor():
     assert rTensor.shape[0] == tensor.shape[0]
     assert rTensor.shape[1] == tensor.shape[1]
 
-    return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
+    return np.append(tensor, rTensor, axis=2)
 
-"Will give a tensor of shape (7, 6, 371)"
+"Will give a tensor of shape (7, 6, 666)"
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
 "295 protein data points + 371 gene data points = 666 (!) total data points"
