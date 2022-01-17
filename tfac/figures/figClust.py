@@ -11,7 +11,7 @@ from ..dataHelpers import proteinNames, form_tensor
 def clustergram_proteins_geneModules():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    tensor = form_tensor()
+    tensor, _, _ = form_tensor()
     tFac = perform_CP(tensor, r=6)
 
     proteins = pd.DataFrame(tFac.factors[2][:295], index = proteinNames(), columns=["comp1", "comp2", "comp3", "comp4", "comp5", "comp6"])

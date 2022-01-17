@@ -17,7 +17,7 @@ def makeFigure():
     ax[0].axis("off")
     ax[1].axis("off")
 
-    tensor = form_tensor()
+    tensor, _, _ = form_tensor()
     # perform tensor decomposition from tensorpack with 8 components
     t = Decomposition(tensor, max_rr=8)
     t.perform_tfac()

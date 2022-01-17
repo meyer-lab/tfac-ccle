@@ -81,7 +81,7 @@ def form_tensor():
     assert rTensor.shape[0] == tensor.shape[0]
     assert rTensor.shape[1] == tensor.shape[1]
 
-    return np.append(tensor, rTensor, axis=2)
+    return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
 "Will give a tensor of shape (7, 6, 666)"
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
