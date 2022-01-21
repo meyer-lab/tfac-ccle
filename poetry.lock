@@ -636,7 +636,7 @@ scipy = "*"
 
 [[package]]
 name = "tensorpack"
-version = "0.0.2"
+version = "0.0.7"
 description = "A collection of tensor methods from the Meyer lab."
 category = "main"
 optional = false
@@ -655,7 +655,7 @@ tensorly = "^0.7"
 type = "git"
 url = "https://github.com/meyer-lab/tensorpack.git"
 reference = "main"
-resolved_reference = "4cb6048e3f6e845627124f43943455be268ad8ae"
+resolved_reference = "ad01af4e6656c822e187f154b9a6f11a399d844a"
 
 [[package]]
 name = "threadpoolctl"
@@ -749,7 +749,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.11"
-content-hash = "d6fd1082d845461d9dbb683e3b0c62c4e2ec0816468332849816639afb9da107"
+content-hash = "f314d580a5b3c6efc4d3e74473a7a9fafcccf469467636be3622c55c35bbe373"
 
 [metadata.files]
 appdirs = [
