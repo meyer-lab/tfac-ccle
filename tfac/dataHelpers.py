@@ -19,9 +19,21 @@ def importLINCSprotein():
     return pd.concat([dataA, dataB, dataC])
 
 
-def ohsu_data():
+def ohsu_data(export=False):
     """ Import OHSU data for PARAFAC2"""
-    return pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4_fixed.txt"), delimiter="\t")
+    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.txt"), delimiter=",", index_col=0)
+    # replace zeros with np.nan
+    RNAseq = RNAseq.replace(0, np.nan)
+    # remove rows with more than 10 zeros
+    RNAseq = RNAseq.dropna(axis=0, thresh=5)
+    RNAseq = RNAseq.replace(np.nan, 0)
+    # column names
+    cols = RNAseq.columns
+    of export:
+        RNAseq.apply(scale, axis=1)
+        RNAseq.to_csv(join(path_here, "tfac/data/ohsu/RNAseq.txt"), sep='\t')
+
+    return RNAseq
 
 
 def proteinNames():
