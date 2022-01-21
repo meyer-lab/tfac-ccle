@@ -29,7 +29,7 @@ def ohsu_data(export=False):
     RNAseq = RNAseq.replace(np.nan, 0)
     # column names
     cols = RNAseq.columns
-    of export:
+    if export:
         RNAseq.apply(scale, axis=1)
         RNAseq.to_csv(join(path_here, "tfac/data/ohsu/RNAseq.txt"), sep='\t')
 

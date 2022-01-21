@@ -161,7 +161,7 @@ def plot_modules(module_expression):
 #####################
 # ENRICHMENT ANALYSIS
 #####################
-def enrishment_analysis(modules):
+def enrichment_analysis(modules):
     # The below list picks the gene sets that are run as part of the enrichment.
     # These provide a decent general search, but you can pick more specific
     # sets from the options here: https://maayanlab.cloud/Enrichr/#libraries
@@ -309,4 +309,4 @@ def gene_module_enrichm_plot():
     module_expression.to_csv("module_expression.csv")
     modules.to_csv("modules.csv")
     plot_modules(module_expression)
-    enrishment_analysis(modules)
+    enrichment_analysis(modules)
