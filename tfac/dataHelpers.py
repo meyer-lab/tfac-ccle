@@ -1,6 +1,7 @@
 """Contains function for importing and handling OHSU data"""
 from os.path import join, dirname
 import numpy as np
+from sklearn.preprocessing import scale
 import pandas as pd
 
 path_here = dirname(dirname(__file__))
