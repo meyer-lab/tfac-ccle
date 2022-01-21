@@ -3,7 +3,7 @@
 from argparse import Namespace
 import os
 from os.path import abspath, dirname
-from .dataHelpers import import_ohsu
+from .dataHelpers import ohsu_data
 import gseapy as gp
 from iterativeWGCNA.iterativeWGCNA import IterativeWGCNA
 import matplotlib.pyplot as plt
