@@ -22,7 +22,7 @@ def importLINCSprotein():
 
 def ohsu_data(export=False):
     """ Import OHSU data for PARAFAC2"""
-    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.txt"), delimiter=",", index_col=0)
+    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"), delimiter=",", index_col=0)
 
     row_avg = RNAseq.mean(axis=1)
     for indx in RNAseq.index:
