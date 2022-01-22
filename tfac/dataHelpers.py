@@ -31,7 +31,8 @@ def ohsu_data(export=False):
     # column names
     cols = RNAseq.columns
     if export:
-        RNAseq = RNAseq.apply(scale, axis=1)
+        RNAseq = RNAseq.apply(scale, axis=1, result_type='expand')
+        RNAseq.columns = cols
         RNAseq.to_csv(join(path_here, "tfac/data/ohsu/RNAseq.txt"), sep='\t')
 
     return RNAseq
@@ -66,8 +67,8 @@ def form_tensor():
     # Subtract off control
     tensor -= tensor[0, 0, :]
 
-    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), delimiter=",")
-    RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
+    RNAseq = ohsu_data()
+    # RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
     # Copy over control
     for treatment in df.index.unique(level=0):

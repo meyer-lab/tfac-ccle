@@ -87,7 +87,7 @@ def ns_RNAseq_data():
 
     data = ohsu_data(export=True)
 
-    input_data = f'{PATH_HERE}//data/ohsu/RNAseq.txt'  # Path to the input file
+    input_data = f'{PATH_HERE}/data/ohsu/RNAseq.txt'  # Path to the input file
 
     wgcna_args = {
         'inputFile': input_data,
