@@ -23,11 +23,12 @@ def importLINCSprotein():
 def ohsu_data(export=False):
     """ Import OHSU data for PARAFAC2"""
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.txt"), delimiter=",", index_col=0)
-    # replace zeros with np.nan
-    RNAseq = RNAseq.replace(0, np.nan)
-    # remove rows with more than 10 zeros
-    RNAseq = RNAseq.dropna(axis=0, thresh=5)
-    RNAseq = RNAseq.replace(np.nan, 0)
+
+    row_avg = RNAseq.mean(axis=1)
+    for indx in RNAseq.index:
+        if row_avg[indx] <= 0.07:
+            RNAseq.drop(indx, inplace=True)
+
     # column names
     cols = RNAseq.columns
     if export:
