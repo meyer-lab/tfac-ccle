@@ -18,6 +18,7 @@ PATH_HERE = dirname(abspath(__file__))
 
 working_dir = f'{PATH_HERE}/module_output'  # This is where Python will save output
 
+
 def get_modules(genes):
     """Maps each gene to its respective module.
 
@@ -79,6 +80,8 @@ def fix_label(label):
 #######################################
 # DATA IMPORT AND MODULE IDENTIFICATION
 #######################################
+
+
 def ns_RNAseq_data():
     # Note that input_data will need to be a .txt file to work with WGCNA, but
     # it's structured just like a .csv, so you can probably save the .csv of
@@ -115,17 +118,20 @@ def ns_RNAseq_data():
 ################
 # RUN THE MODULE
 ################
+
+
 def run_module(ns, data):
 
     wgcna = IterativeWGCNA(ns)
     wgcna.run()
     modules = get_modules(wgcna.genes.genes)
-    
+
     return modules
 
 #################
 # MODULE PLOTTING
 #################
+
 
 def plot_modules(module_expression):
     plt.figure(figsize=(6, 6))
@@ -161,6 +167,8 @@ def plot_modules(module_expression):
 #####################
 # ENRICHMENT ANALYSIS
 #####################
+
+
 def enrichment_analysis(modules):
     # The below list picks the gene sets that are run as part of the enrichment.
     # These provide a decent general search, but you can pick more specific
@@ -289,12 +297,13 @@ def enrichment_analysis(modules):
         fig.suptitle(name)
         fig.savefig(f'{working_dir}/{name}_GO.svg')
 
+
 def gene_module_enrichm_plot():
     """ Plots the gene module analysis in heatmap, in the tfac/output folder as modules_v_components.svg """
     ns, data = ns_RNAseq_data()
     # running the module
     modules = run_module(ns, data)
-    # prepare for saving and 
+    # prepare for saving and
     names = sorted(list(set(modules.loc[:, 'module'])))
     module_expression = pd.DataFrame(
         index=names,

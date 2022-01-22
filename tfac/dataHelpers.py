@@ -85,8 +85,8 @@ def form_tensor():
     rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
 
     # Normalize the data
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True) # proteins
-    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True) # genes
+    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)  # proteins
+    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True)  # genes
 
     # Match variance of both datasets
     tensor /= np.nansum(np.square(tensor))
@@ -96,6 +96,7 @@ def form_tensor():
     assert rTensor.shape[1] == tensor.shape[1]
 
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
+
 
 "Will give a tensor of shape (7, 6, 666)"
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
