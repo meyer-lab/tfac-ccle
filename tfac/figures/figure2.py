@@ -15,23 +15,25 @@ from ..dataHelpers import form_tensor, proteinNames
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((20, 20), (3, 4))
+    ax, f = getSetup((8, 16), (3, 2))
 
     tensor, drugs, times = form_tensor()
 
     tFac = perform_CP(tensor, r=6)
 
-    # proteins - subplot (a)
-    proteins = [pd.DataFrame(tFac.factors[2][57367:57450], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[0:83]),
-    pd.DataFrame(tFac.factors[2][57450:57520], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[83:153]),
-    pd.DataFrame(tFac.factors[2][57520:57590], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[153:223]),
-    pd.DataFrame(tFac.factors[2][57590:], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=proteinNames()[223:])]
+    treatment = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=drugs)
+    tm = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=times)
 
-    for i in range(4):
-        g = sns.heatmap(proteins[i], cmap="PRGn", center=0, yticklabels=True, cbar=True, vmin=-0.01, vmax=0.01, ax=ax[i])
-        g.set_yticklabels(g.get_yticklabels(), rotation = 0)
-        g.set_title("proteins")
+    g1 = sns.heatmap(treatment, cmap="PRGn", center=0, yticklabels=True, cbar=True, vmin=-1., vmax=1., ax=ax[0])
+    g1.set_yticklabels(g1.get_yticklabels(), rotation=0)
+    g1.set_title("treatment")
 
+    g2 = sns.heatmap(tm, cmap="PRGn", center=0, yticklabels=True, cbar=True, vmin=-1., vmax=1., ax=ax[1])
+    g2.set_yticklabels(g2.get_yticklabels(), rotation=0)
+    g2.set_title("times")
+
+    for i in range(2, 6):
+        ax[i].axis("off")
     # ? - subplot (b)
 
     # components vs time - subplots (c-f)
