@@ -307,6 +307,8 @@ def gene_module_enrichm_plot():
 
     # write the module expression into a csv file
     module_expression.to_csv("module_expression.csv")
-    modules.to_csv("modules.csv")
     plot_modules(module_expression)
     enrichment_analysis(modules)
+
+    # removing the scaled file after this functions runs
+    os.remove(f'{PATH_HERE}/data/ohsu/RNAseq.txt')
