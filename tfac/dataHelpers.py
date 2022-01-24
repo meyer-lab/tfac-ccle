@@ -99,7 +99,7 @@ def form_tensor():
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
 
-"Will give a tensor of shape (7, 6, 666)"
+"Will give a tensor of shape (7, 6, 498)"
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
-"295 protein data points + 371 gene data points = 666 (!) total data points"
+"295 protein data points + 203 gene data points = 498 total data points"
