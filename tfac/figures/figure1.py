@@ -15,7 +15,6 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((8, 3), (1, 3))
     ax[0].axis("off")
-    ax[1].axis("off")
 
     tensor, _, _ = form_tensor()
     # perform tensor decomposition from tensorpack with 8 components
