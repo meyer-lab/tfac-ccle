@@ -25,9 +25,9 @@ def makeFigure():
     tfacr2x(ax[0], t)
     reduction(ax[1], t)
 
-    # Scales for each tensor
+    # Scaling factors for protein dataset
     scales = np.power(4, [-4.0,-3.0,-2.0,-1.0,0,1,2,3,4])
-
+    # Amount of components for tfac
     comps = 3
     R2Xs = np.zeros((3,len(scales)))
     # Iterate through each scaling factor 
@@ -60,6 +60,7 @@ def makeFigure():
     ax[2].legend()
     ax[2].set_xscale("log",base=4)
     ax[2].set_xticks([x for x in scales])
+    ax[2].set_ylim(0, 1)
     # Add subplot labels
     subplotLabel(ax)
 
