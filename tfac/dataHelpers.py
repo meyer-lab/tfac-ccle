@@ -1,6 +1,7 @@
 """Contains function for importing and handling OHSU data"""
 from os.path import join, dirname
 import numpy as np
+from sklearn.preprocessing import scale
 import pandas as pd
 
 path_here = dirname(dirname(__file__))
@@ -19,9 +20,23 @@ def importLINCSprotein():
     return pd.concat([dataA, dataB, dataC])
 
 
-def ohsu_data():
+def ohsu_data(export=False):
     """ Import OHSU data for PARAFAC2"""
-    return pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.txt"), delimiter="\t")
+    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"), delimiter=",", index_col=0)
+
+    row_avg = RNAseq.mean(axis=1)
+    for indx in RNAseq.index:
+        if row_avg[indx] <= 0.07:
+            RNAseq.drop(indx, inplace=True)
+
+    # column names
+    cols = RNAseq.columns
+    if export:
+        RNAseq = RNAseq.apply(scale, axis=1, result_type='expand')
+        RNAseq.columns = cols
+        RNAseq.to_csv(join(path_here, "tfac/data/ohsu/RNAseq.txt"), sep='\t')
+
+    return RNAseq
 
 
 def proteinNames():
@@ -53,13 +68,14 @@ def form_tensor():
     # Subtract off control
     tensor -= tensor[0, 0, :]
 
-    RNAseq = ohsu_data()
+    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), sep=',')
+    RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
     # Copy over control
     for treatment in df.index.unique(level=0):
         RNAseq[treatment + "_0"] = RNAseq["ctrl_0"]
 
-    RNAseq = RNAseq.set_index("ensembl_gene_id").T
+    RNAseq = RNAseq.set_index("gene_modules").T
     RNAseq.index = RNAseq.index.str.split('_', expand=True)
     RNAseq.index = RNAseq.index.set_levels(RNAseq.index.levels[1].astype(int), level=1)
 
@@ -70,8 +86,8 @@ def form_tensor():
     rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
 
     # Normalize the data
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True) # proteins
-    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True) # genes
+    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)  # proteins
+    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True)  # genes
 
     # Match variance of both datasets
     tensor /= np.nansum(np.square(tensor))
@@ -82,7 +98,8 @@ def form_tensor():
 
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
-"Will give a tensor of shape (7, 6, 57662)"
+
+"Will give a tensor of shape (7, 6, 498)"
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
-"295 protein data points + 57367 gene data points = 57662 total data points"
+"295 protein data points + 203 gene data points = 498 total data points"

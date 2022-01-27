@@ -3,7 +3,7 @@
 from argparse import Namespace
 import os
 from os.path import abspath, dirname
-
+from .dataHelpers import ohsu_data
 import gseapy as gp
 from iterativeWGCNA.iterativeWGCNA import IterativeWGCNA
 import matplotlib.pyplot as plt
@@ -15,8 +15,9 @@ import seaborn as sns
 
 COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 PATH_HERE = dirname(abspath(__file__))
+
 working_dir = f'{PATH_HERE}/module_output'  # This is where Python will save output
-input_data = f'{PATH_HERE}/data/ohsu/MDD_RNAseq_Level4.txt'  # Path to the input file
+
 
 def get_modules(genes):
     """Maps each gene to its respective module.
@@ -79,17 +80,17 @@ def fix_label(label):
 #######################################
 # DATA IMPORT AND MODULE IDENTIFICATION
 #######################################
+
+
 def ns_RNAseq_data():
     # Note that input_data will need to be a .txt file to work with WGCNA, but
     # it's structured just like a .csv, so you can probably save the .csv of
     # your data as a .txt file and make sure it is tab-delimited.
     os.makedirs(working_dir, exist_ok=True)
 
-    data = pd.read_csv(
-        input_data,
-        index_col=0,
-        delimiter='\t'
-    )
+    data = ohsu_data(export=True)
+
+    input_data = f'{PATH_HERE}/data/ohsu/RNAseq.txt'  # Path to the input file
 
     wgcna_args = {
         'inputFile': input_data,
@@ -117,28 +118,22 @@ def ns_RNAseq_data():
 ################
 # RUN THE MODULE
 ################
+
+
 def run_module(ns, data):
 
     wgcna = IterativeWGCNA(ns)
     wgcna.run()
     modules = get_modules(wgcna.genes.genes)
-    
+
     return modules
 
 #################
 # MODULE PLOTTING
 #################
-def plot_modules(modules, data):
-    names = sorted(list(set(modules.loc[:, 'module'])))
-    module_expression = pd.DataFrame(
-        index=names,
-        columns=data.columns
-    )
-    for name in names:
-        in_module = modules.loc[modules.loc[:, 'module'] == name]
-        module = data.loc[in_module.index, :]
-        module_expression.loc[name, :] = module.mean()
 
+
+def plot_modules(module_expression):
     plt.figure(figsize=(6, 6))
     bound = module_expression.abs().max().max()
     sns.heatmap(
@@ -172,7 +167,9 @@ def plot_modules(modules, data):
 #####################
 # ENRICHMENT ANALYSIS
 #####################
-def enrishment_analysis(modules):
+
+
+def enrichment_analysis(modules):
     # The below list picks the gene sets that are run as part of the enrichment.
     # These provide a decent general search, but you can pick more specific
     # sets from the options here: https://maayanlab.cloud/Enrichr/#libraries
@@ -299,3 +296,28 @@ def enrishment_analysis(modules):
 
         fig.suptitle(name)
         fig.savefig(f'{working_dir}/{name}_GO.svg')
+
+
+def gene_module_enrichm_plot():
+    """ Plots the gene module analysis in heatmap, in the tfac/output folder as modules_v_components.svg """
+    ns, data = ns_RNAseq_data()
+    # running the module
+    modules = run_module(ns, data)
+    # prepare for saving and
+    names = sorted(list(set(modules.loc[:, 'module'])))
+    module_expression = pd.DataFrame(
+        index=names,
+        columns=data.columns
+    )
+    for name in names:
+        in_module = modules.loc[modules.loc[:, 'module'] == name]
+        module = data.loc[in_module.index, :]
+        module_expression.loc[name, :] = module.mean()
+
+    # write the module expression into a csv file
+    module_expression.to_csv("module_expression.csv")
+    plot_modules(module_expression)
+    enrichment_analysis(modules)
+
+    # removing the scaled file after this functions runs
+    os.remove(f'{PATH_HERE}/data/ohsu/RNAseq.txt')
