@@ -6,7 +6,6 @@ This creates Figure 1:
 """
 from .common import subplotLabel, getSetup
 from tensorpack import Decomposition
-from tensorpack.decomposition import impute_missing_mat
 from tensorpack.plot import *
 from ..dataHelpers import form_tensor
 
