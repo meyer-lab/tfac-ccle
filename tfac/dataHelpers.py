@@ -3,6 +3,7 @@ from os.path import join, dirname
 import numpy as np
 from sklearn.preprocessing import scale
 import pandas as pd
+import requests
 
 path_here = dirname(dirname(__file__))
 
@@ -103,3 +104,9 @@ def form_tensor():
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
 "295 protein data points + 203 gene data points = 498 total data points"
+
+def import_LINCS_MEMA():
+    """ imports from url from seas. """
+    data = pd.read_csv(join(path_here, "tfac/data/mcf10a_egf_ssf_Level3.tsv.xz"), delim_whitespace=True)
+    data = data.dropna(axis=1)  # remove columns with no measurements
+    return data
