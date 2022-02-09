@@ -3,7 +3,6 @@ from os.path import join, dirname
 import numpy as np
 from sklearn.preprocessing import scale
 import pandas as pd
-import requests
 
 path_here = dirname(dirname(__file__))
 
