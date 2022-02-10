@@ -117,6 +117,7 @@ def import_LINCS_MEMA():
     data.drop(list(data.filter(regex = 'Norm')), axis = 1, inplace = True)
     data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
     measurements = data.columns[data.dtypes == float]
+
     tensor = np.empty((pd.unique(data["Ligand"]).size, pd.unique(data["ECMp"]).size, len(measurements)))
 
     for ii, ECM in enumerate(pd.unique(data["ECMp"])):
@@ -133,4 +134,4 @@ def import_LINCS_MEMA():
     goods = np.all(np.isfinite(tensor), axis=(0, 1))
     measurements = measurements[goods]
     tensor = tensor[:, :, goods]
-    return tensor
+    return tensor, pd.unique(data["Ligand"]), pd.unique(data["ECMp"]), measurements
