@@ -103,3 +103,34 @@ def form_tensor():
 "7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
 "295 protein data points + 203 gene data points = 498 total data points"
+
+def import_LINCS_MEMA():
+    """ Cell behavior and phenotypic measurements of MCF10A cells. """
+
+    data = pd.read_csv(join(path_here, "tfac/data/mcf10a_egf_ssf_Level3.tsv.xz"), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
+    data = data.reset_index()
+    data = data.dropna(axis=1)  # remove columns with no measurements
+    data.drop(list(data.filter(regex = '.tsv')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = '_SE')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Feret')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Gated')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Norm')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
+    measurements = data.columns[data.dtypes == float]
+    tensor = np.empty((pd.unique(data["Ligand"]).size, pd.unique(data["ECMp"]).size, len(measurements)))
+
+    for ii, ECM in enumerate(pd.unique(data["ECMp"])):
+        dataECM = data.loc[data["ECMp"] == ECM]
+
+        for jj, ligs in enumerate(pd.unique(data["Ligand"])):
+            selected = dataECM.loc[dataECM["Ligand"] == ligs, measurements]
+            tensor[jj, ii, :] = selected.iloc[0, :]
+
+    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)
+    assert np.all(np.isfinite(tensor))
+    tensor /= np.std(tensor, axis=(0, 1), keepdims=True)
+
+    goods = np.all(np.isfinite(tensor), axis=(0, 1))
+    measurements = measurements[goods]
+    tensor = tensor[:, :, goods]
+    return tensor
