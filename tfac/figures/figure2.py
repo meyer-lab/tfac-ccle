@@ -19,7 +19,8 @@ def makeFigure():
 
     tensor, drugs, times = form_tensor()
 
-    tFac = perform_CP(tensor, r=4, maxiter=2000, progress=True)
+    tFac = perform_CP(tensor, r=5, maxiter=2000, progress=True)
+    tFac.normalize()
 
     treatment = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=drugs)
     tm = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=times)
