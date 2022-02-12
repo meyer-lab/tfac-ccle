@@ -20,6 +20,8 @@ def clustergram_proteins_geneModules():
     tFac = perform_CP(tensor, 5, maxiter=2000)
 
     proteins = pd.DataFrame(tFac.factors[2][:295], index=proteinNames(), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
+    tFac.normalize()
+
     decreased_proteins = proteins.loc[((-0.1 >= proteins).any(1) | (proteins >= 0.1).any(1))]
     g = sns.clustermap(decreased_proteins, cmap="PRGn", method="centroid", center=0, figsize=(8, 10), col_cluster=False)
     plt.savefig("output/clustergram_proteins.svg")
@@ -34,6 +36,7 @@ def cluster_mema():
     """ Plot the clustermap for the ECM data, separately when it is decomposed. """
     tensor, ligand, ecm, measurements = import_LINCS_MEMA()
     fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-8)
+    fac.normalize()
 
     facZero = pd.DataFrame(fac.factors[0], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ligand)
     decreased_ligand = facZero.loc[((-0.1 >= facZero).any(1) | (facZero >= 0.1).any(1))]
