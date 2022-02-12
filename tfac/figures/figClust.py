@@ -18,15 +18,16 @@ def clustergram_proteins_geneModules():
     # Get list of axis objects
     tensor, _, _ = form_tensor()
     tFac = perform_CP(tensor, 5, maxiter=2000)
+
+    proteins = pd.DataFrame(tFac.factors[2][:295], index=proteinNames(), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
     tFac.normalize()
 
-    proteins = pd.DataFrame(tFac.factors[2][:295], index=proteinNames(), columns=["comp1", "comp2", "comp3", "comp4", "comp5"])
     decreased_proteins = proteins.loc[((-0.1 >= proteins).any(1) | (proteins >= 0.1).any(1))]
     g = sns.clustermap(decreased_proteins, cmap="PRGn", method="centroid", center=0, figsize=(8, 10), col_cluster=False)
     plt.savefig("output/clustergram_proteins.svg")
 
     RNAseq = pd.read_csv("tfac/data/ohsu/module_expression.csv", delimiter=",")
-    genes = pd.DataFrame(tFac.factors[2][295:], index=list(RNAseq["Unnamed: 0"]), columns=["comp1", "comp2", "comp3", "comp4", "comp5"])
+    genes = pd.DataFrame(tFac.factors[2][295:], index=list(RNAseq["Unnamed: 0"]), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
     decreased_genes = genes.loc[((-0.1 >= genes).any(1) | (genes >= 0.1).any(1))]
     g = sns.clustermap(decreased_genes, cmap="PRGn", method="centroid", center=0, figsize=(8, 14), col_cluster=False)
     plt.savefig("output/clustergram_geneModules.svg")
@@ -35,7 +36,6 @@ def cluster_mema():
     """ Plot the clustermap for the ECM data, separately when it is decomposed. """
     tensor, ligand, ecm, measurements = import_LINCS_MEMA()
     fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-8)
-
     fac.normalize()
 
     facZero = pd.DataFrame(fac.factors[0], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ligand)
