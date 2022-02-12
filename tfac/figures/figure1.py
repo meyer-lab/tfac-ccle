@@ -20,7 +20,7 @@ def makeFigure():
     # perform tensor decomposition from tensorpack with 8 components
     t = Decomposition(tensor, max_rr=6)
     t.perform_tfac()
-    t.perform_PCA(flattenon=1)
+    t.perform_PCA(flattenon=2)
 
     tfacr2x(ax[1], t)
     reduction(ax[2], t)
