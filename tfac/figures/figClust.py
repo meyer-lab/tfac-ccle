@@ -20,15 +20,14 @@ def clustergram_proteins_geneModules():
     tFac = perform_CP(tensor, 5, maxiter=2000)
 
     proteins = pd.DataFrame(tFac.factors[2][:295], index=proteinNames(), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
-    tFac.normalize()
 
     decreased_proteins = proteins.loc[((-0.1 >= proteins).any(1) | (proteins >= 0.1).any(1))]
-    g = sns.clustermap(decreased_proteins, cmap="PRGn", method="centroid", center=0, figsize=(8, 10), col_cluster=False)
+    g = sns.clustermap(decreased_proteins, cmap="PRGn", method="centroid", center=0, figsize=(8, 18), col_cluster=False)
     plt.savefig("output/clustergram_proteins.svg")
 
     RNAseq = pd.read_csv("tfac/data/ohsu/module_expression.csv", delimiter=",")
     genes = pd.DataFrame(tFac.factors[2][295:], index=list(RNAseq["Unnamed: 0"]), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
-    decreased_genes = genes.loc[((-0.1 >= genes).any(1) | (genes >= 0.1).any(1))]
+    decreased_genes = genes.loc[((-0.3 >= genes).any(1) | (genes >= 0.3).any(1))]
     g = sns.clustermap(decreased_genes, cmap="PRGn", method="centroid", center=0, figsize=(8, 14), col_cluster=False)
     plt.savefig("output/clustergram_geneModules.svg")
 
@@ -49,7 +48,7 @@ def cluster_mema():
 
     g = sns.clustermap(decreased_ligand, cmap="PRGn", method="centroid", center=0, figsize=(8, 12), col_cluster=False)
     plt.savefig("output/clustergram_ligand.svg")
-    g = sns.clustermap(decreased_ecm, cmap="PRGn", method="centroid", center=0, figsize=(10, 16), col_cluster=False)
+    g = sns.clustermap(decreased_ecm, cmap="PRGn", method="centroid", center=0, figsize=(8, 16), col_cluster=False)
     plt.savefig("output/clustergram_ECM.svg")
-    g = sns.clustermap(decreased_measurement, cmap="PRGn", method="centroid", center=0, figsize=(10, 18), col_cluster=False)
+    g = sns.clustermap(decreased_measurement, cmap="PRGn", method="centroid", center=0, figsize=(8, 18), col_cluster=False)
     plt.savefig("output/clustergram_measurements.svg")

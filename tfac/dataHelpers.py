@@ -93,6 +93,9 @@ def form_tensor():
     tensor /= np.nansum(np.square(tensor))
     rTensor /= np.nansum(np.square(rTensor))
 
+    # scale the proteins based on analysis
+    tensor = tensor * 4**-1
+
     assert rTensor.shape[0] == tensor.shape[0]
     assert rTensor.shape[1] == tensor.shape[1]
 
