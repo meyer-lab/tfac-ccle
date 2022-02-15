@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorpack import perform_CP
 import tensorly as tl
-from tensorly.cp_tensor import cp_flip_sign
+from tensorly.cp_tensor import cp_flip_sign, CPTensor
 from tensorly.decomposition import parafac
 from ..dataHelpers import import_LINCS_MEMA
 from ..dataHelpers import proteinNames, form_tensor
@@ -31,11 +31,33 @@ def clustergram_proteins_geneModules():
     g = sns.clustermap(decreased_genes, cmap="PRGn", method="centroid", center=0, figsize=(8, 14), col_cluster=False)
     plt.savefig("output/clustergram_geneModules.svg")
 
+
+def cp_normalize(cp_tensor):
+    weights, factors = cp_tensor
+    rank = cp_tensor.rank
+    
+    if weights is None:
+        weights = np.ones(rank)
+    
+    normalized_factors = []
+    for i, factor in enumerate(factors):
+        if i == 0:
+            factor = factor*weights
+            weights = np.ones(rank)
+            
+        scales = np.linalg.norm(factor, ord=np.inf, axis=0)
+        weights = weights*scales
+        normalized_factors.append(factor / np.reshape(scales, (1, -1)))
+
+    return CPTensor((weights, normalized_factors))
+
+
 def cluster_mema():
     """ Plot the clustermap for the ECM data, separately when it is decomposed. """
     tensor, ligand, ecm, measurements = import_LINCS_MEMA()
-    fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-8)
-    fac.normalize()
+    fac = parafac(tensor, 6, n_iter_max=2000, linesearch=True, tol=1e-12)
+    fac = cp_normalize(fac)
+    fac = cp_flip_sign(fac, mode=2)
 
     facZero = pd.DataFrame(fac.factors[0], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ligand)
     decreased_ligand = facZero.loc[((-0.1 >= facZero).any(1) | (facZero >= 0.1).any(1))]
