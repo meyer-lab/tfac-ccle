@@ -66,6 +66,3 @@ def makeFigure():
     ax[1].set_xlim(0.5, np.amax(comps) + 0.5)
 
     return f
-
-f = makeFigure()
-f.savefig('ttt.png')
