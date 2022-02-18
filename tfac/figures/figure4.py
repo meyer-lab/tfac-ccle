@@ -14,7 +14,7 @@ def makeFigure():
 
     ax, f = getSetup((10, 5), (1, 2))
     tensor, ligand, ecm, measurements = import_LINCS_MEMA()
-    comps = 5
+    comps = 12
 
     TR2X = []
     for comp in np.arange(1,comps+1):
@@ -52,6 +52,7 @@ def makeFigure():
     ax[0].set_xlabel("Size of Reduced Data")
     ax[0].set_title("Data reduction, TFac vs. PCA")
     ax[0].set_ylim(bottom=0.0)
+    ax[0].set_xlim(right=8192.0)
     ax[0].xaxis.set_major_formatter(ScalarFormatter())
     ax[0].legend()
 
@@ -65,3 +66,6 @@ def makeFigure():
     ax[1].set_xlim(0.5, np.amax(comps) + 0.5)
 
     return f
+
+f = makeFigure()
+f.savefig('ttt.png')
