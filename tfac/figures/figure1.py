@@ -7,25 +7,35 @@ This creates Figure 1:
 from .common import subplotLabel, getSetup
 from tensorpack import Decomposition
 from tensorpack.plot import *
-from ..dataHelpers import form_tensor
+from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((8, 3), (1, 3))
-    ax[0].axis("off")
+    ax, f = getSetup((8, 6), (2, 3))
 
-    tensor, _, _ = form_tensor()
+    ccle, _, _ = import_LINCS_CCLE()
     # perform tensor decomposition from tensorpack with 8 components
-    t = Decomposition(tensor, max_rr=6)
-    t.perform_tfac()
-    t.perform_PCA(flattenon=2)
+    tc = Decomposition(ccle, max_rr=7)
+    tc.perform_tfac()
+    tc.perform_PCA(flattenon=2)
 
-    tfacr2x(ax[1], t)
-    reduction(ax[2], t)
+    tfacr2x(ax[0], tc)
+    reduction(ax[1], tc)
+
+    # mema
+    mema, _, _, _ = import_LINCS_MEMA()
+    tm = Decomposition(mema, max_rr=7)
+    tm.perform_tfac()
+    tm.perform_PCA(flattenon=2)
+
+    tfacr2x(ax[3], tm)
+    reduction(ax[4], tm)
 
     # Add subplot labels
     subplotLabel(ax)
+    ax[0].set_title("Variance Explained by Tensor, CCLE")
+    ax[3].set_title("Variance Explained by Tensor, MEMA")
 
     return f
