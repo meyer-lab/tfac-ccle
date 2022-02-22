@@ -10,13 +10,13 @@ import tensorly as tl
 from tensorly.cp_tensor import cp_flip_sign, CPTensor
 from tensorly.decomposition import parafac
 from ..dataHelpers import import_LINCS_MEMA
-from ..dataHelpers import proteinNames, form_tensor
+from ..dataHelpers import proteinNames, import_LINCS_CCLE
 
 
 def clustergram_proteins_geneModules():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    tensor, _, _ = form_tensor()
+    tensor, _, _ = import_LINCS_CCLE()
     tFac = perform_CP(tensor, 5, maxiter=2000)
 
     proteins = pd.DataFrame(tFac.factors[2][:295], index=proteinNames(), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
