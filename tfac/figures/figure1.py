@@ -15,6 +15,7 @@ def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((8, 6), (2, 3))
+    ax[5].axis("off")
 
     # ccle
     ccle, _, _ = import_LINCS_CCLE()
@@ -36,11 +37,11 @@ def makeFigure():
     reduction(ax[4], tm)
 
     # Scaling factors for protein dataset
-    R2Xs, scales = scaling(ccle, comps=5)
+    scales, R2Xs = scaling(ccle, comps=5)
 
     labels = ['Protein','RNA','Total']
     for i in range(3):
-        ax[2].plot(scales, R2Xs[i,:], label=labels[i])
+        ax[2].plot(scales, R2Xs[i, :], label=labels[i])
     ax[2].set_ylabel("R2X")
     ax[2].set_xlabel("Protein Variance Scaling Factor")
     ax[2].set_title("Variance explained of RNA and Protein")
@@ -58,7 +59,7 @@ def makeFigure():
 
 def scaling(tensor, comps: int):
     """ Scaling function for proteins and gene expressions in CCLE dataset. """
-    scales = np.power(4, [-4.0,-3.0,-2.0,-1.0,0,1,2,3,4])
+    scales = np.power(4, [-4.0, -3.0, -2.0, -1.0, 0 ,1, 2, 3, 4])
 
     R2Xs = np.zeros((3, len(scales)))
 
@@ -73,9 +74,9 @@ def scaling(tensor, comps: int):
         # perform cp and generate reconsturction
         tfac = perform_CP(newTensor, r=comps)
         recon = tfac.to_tensor()
-        reconProt = recon[:,:,:295]
-        reconRNA = recon[:,:,295:]
-        recons = [reconProt,reconRNA,recon]
+        reconProt = recon[:, :, :295]
+        reconRNA = recon[:, :, 295:]
+        recons = [reconProt, reconRNA, recon]
 
         # calculate R2X for proteins, RNA, whole Tensor
         for cc, rec in enumerate(recons):
@@ -85,4 +86,5 @@ def scaling(tensor, comps: int):
             Top += np.linalg.norm(rec * tMask - tIn) ** 2.0
             Bottom += np.linalg.norm(tIn) ** 2.0
             R2Xs[cc, c] = 1 - Top / Bottom
+
     return scales, R2Xs
