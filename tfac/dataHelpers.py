@@ -46,7 +46,7 @@ def proteinNames():
     return data.columns.values.tolist()
 
 
-def form_tensor():
+def import_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
     Returns both the protein and RNAseq tensors in aligned format. """
     df = importLINCSprotein()
