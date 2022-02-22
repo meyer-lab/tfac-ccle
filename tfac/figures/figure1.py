@@ -36,7 +36,7 @@ def makeFigure():
     reduction(ax[4], tm)
 
     # Scaling factors for protein dataset
-    R2Xs, scales = scaling(comps=5)
+    R2Xs, scales = scaling(ccle, comps=5)
 
     labels = ['Protein','RNA','Total']
     for i in range(3):
@@ -56,7 +56,7 @@ def makeFigure():
 
     return f
 
-def scaling(comps: int):
+def scaling(tensor, comps: int):
     """ Scaling function for proteins and gene expressions in CCLE dataset. """
     scales = np.power(4, [-4.0,-3.0,-2.0,-1.0,0,1,2,3,4])
 
