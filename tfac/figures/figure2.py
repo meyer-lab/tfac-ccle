@@ -15,11 +15,11 @@ from ..dataHelpers import form_tensor, proteinNames
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((8, 16), (3, 2))
+    ax, f = getSetup((8, 4), (1, 2))
 
     tensor, drugs, times = form_tensor()
 
-    tFac = perform_CP(tensor, r=4, maxiter=2000, progress=True)
+    tFac = perform_CP(tensor, r=5, maxiter=2000, progress=True)
 
     treatment = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=drugs)
     tm = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=times)
@@ -31,9 +31,6 @@ def makeFigure():
     g2 = sns.heatmap(tm, cmap="PRGn", center=0, yticklabels=True, cbar=True, ax=ax[1])
     g2.set_yticklabels(g2.get_yticklabels(), rotation=0)
     g2.set_title("times")
-
-    for i in range(2, 6):
-        ax[i].axis("off")
 
     # Add subplot labels
     subplotLabel(ax)
