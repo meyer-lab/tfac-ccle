@@ -14,8 +14,10 @@ from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((8, 6), (2, 3))
+    ax, f = getSetup((9, 12), (4, 3))
     ax[5].axis("off")
+    ax[8].axis("off")
+    ax[11].axis("off")
 
     # ccle
     ccle, _, _ = import_LINCS_CCLE()
@@ -27,14 +29,33 @@ def makeFigure():
     tfacr2x(ax[0], tc)
     reduction(ax[1], tc)
 
-    # mema
-    mema, _, _, _ = import_LINCS_MEMA()
-    tm = Decomposition(mema, max_rr=7)
+    # mema MCF10A
+    MCF10A, _, _, _ = import_LINCS_MEMA("tfac/data/mcf10a_egf_ssf_Level3.tsv.xz")
+    tm = Decomposition(MCF10A, max_rr=7)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=2)
 
     tfacr2x(ax[3], tm)
     reduction(ax[4], tm)
+
+    # mema HMEC240L
+    HMEC240, _, _, _ = import_LINCS_MEMA("tfac/data/HMEC240L_SS4_Level3.tsv.xz")
+    th = Decomposition(HMEC240, max_rr=7)
+    th.perform_tfac()
+    th.perform_PCA(flattenon=2)
+
+    tfacr2x(ax[6], th)
+    reduction(ax[7], th)
+
+    # mema HMEC122L
+    HMEC122, _, _, _ = import_LINCS_MEMA("tfac/data/HMEC122L_SS4_Level3.tsv.xz")
+    th = Decomposition(HMEC122, max_rr=7)
+    th.perform_tfac()
+    th.perform_PCA(flattenon=2)
+    print(HMEC122.shape)
+
+    tfacr2x(ax[9], th)
+    reduction(ax[10], th)
 
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)
@@ -53,7 +74,9 @@ def makeFigure():
     # Add subplot labels
     subplotLabel(ax)
     ax[0].set_title("Variance Explained by Tensor, CCLE")
-    ax[3].set_title("Variance Explained by Tensor, MEMA")
+    ax[3].set_title("Variance Explained by Tensor, MEMA, MCF10A")
+    ax[6].set_title("Variance Explained by Tensor, MEMA, HMEC240L")
+    ax[9].set_title("Variance Explained by Tensor, MEMA, HMEC122L")
 
     return f
 

@@ -107,10 +107,10 @@ def import_LINCS_CCLE():
 "6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
 "295 protein data points + 203 gene data points = 498 total data points"
 
-def import_LINCS_MEMA():
+def import_LINCS_MEMA(datafile):
     """ Cell behavior and phenotypic measurements of MCF10A cells. """
 
-    data = pd.read_csv(join(path_here, "tfac/data/mcf10a_egf_ssf_Level3.tsv.xz"), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
+    data = pd.read_csv(join(path_here, datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
     data = data.reset_index()
     data = data.dropna(axis=1)  # remove columns with no measurements
     data.drop(list(data.filter(regex = '.tsv')), axis = 1, inplace = True)
