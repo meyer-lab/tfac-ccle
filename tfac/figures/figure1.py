@@ -52,7 +52,6 @@ def makeFigure():
     th = Decomposition(HMEC122, max_rr=7)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
-    print(HMEC122.shape)
 
     tfacr2x(ax[9], th)
     reduction(ax[10], th)
