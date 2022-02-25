@@ -30,7 +30,7 @@ def makeFigure():
     reduction(ax[1], tc)
 
     # mema MCF10A
-    MCF10A, _, _, _ = import_LINCS_MEMA("tfac/data/mcf10a_egf_ssf_Level3.tsv.xz")
+    MCF10A, _, _, _ = import_LINCS_MEMA("mcf10a_ssc_Level3.tsv.xz")
     tm = Decomposition(MCF10A, max_rr=7)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=2)
@@ -39,7 +39,7 @@ def makeFigure():
     reduction(ax[4], tm)
 
     # mema HMEC240L
-    HMEC240, _, _, _ = import_LINCS_MEMA("tfac/data/HMEC240L_SS4_Level3.tsv.xz")
+    HMEC240, _, _, _ = import_LINCS_MEMA("hmec240l_ssc_Level3.tsv.xz")
     th = Decomposition(HMEC240, max_rr=7)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
@@ -48,7 +48,7 @@ def makeFigure():
     reduction(ax[7], th)
 
     # mema HMEC122L
-    HMEC122, _, _, _ = import_LINCS_MEMA("tfac/data/HMEC122L_SS4_Level3.tsv.xz")
+    HMEC122, _, _, _ = import_LINCS_MEMA("hmec122l_ssc_Level3.tsv.xz")
     th = Decomposition(HMEC122, max_rr=7)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
