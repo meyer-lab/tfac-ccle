@@ -53,7 +53,7 @@ def cp_normalize(cp_tensor):
 
 def cluster_mema():
     """ Plot the clustermap for the ECM data, separately when it is decomposed. """
-    tensor, ligand, ecm, measurements = import_LINCS_MEMA("tfac/data/mcf10a_egf_ssf_Level3.tsv.xz")
+    tensor, ligand, ecm, measurements = import_LINCS_MEMA("mcf10a_ssc_Level3.tsv.xz")
     fac = parafac(tensor, 6, n_iter_max=2000, linesearch=True, tol=1e-12)
     fac = cp_normalize(fac)
     fac = cp_flip_sign(fac, mode=2)
