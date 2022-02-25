@@ -110,7 +110,7 @@ def import_LINCS_CCLE():
 def import_LINCS_MEMA(datafile):
     """ Cell behavior and phenotypic measurements of MCF10A cells. """
 
-    data = pd.read_csv(join(path_here, datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
+    data = pd.read_csv(join("/opt/MEMA-data/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
     data = data.reset_index()
     data = data.dropna(axis=1)  # remove columns with no measurements
     data.drop(list(data.filter(regex = '.tsv')), axis = 1, inplace = True)
