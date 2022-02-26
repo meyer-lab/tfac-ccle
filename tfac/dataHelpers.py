@@ -109,32 +109,25 @@ def import_LINCS_CCLE():
 
 def import_LINCS_MEMA(datafile):
     """ Cell behavior and phenotypic measurements of MCF10A cells. """
-
     data = pd.read_csv(join("/opt/MEMA-data/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
     data = data.reset_index()
-    data = data.dropna(axis=1)  # remove columns with no measurements
-    data.drop(list(data.filter(regex = '.tsv')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = '_SE')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Feret')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Gated')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Norm')), axis = 1, inplace = True)
+    #data = data.dropna(axis=1)  # remove columns with no measurements
+    # print(data.columns[data.isna().any()].tolist())
     data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
     measurements = data.columns[data.dtypes == float]
 
-    tensor = np.empty((pd.unique(data["Ligand"]).size, pd.unique(data["ECMp"]).size, len(measurements)))
+    ligands = pd.unique(data["Ligand"])
+    ECMp = pd.unique(data["ECMp"])
+    tensor = np.empty((ligands.size, ECMp.size, len(measurements)))
 
-    for ii, ECM in enumerate(pd.unique(data["ECMp"])):
+    for ii, ECM in enumerate(ECMp):
         dataECM = data.loc[data["ECMp"] == ECM]
 
-        for jj, ligs in enumerate(pd.unique(data["Ligand"])):
+        for jj, ligs in enumerate(ligands):
             selected = dataECM.loc[dataECM["Ligand"] == ligs, measurements]
             tensor[jj, ii, :] = selected.iloc[0, :]
+            assert selected.shape[0] == 1
 
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)
-    assert np.all(np.isfinite(tensor))
-    tensor /= np.std(tensor, axis=(0, 1), keepdims=True)
-
-    goods = np.all(np.isfinite(tensor), axis=(0, 1))
-    measurements = measurements[goods]
-    tensor = tensor[:, :, goods]
-    return tensor, pd.unique(data["Ligand"]), pd.unique(data["ECMp"]), measurements
+    tensor -= np.nanmean(tensor, axis=(0, 1), keepdims=True)
+    tensor /= np.nanstd(tensor, axis=(0, 1), keepdims=True)
+    return tensor, ligands, ECMp, measurements

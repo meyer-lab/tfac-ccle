@@ -4,10 +4,10 @@ This creates Figure 1:
 (b) tensor_svg.svg from the data folder
 (c) R2X of the whole data, including gene expressions and protein levels.
 """
-from matplotlib.pyplot import axis
+import numpy as np
 from .common import subplotLabel, getSetup
-from tensorpack import Decomposition, perform_CP, calcR2X
-from tensorpack.plot import *
+from tensorpack import Decomposition, perform_CP
+from tensorpack.plot import tfacr2x, reduction
 from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA
 
 
