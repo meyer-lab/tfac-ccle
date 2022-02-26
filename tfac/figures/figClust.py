@@ -9,8 +9,7 @@ from tensorpack import perform_CP
 import tensorly as tl
 from tensorly.cp_tensor import cp_flip_sign, CPTensor
 from tensorly.decomposition import parafac
-from ..dataHelpers import import_LINCS_MEMA
-from ..dataHelpers import proteinNames, import_LINCS_CCLE
+from ..dataHelpers import proteinNames, import_LINCS_CCLE, import_LINCS_MEMA
 
 
 def clustergram_proteins_geneModules():
