@@ -51,9 +51,9 @@ def cp_normalize(cp_tensor):
     return CPTensor((weights, normalized_factors))
 
 
-def cluster_mema():
+def cluster_mema(cellline):
     """ Plot the clustermap for the ECM data, separately when it is decomposed. """
-    tensor, ligand, ecm, measurements = import_LINCS_MEMA("mcf10a_ssc_Level3.tsv.xz")
+    tensor, ligand, ecm, measurements = import_LINCS_MEMA(cellline + "_ssc_Level3.tsv.xz")
     fac = parafac(tensor, 6, n_iter_max=2000, linesearch=True, tol=1e-12)
     fac = cp_normalize(fac)
     fac = cp_flip_sign(fac, mode=2)
@@ -67,9 +67,9 @@ def cluster_mema():
 
     print("R2X: ", 1.0 - np.linalg.norm(tl.cp_to_tensor(fac) - tensor)**2.0 / np.linalg.norm(tensor)**2.0)
 
-    g = sns.clustermap(decreased_ligand, cmap="PRGn", method="centroid", center=0, figsize=(8, 20), col_cluster=False)
-    plt.savefig("output/clustergram_ligand.svg")
+    g = sns.clustermap(decreased_ligand, cmap="PRGn", method="centroid", center=0, figsize=(8, 25), col_cluster=False)
+    plt.savefig("output/ligands_" + cellline + ".svg")
     g = sns.clustermap(decreased_ecm, cmap="PRGn", method="centroid", center=0, figsize=(8, 16), col_cluster=False)
-    plt.savefig("output/clustergram_ECM.svg")
-    g = sns.clustermap(decreased_measurement, cmap="PRGn", method="centroid", center=0, figsize=(8, 48), col_cluster=False)
-    plt.savefig("output/clustergram_measurements.svg")
+    plt.savefig("output/ECM_" + cellline + ".svg")
+    g = sns.clustermap(decreased_measurement, cmap="PRGn", method="centroid", center=0, figsize=(8, 8), col_cluster=False)
+    plt.savefig("output/measurements_" + cellline + ".svg")
