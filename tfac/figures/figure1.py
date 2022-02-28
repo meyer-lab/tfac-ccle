@@ -18,11 +18,7 @@ def makeFigure():
 
     tensor, _, _ = form_tensor()
     # perform tensor decomposition from tensorpack with 8 components
-<<<<<<< HEAD
-    t = Decomposition(tensor, max_rr=7)
-=======
     t = Decomposition(tensor, max_rr=6)
->>>>>>> master
     t.perform_tfac()
     t.perform_PCA(flattenon=2)
 
