@@ -9,7 +9,7 @@ import pandas as pd
 import seaborn as sns
 from .common import subplotLabel, getSetup
 from tensorpack import perform_CP
-from ..dataHelpers import form_tensor, proteinNames
+from ..dataHelpers import import_LINCS_CCLE, proteinNames
 
 
 def makeFigure():
@@ -17,7 +17,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((8, 4), (1, 2))
 
-    tensor, drugs, times = form_tensor()
+    tensor, drugs, times = import_LINCS_CCLE()
 
     tFac = perform_CP(tensor, r=5, maxiter=2000, progress=True)
 
