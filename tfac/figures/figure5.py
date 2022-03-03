@@ -12,14 +12,14 @@ from .common import getSetup
 def makeFigure():
     """ make heatmaps of factors when decomposed individually. """
     ax, f = getSetup((40, 10), (3, 1))
-    tensor, ligand, ecm, measurements = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
+    tensor, ligand, ecm, measurements = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
     fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-9)
     fac = cp_flip_sign(fac, 2)
     fac.normalize()
 
-    facZero = pd.DataFrame(fac.factors[0], columns=[f"{i}" for i in np.arange(1, fac.factors[0].shape[1] + 1)], index=ligand)
-    facOne = pd.DataFrame(fac.factors[1], columns=[f"{i}" for i in np.arange(1, fac.factors[1].shape[1] + 1)], index=ecm)
-    facTwo = pd.DataFrame(fac.factors[2], columns=[f"{i}" for i in np.arange(1, fac.factors[2].shape[1] + 1)], index=measurements)
+    facZero = pd.DataFrame(fac.factors[0], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ligand)
+    facOne = pd.DataFrame(fac.factors[1], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ecm)
+    facTwo = pd.DataFrame(fac.factors[2], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=measurements)
 
     facZero = reorder_table(facZero)
     facOne = reorder_table(facOne)

@@ -3,6 +3,7 @@ from os.path import join, dirname
 import numpy as np
 from sklearn.preprocessing import scale
 import pandas as pd
+import scipy.cluster.hierarchy as sch
 
 path_here = dirname(dirname(__file__))
 
@@ -44,6 +45,14 @@ def proteinNames():
     data = importLINCSprotein()
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
     return data.columns.values.tolist()
+
+
+def reorder_table(df):
+    """ Reorder a table's rows using heirarchical clustering. """
+    # Reorder measurements based on similarity
+    Y = sch.linkage(df.to_numpy(), method='centroid')
+    index = sch.dendrogram(Y, orientation='right')['leaves']
+    return df.iloc[index, :]
 
 
 def import_LINCS_CCLE():
@@ -109,6 +118,10 @@ def import_LINCS_MEMA(datafile):
     assert len(missingCols) < 15
     data = data.dropna(axis=1)  # remove columns with no measurements
     data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Feret')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Orientation')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = '_SE')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'LoessSCC')), axis = 1, inplace = True)
     measurements = data.columns[data.dtypes == float]
 
     ligands = pd.unique(data["Ligand"])
