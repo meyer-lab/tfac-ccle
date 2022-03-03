@@ -1,6 +1,7 @@
 """Contains function for importing and handling OHSU data"""
 from os.path import join, dirname
 import numpy as np
+from sklearn.preprocessing import scale
 import pandas as pd
 
 path_here = dirname(dirname(__file__))
@@ -19,9 +20,23 @@ def importLINCSprotein():
     return pd.concat([dataA, dataB, dataC])
 
 
-def ohsu_data():
+def ohsu_data(export=False):
     """ Import OHSU data for PARAFAC2"""
-    return pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"))
+    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"), delimiter=",", index_col=0)
+
+    row_avg = RNAseq.mean(axis=1)
+    for indx in RNAseq.index:
+        if row_avg[indx] <= 0.07:
+            RNAseq.drop(indx, inplace=True)
+
+    # column names
+    cols = RNAseq.columns
+    if export:
+        RNAseq = RNAseq.apply(scale, axis=1, result_type='expand')
+        RNAseq.columns = cols
+        RNAseq.to_csv(join(path_here, "tfac/data/ohsu/RNAseq.txt"), sep='\t')
+
+    return RNAseq
 
 
 def proteinNames():
@@ -31,7 +46,7 @@ def proteinNames():
     return data.columns.values.tolist()
 
 
-def form_tensor():
+def import_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
     Returns both the protein and RNAseq tensors in aligned format. """
     df = importLINCSprotein()
@@ -53,13 +68,14 @@ def form_tensor():
     # Subtract off control
     tensor -= tensor[0, 0, :]
 
-    RNAseq = ohsu_data()
+    RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), sep=',')
+    RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
     # Copy over control
     for treatment in df.index.unique(level=0):
         RNAseq[treatment + "_0"] = RNAseq["ctrl_0"]
 
-    RNAseq = RNAseq.set_index("ensembl_gene_id").T
+    RNAseq = RNAseq.set_index("gene_modules").T
     RNAseq.index = RNAseq.index.str.split('_', expand=True)
     RNAseq.index = RNAseq.index.set_levels(RNAseq.index.levels[1].astype(int), level=1)
 
@@ -70,50 +86,43 @@ def form_tensor():
     rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
 
     # Normalize the data
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)
-    rTensor -= np.mean(rTensor, axis=(0, 1), keepdims=True)
+    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)  # proteins
+    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True)  # genes
 
     # Match variance of both datasets
     tensor /= np.nansum(np.square(tensor))
-    RNAseq /= np.nansum(np.square(RNAseq))
+    rTensor /= np.nansum(np.square(rTensor))
+
+    # scale the proteins based on analysis
+    tensor = tensor * 4**-1
 
     assert rTensor.shape[0] == tensor.shape[0]
     assert rTensor.shape[1] == tensor.shape[1]
 
-    return tensor, rTensor, df.index.unique(level=0), times
+    return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
-"Will give a tensor of shape (7, 6, 57662)"
-"7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
-"6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
-"295 protein data points + 57367 gene data points = 57662 total data points"
-def form_bigtensor():
-    tensor, _, _, _ = form_tensor()
-    RNAseq = ohsu_data()
-    "change the rna sequence data to be the same as tensor protein data (7, 6)"
-    RNAseq.drop("ensembl_gene_id", inplace=True, axis=1)
-    cols = [ 'BMP2_24', 'BMP2_48', 'EGF_24', 'EGF_48','HGF_24', 'HGF_48', 'IFNg_24',   'IFNg_48', 'OSM_24', 'OSM_48',  'PBS_24','PBS_48', 'TGFb_24',
-        'TGFb_48', 'ctrl_0']
-    RNAseq = RNAseq[cols]
-    RNAseq = RNAseq.drop(["ctrl_0"], axis=1)
-    RNAseqnp = RNAseq.to_numpy()
-    RNAseqnp = RNAseqnp.T
-    "take the rna sequence and break out the time periods to be similar on two axes to the protein"
-    RNAtensor = np.zeros((7,6,57367))
-    "copy over the values from our rna sequence to the appropriate rows in the tensor"
-    np.copyto(RNAtensor[0][4], RNAseqnp[0])
-    np.copyto(RNAtensor[0][5], RNAseqnp[1])
-    np.copyto(RNAtensor[1][4], RNAseqnp[2])
-    np.copyto(RNAtensor[1][5], RNAseqnp[3])
-    np.copyto(RNAtensor[2][4], RNAseqnp[4])
-    np.copyto(RNAtensor[2][5], RNAseqnp[5])
-    np.copyto(RNAtensor[3][4], RNAseqnp[6])
-    np.copyto(RNAtensor[3][5], RNAseqnp[7])
-    np.copyto(RNAtensor[4][4], RNAseqnp[8])
-    np.copyto(RNAtensor[4][5], RNAseqnp[9])
-    np.copyto(RNAtensor[5][4], RNAseqnp[10])
-    np.copyto(RNAtensor[5][5], RNAseqnp[11])
-    np.copyto(RNAtensor[6][4], RNAseqnp[12])
-    np.copyto(RNAtensor[6][5], RNAseqnp[13])
-    "finally append the two tensors together, with the protein data coming first"
-    finaltensor = np.append(tensor, RNAtensor, axis=2)
-    return finaltensor
+def import_LINCS_MEMA(datafile):
+    """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
+    data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
+    data = data.reset_index()
+    missingCols = data.columns[data.isna().any()]
+    assert len(missingCols) < 15
+    data = data.dropna(axis=1)  # remove columns with no measurements
+    data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
+    measurements = data.columns[data.dtypes == float]
+
+    ligands = pd.unique(data["Ligand"])
+    ECMp = pd.unique(data["ECMp"])
+    tensor = np.empty((ligands.size, ECMp.size, len(measurements)))
+
+    for ii, ECM in enumerate(ECMp):
+        dataECM = data.loc[data["ECMp"] == ECM]
+
+        for jj, ligs in enumerate(ligands):
+            selected = dataECM.loc[dataECM["Ligand"] == ligs, measurements]
+            tensor[jj, ii, :] = selected.iloc[0, :]
+            assert selected.shape[0] == 1
+
+    tensor -= np.nanmean(tensor, axis=(0, 1), keepdims=True)
+    tensor /= np.nanstd(tensor, axis=(0, 1), keepdims=True)
+    return tensor, ligands, ECMp, measurements
