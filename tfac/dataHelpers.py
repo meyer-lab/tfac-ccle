@@ -101,18 +101,13 @@ def import_LINCS_CCLE():
 
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
-
-"Will give a tensor of shape (7, 6, 498)"
-"7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
-"6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
-"295 protein data points + 203 gene data points = 498 total data points"
-
 def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
     data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
     data = data.reset_index()
-    #data = data.dropna(axis=1)  # remove columns with no measurements
-    # print(data.columns[data.isna().any()].tolist())
+    missingCols = data.columns[data.isna().any()]
+    assert len(missingCols) < 15
+    data = data.dropna(axis=1)  # remove columns with no measurements
     data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
     measurements = data.columns[data.dtypes == float]
 

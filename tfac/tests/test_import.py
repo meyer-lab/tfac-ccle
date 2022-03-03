@@ -3,7 +3,7 @@ import numpy as np
 from ..dataHelpers import import_LINCS_MEMA
 
 
-@pytest.mark.parametrize("file", ["mcf10a_ssc_Level3.tsv.xz", "hmec240l_ssc_Level3.tsv.xz", "hmec122l_ssc_Level3.tsv.xz"])
+@pytest.mark.parametrize("file", ["mcf10a_ssc_Level4.tsv.xz", "hmec240l_ssc_Level4.tsv.xz", "hmec122l_ssc_Level4.tsv.xz"])
 def test_import(file):
     """ Test the data import. """
     tensor, ligand, ECM, measurements = import_LINCS_MEMA(file)
