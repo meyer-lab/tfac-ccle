@@ -4,7 +4,6 @@ import numpy as np
 import tensorly as tl
 from tensorly.cp_tensor import cp_flip_sign
 from tensorly.decomposition import parafac
-import matplotlib.pyplot as plt
 import seaborn as sns
 from ..dataHelpers import import_LINCS_MEMA
 from .common import getSetup
@@ -12,7 +11,7 @@ from .common import getSetup
 def makeFigure():
     """ make heatmaps of factors when decomposed individually. """
     ax, f = getSetup((20, 10), (3, 1))
-    tensor, ligand, ecm, measurements = import_LINCS_MEMA()
+    tensor, ligand, ecm, measurements = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
     fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-8)
 
     fac = cp_flip_sign(fac, 2)

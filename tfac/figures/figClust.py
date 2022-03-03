@@ -9,14 +9,13 @@ from tensorpack import perform_CP
 import tensorly as tl
 from tensorly.cp_tensor import cp_flip_sign, CPTensor
 from tensorly.decomposition import parafac
-from ..dataHelpers import import_LINCS_MEMA
-from ..dataHelpers import proteinNames, form_tensor
+from ..dataHelpers import proteinNames, import_LINCS_CCLE, import_LINCS_MEMA
 
 
 def clustergram_proteins_geneModules():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    tensor, _, _ = form_tensor()
+    tensor, _, _ = import_LINCS_CCLE()
     tFac = perform_CP(tensor, 5, maxiter=2000)
 
     proteins = pd.DataFrame(tFac.factors[2][:295], index=proteinNames(), columns=["Cmp. 1", "Cmp. 2", "Cmp. 3", "Cmp. 4", "Cmp. 5"])
@@ -52,10 +51,10 @@ def cp_normalize(cp_tensor):
     return CPTensor((weights, normalized_factors))
 
 
-def cluster_mema():
+def cluster_mema(cellline, num):
     """ Plot the clustermap for the ECM data, separately when it is decomposed. """
-    tensor, ligand, ecm, measurements = import_LINCS_MEMA()
-    fac = parafac(tensor, 6, n_iter_max=2000, linesearch=True, tol=1e-12)
+    tensor, ligand, ecm, measurements = import_LINCS_MEMA(cellline + "_ssc_Level4.tsv.xz")
+    fac = parafac(tensor, num, n_iter_max=2000, linesearch=True, tol=1e-12)
     fac = cp_normalize(fac)
     fac = cp_flip_sign(fac, mode=2)
 
@@ -68,9 +67,9 @@ def cluster_mema():
 
     print("R2X: ", 1.0 - np.linalg.norm(tl.cp_to_tensor(fac) - tensor)**2.0 / np.linalg.norm(tensor)**2.0)
 
-    g = sns.clustermap(decreased_ligand, cmap="PRGn", method="centroid", center=0, figsize=(8, 12), col_cluster=False)
-    plt.savefig("output/clustergram_ligand.svg")
+    g = sns.clustermap(decreased_ligand, cmap="PRGn", method="centroid", center=0, figsize=(8, 25), col_cluster=False)
+    plt.savefig("output/ligands_" + cellline + ".svg")
     g = sns.clustermap(decreased_ecm, cmap="PRGn", method="centroid", center=0, figsize=(8, 16), col_cluster=False)
-    plt.savefig("output/clustergram_ECM.svg")
-    g = sns.clustermap(decreased_measurement, cmap="PRGn", method="centroid", center=0, figsize=(8, 18), col_cluster=False)
-    plt.savefig("output/clustergram_measurements.svg")
+    plt.savefig("output/ECM_" + cellline + ".svg")
+    g = sns.clustermap(decreased_measurement, cmap="PRGn", method="centroid", center=0, figsize=(8, 28), col_cluster=False)
+    plt.savefig("output/measurements_" + cellline + ".svg")
