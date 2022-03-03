@@ -4,6 +4,7 @@ import numpy as np
 import tensorly as tl
 from tensorly.cp_tensor import cp_flip_sign
 from tensorly.decomposition import parafac
+from tensorpack.cmtf import cp_normalize
 import seaborn as sns
 from ..dataHelpers import import_LINCS_MEMA, reorder_table
 from .common import getSetup
@@ -15,7 +16,7 @@ def makeFigure():
     tensor, ligand, ecm, measurements = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
     fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-9)
     fac = cp_flip_sign(fac, 2)
-    fac.normalize()
+    fac = cp_normalize(fac)
 
     facZero = pd.DataFrame(fac.factors[0], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ligand)
     facOne = pd.DataFrame(fac.factors[1], columns=[f"{i}" for i in np.arange(1, fac.rank + 1)], index=ecm)
