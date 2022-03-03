@@ -108,9 +108,9 @@ def import_LINCS_CCLE():
 "295 protein data points + 203 gene data points = 498 total data points"
 
 def import_LINCS_MEMA(datafile):
-    """ Cell behavior and phenotypic measurements of MCF10A cells. """
+    """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
 
-    data = pd.read_csv(join("/opt/MEMA-data/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
+    data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
     data = data.reset_index()
     data = data.dropna(axis=1)  # remove columns with no measurements
     data.drop(list(data.filter(regex = '.tsv')), axis = 1, inplace = True)
