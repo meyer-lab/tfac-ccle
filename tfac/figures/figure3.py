@@ -4,7 +4,6 @@ import numpy as np
 import tensorly as tl
 from tensorly.cp_tensor import cp_flip_sign
 from tensorly.decomposition import parafac
-import matplotlib.pyplot as plt
 import seaborn as sns
 from ..dataHelpers import import_LINCS_MEMA
 from .common import getSetup

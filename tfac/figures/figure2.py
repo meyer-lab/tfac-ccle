@@ -9,7 +9,7 @@ import pandas as pd
 import seaborn as sns
 from .common import subplotLabel, getSetup
 from tensorpack import perform_CP
-from ..dataHelpers import import_LINCS_CCLE, proteinNames
+from ..dataHelpers import import_LINCS_CCLE
 
 
 def makeFigure():
