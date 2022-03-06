@@ -13,6 +13,7 @@ from tensorpack import perform_CP
 from tensorpack.cmtf import cp_normalize
 from ..dataHelpers import import_LINCS_CCLE, proteinNames, reorder_table
 
+
 def getsetup(figsize):
     sns.set(style="whitegrid", font_scale=0.7, color_codes=True, palette="colorblind", rc={"grid.linestyle": "dotted", "axes.linewidth": 0.6})
     fig = plt.figure(figsize=figsize, constrained_layout=True)
@@ -23,6 +24,7 @@ def getsetup(figsize):
     ax3 = fig.add_subplot(gs[1, :])
     ax4 = fig.add_subplot(gs[2, :])
     return ([ax1, ax2, ax3, ax4], fig)
+
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
@@ -45,9 +47,9 @@ def makeFigure():
     g2.set_yticklabels(g2.get_yticklabels(), rotation=0)
     g2.set_title("times")
 
-    facTwo1 = pd.DataFrame(tFac.factors[2][:295], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=proteinNames()) # proteins
+    facTwo1 = pd.DataFrame(tFac.factors[2][:295], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=proteinNames())  # proteins
     RNAseq = pd.read_csv("tfac/data/ohsu/module_expression.csv", delimiter=",")
-    facTwo2 = pd.DataFrame(tFac.factors[2][295:], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=list(RNAseq["Unnamed: 0"])) # gene modules
+    facTwo2 = pd.DataFrame(tFac.factors[2][295:], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=list(RNAseq["Unnamed: 0"]))  # gene modules
 
     facTwo1 = reorder_table(facTwo1)
     facTwo2 = reorder_table(facTwo2)
