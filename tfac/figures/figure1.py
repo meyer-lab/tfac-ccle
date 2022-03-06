@@ -38,7 +38,8 @@ def makeFigure():
 
     tfacr2x(ax[3], tm)
     reduction(ax[4], tm)
-    ax[4].set_xlim((90, 18384))
+    ax[4].set_xlim((200, 8592))
+    ax[4].set_xticks([256, 512, 1024, 2048, 4096, 8192])
 
 
     # mema HMEC240L
@@ -49,7 +50,8 @@ def makeFigure():
 
     tfacr2x(ax[6], th)
     reduction(ax[7], th)
-    ax[7].set_xlim((90, 18384))
+    ax[7].set_xlim((200, 8592))
+    ax[7].set_xticks([256, 512, 1024, 2048, 4096, 8192])
 
     # mema HMEC122L
     HMEC122, _, _, _ = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
@@ -59,7 +61,8 @@ def makeFigure():
 
     tfacr2x(ax[9], th)
     reduction(ax[10], th)
-    ax[10].set_xlim((90, 18384))
+    ax[10].set_xlim((200, 8592))
+    ax[10].set_xticks([256, 512, 1024, 2048, 4096, 8192])
 
 
     # Scaling factors for protein dataset
