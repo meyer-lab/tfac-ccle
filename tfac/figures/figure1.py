@@ -77,14 +77,14 @@ def makeFigure():
     ax[2].set_xticks([x for x in scales])
     ax[2].set_ylim(0, 1)
 
-    labels = ['Protein','RNA','Total']
+    labels = ['Protein', 'RNA', 'Total']
     for i in range(3):
-        ax[2].plot(scales,R2Xs[i,:],label=labels[i])
+        ax[2].plot(scales, R2Xs[i, :], label=labels[i])
     ax[2].set_ylabel("R2X")
     ax[2].set_xlabel("Protein Variance Scaling Factor")
     ax[2].set_title("Variance explained of RNA and Protein")
     ax[2].legend()
-    ax[2].set_xscale("log",base=4)
+    ax[2].set_xscale("log", base=4)
     ax[2].set_xticks([x for x in scales])
     ax[2].set_ylim(0, 1)
     # Add subplot labels

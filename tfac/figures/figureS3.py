@@ -17,7 +17,13 @@ def makeFigure():
 
     MCF10A, ligand, ecm, meas = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
 
-    tFac = perform_CP(MCF10A, r=6, maxiter=2000, progress=True)
+    plot_components(MCF10A, ligand, ecm, meas, ax)
+
+    return f 
+
+def plot_components(tensor, ligand, ecm, meas, ax): 
+
+    tFac = perform_CP(tensor, r=6, maxiter=2000, progress=True)
     tFac = cp_normalize(tFac)
 
     fac1 = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=ligand) # ligans
@@ -43,5 +49,3 @@ def makeFigure():
         g1.set_title(f"ECM, {col}")
         g2 = sns.heatmap(measurements.loc[measurements_l_ind].sort_values([col]), ax=ax[12+c], cmap="PRGn", center=0, vmin=-1, vmax=1)
         g2.set_title(f"Measurements, {col}")
-
-    return f 
