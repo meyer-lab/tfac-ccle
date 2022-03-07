@@ -41,7 +41,7 @@ def getsetup(figsize):
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, ax1, ax2, f = getsetup((50, 10))
+    ax, ax1, ax2, f = getsetup((25, 10))
 
     MCF10A, ligand, ecm, meas = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
 
