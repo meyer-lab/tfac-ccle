@@ -3,6 +3,7 @@ from os.path import join, dirname
 import numpy as np
 from sklearn.preprocessing import scale
 import pandas as pd
+import scipy.cluster.hierarchy as sch
 
 path_here = dirname(dirname(__file__))
 
@@ -44,6 +45,14 @@ def proteinNames():
     data = importLINCSprotein()
     data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
     return data.columns.values.tolist()
+
+
+def reorder_table(df):
+    """ Reorder a table's rows using heirarchical clustering. """
+    # Reorder measurements based on similarity
+    Y = sch.linkage(df.to_numpy(), method='centroid')
+    index = sch.dendrogram(Y, orientation='right')['leaves']
+    return df.iloc[index, :]
 
 
 def import_LINCS_CCLE():
@@ -101,40 +110,32 @@ def import_LINCS_CCLE():
 
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
-
-"Will give a tensor of shape (7, 6, 498)"
-"7 treatments, in this order: 'BMP2', 'EGF', 'HGF', 'IFNg', 'OSM', 'PBS', 'TGFb'"
-"6 time points (in hours), in this order: 0.0, 1.0, 4.0, 8.0, 24.0, 48.0"
-"295 protein data points + 203 gene data points = 498 total data points"
-
 def import_LINCS_MEMA(datafile):
-    """ Cell behavior and phenotypic measurements of MCF10A cells. """
-
-    data = pd.read_csv(join("/opt/MEMA-data/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
+    """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
+    data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
     data = data.reset_index()
+    missingCols = data.columns[data.isna().any()]
+    assert len(missingCols) < 15
     data = data.dropna(axis=1)  # remove columns with no measurements
-    data.drop(list(data.filter(regex = '.tsv')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = '_SE')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Feret')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Gated')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Norm')), axis = 1, inplace = True)
     data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Feret')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'Orientation')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = '_SE')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex = 'LoessSCC')), axis = 1, inplace = True)
     measurements = data.columns[data.dtypes == float]
 
-    tensor = np.empty((pd.unique(data["Ligand"]).size, pd.unique(data["ECMp"]).size, len(measurements)))
+    ligands = pd.unique(data["Ligand"])
+    ECMp = pd.unique(data["ECMp"])
+    tensor = np.empty((ligands.size, ECMp.size, len(measurements)))
 
-    for ii, ECM in enumerate(pd.unique(data["ECMp"])):
+    for ii, ECM in enumerate(ECMp):
         dataECM = data.loc[data["ECMp"] == ECM]
 
-        for jj, ligs in enumerate(pd.unique(data["Ligand"])):
+        for jj, ligs in enumerate(ligands):
             selected = dataECM.loc[dataECM["Ligand"] == ligs, measurements]
             tensor[jj, ii, :] = selected.iloc[0, :]
+            assert selected.shape[0] == 1
 
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)
-    assert np.all(np.isfinite(tensor))
-    tensor /= np.std(tensor, axis=(0, 1), keepdims=True)
-
-    goods = np.all(np.isfinite(tensor), axis=(0, 1))
-    measurements = measurements[goods]
-    tensor = tensor[:, :, goods]
-    return tensor, pd.unique(data["Ligand"]), pd.unique(data["ECMp"]), measurements
+    tensor -= np.nanmean(tensor, axis=(0, 1), keepdims=True)
+    tensor /= np.nanstd(tensor, axis=(0, 1), keepdims=True)
+    return tensor, ligands, ECMp, measurements
