@@ -1,5 +1,5 @@
 """
-Figure to show each components largest weights for CCLE Data
+Figure to show each components largest weights for CCLE Data, Component 1 
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,7 +32,7 @@ def getsetup(figsize):
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, ax1, f = getsetup((50, 10))
+    ax, ax1, f = getsetup((20, 10))
 
     tensor, drugs, times = import_LINCS_CCLE()
 
@@ -46,17 +46,16 @@ def makeFigure():
     facTwo1 = reorder_table(facTwo1)
     facTwo2 = reorder_table(facTwo2)
 
-    pthreshold = 0.2
-    gthreshold = 0.5
     for axis1, axis2, col in zip(ax, ax1, facTwo1.keys()):
         prots = facTwo1[[col]]
         geneMods = facTwo2[[col]]
-        prots_thresholded = prots[((prots > pthreshold) | (prots < -pthreshold))].dropna()
-        gene_thresholded = geneMods[((geneMods > gthreshold) | (geneMods < -gthreshold))].dropna()
 
-        g0 = sns.heatmap(prots_thresholded.T, ax=axis1, cmap="PRGn", center=0, vmin=-1, vmax=1)
+        prots_l_ind = prots.abs().nlargest(30, col).index
+        gene_l_ind = geneMods.abs().nlargest(30, col).index
+
+        g0 = sns.heatmap(prots.loc[prots_l_ind].sort_values([col]), ax=axis1, cmap="PRGn", center=0, vmin=-1, vmax=1)
         g0.set_title(f"Proteins, {col}")
-        g1 = sns.heatmap(gene_thresholded.T, ax=axis2, cmap="PRGn", center=0, vmin=-1, vmax=1)
+        g1 = sns.heatmap(geneMods.loc[gene_l_ind].sort_values([col]), ax=axis2, cmap="PRGn", center=0, vmin=-1, vmax=1)
         g1.set_title(f"Gene Modules, {col}")
 
     return f 
