@@ -110,6 +110,7 @@ def import_LINCS_CCLE():
 
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
+
 def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
     data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
@@ -117,11 +118,11 @@ def import_LINCS_MEMA(datafile):
     missingCols = data.columns[data.isna().any()]
     assert len(missingCols) < 15
     data = data.dropna(axis=1)  # remove columns with no measurements
-    data.drop(list(data.filter(regex = 'Conc')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Feret')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'Orientation')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = '_SE')), axis = 1, inplace = True)
-    data.drop(list(data.filter(regex = 'LoessSCC')), axis = 1, inplace = True)
+    data.drop(list(data.filter(regex='Conc')), axis=1, inplace=True)
+    data.drop(list(data.filter(regex='Feret')), axis=1, inplace=True)
+    data.drop(list(data.filter(regex='Orientation')), axis=1, inplace=True)
+    data.drop(list(data.filter(regex='_SE')), axis=1, inplace=True)
+    data.drop(list(data.filter(regex='LoessSCC')), axis=1, inplace=True)
     measurements = data.columns[data.dtypes == float]
 
     ligands = pd.unique(data["Ligand"])
