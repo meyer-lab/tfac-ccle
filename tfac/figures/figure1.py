@@ -41,7 +41,6 @@ def makeFigure():
     ax[4].set_xlim((200, 8592))
     ax[4].set_xticks([256, 512, 1024, 2048, 4096, 8192])
 
-
     # mema HMEC240L
     HMEC240, _, _, _ = import_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
     th = Decomposition(HMEC240, max_rr=7)
@@ -64,11 +63,10 @@ def makeFigure():
     ax[10].set_xlim((200, 8592))
     ax[10].set_xticks([256, 512, 1024, 2048, 4096, 8192])
 
-
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)
 
-    labels = ['Protein','RNA','Total']
+    labels = ['Protein', 'RNA', 'Total']
     for i in range(3):
         ax[2].plot(scales, R2Xs[i, :], label=labels[i])
     ax[2].set_ylabel("R2X")
@@ -88,14 +86,15 @@ def makeFigure():
 
     return f
 
+
 def scaling(tensor, comps: int):
     """ Scaling function for proteins and gene expressions in CCLE dataset. """
-    scales = np.power(4, [-4.0, -3.0, -2.0, -1.0, 0 ,1, 2, 3, 4])
+    scales = np.power(4, [-4.0, -3.0, -2.0, -1.0, 0, 1, 2, 3, 4])
 
     R2Xs = np.zeros((3, len(scales)))
 
-    # Iterate through each scaling factor 
-    for c, s in enumerate(scales): 
+    # Iterate through each scaling factor
+    for c, s in enumerate(scales):
         # apply scaling to dataset (tensor * s)
         protData = tensor[:, :, :295] * s
         rnaData = tensor[:, :, 295:]

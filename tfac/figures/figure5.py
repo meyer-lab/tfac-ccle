@@ -32,4 +32,3 @@ def makeFigure():
     sns.heatmap(facOne.T, ax=ax[1], cmap="PRGn", center=0)
     sns.heatmap(facTwo.T, ax=ax[2], cmap="PRGn", center=0)
     return f
-

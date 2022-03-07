@@ -10,4 +10,4 @@ def test_import(file):
     assert tensor.shape[0] == len(ligand)
     assert tensor.shape[1] == len(ECM)
     assert tensor.shape[2] == len(measurements)
-    assert np.all(np.isfinite(tensor)) # Should have no missingness
+    assert np.all(np.isfinite(tensor))  # Should have no missingness
