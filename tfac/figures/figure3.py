@@ -12,7 +12,7 @@ from .common import getSetup
 
 def makeFigure():
     """ make heatmaps of factors when decomposed individually. """
-    ax, f = getSetup((30, 10), (3, 1))
+    ax, f = getSetup((30, 15), (3, 1))
     tensor, ligand, ecm, measurements = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
     fac = parafac(tensor, 5, n_iter_max=2000, linesearch=True, tol=1e-9)
     fac = cp_flip_sign(fac, 2)
