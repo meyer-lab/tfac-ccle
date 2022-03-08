@@ -14,7 +14,7 @@ from ..dataHelpers import import_LINCS_CCLE, proteinNames, reorder_table
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((25, 10), (2, 5))
+    ax, f = getSetup((10, 15), (2, 5))
 
     tensor, drugs, times = import_LINCS_CCLE()
 
