@@ -14,7 +14,7 @@ from .figureS3 import plot_components
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((25, 10), (3, 6))
+    ax, f = getSetup((25, 10), (3, 5))
 
     HMEC122, ligand, ecm, meas = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
 
