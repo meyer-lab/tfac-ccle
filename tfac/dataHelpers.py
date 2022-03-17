@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.preprocessing import scale
 import pandas as pd
 import scipy.cluster.hierarchy as sch
+import xarray as xa
 
 path_here = dirname(dirname(__file__))
 
@@ -114,7 +115,7 @@ def import_LINCS_CCLE():
 def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
     data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
-    data = data.reset_index()
+
     missingCols = data.columns[data.isna().any()]
     assert len(missingCols) < 15
     data = data.dropna(axis=1)  # remove columns with no measurements
@@ -123,20 +124,8 @@ def import_LINCS_MEMA(datafile):
     data.drop(list(data.filter(regex='Orientation')), axis=1, inplace=True)
     data.drop(list(data.filter(regex='_SE')), axis=1, inplace=True)
     data.drop(list(data.filter(regex='LoessSCC')), axis=1, inplace=True)
-    measurements = data.columns[data.dtypes == float]
+    data = data.loc[:, data.dtypes == float]
+    data.iloc[:, :] = scale(data)
 
-    ligands = pd.unique(data["Ligand"])
-    ECMp = pd.unique(data["ECMp"])
-    tensor = np.empty((ligands.size, ECMp.size, len(measurements)))
-
-    for ii, ECM in enumerate(ECMp):
-        dataECM = data.loc[data["ECMp"] == ECM]
-
-        for jj, ligs in enumerate(ligands):
-            selected = dataECM.loc[dataECM["Ligand"] == ligs, measurements]
-            tensor[jj, ii, :] = selected.iloc[0, :]
-            assert selected.shape[0] == 1
-
-    tensor -= np.nanmean(tensor, axis=(0, 1), keepdims=True)
-    tensor /= np.nanstd(tensor, axis=(0, 1), keepdims=True)
-    return tensor, ligands, ECMp, measurements
+    xdf = data.to_xarray().to_array(dim="Measurement")
+    return xdf

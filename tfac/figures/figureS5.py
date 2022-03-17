@@ -1,14 +1,8 @@
 """
 Figure to show each components largest weights for MEMA Data
 """
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-from .common import subplotLabel, getSetup
-from tensorpack import perform_CP
-from tensorpack.cmtf import cp_normalize
-from ..dataHelpers import import_LINCS_MEMA, proteinNames, reorder_table
+from .common import getSetup
+from ..dataHelpers import import_LINCS_MEMA
 from .figureS3 import plot_components
 
 def makeFigure():
@@ -16,8 +10,8 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((25, 10), (3, 5))
 
-    HMEC122, ligand, ecm, meas = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
+    HMEC122 = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
 
-    plot_components(HMEC122, ligand, ecm, meas, ax)    
+    plot_components(HMEC122, ax)    
 
     return f 

@@ -1,7 +1,6 @@
 """ import drug response data. """
 from os.path import join, dirname
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import h5py
