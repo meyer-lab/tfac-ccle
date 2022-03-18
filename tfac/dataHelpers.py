@@ -129,3 +129,26 @@ def import_LINCS_MEMA(datafile):
 
     xdf = data.to_xarray().to_array(dim="Measurement")
     return xdf
+
+def import_LINCS_CycIF():
+    """ Imports the cyclic immunofluorescence data from LINCS. """
+    data = pd.read_csv(join(path_here, "tfac/data/CycIF/MDD_cycIF_Level4.csv"), delimiter=",", index_col=0)
+
+    ctrl = data['ctrl_0']
+    data.drop(columns='ctrl_0', inplace=True)
+    data = data.T
+    datacopy = data.copy()
+    # to add the control at the start of each treatment
+    datacopy.index = datacopy.index.str.split('_', expand=True) # split the treatment name and the time index
+    for tr in list(datacopy.index.levels[0]):
+        data = pd.concat([pd.DataFrame({tr+'_0': ctrl}).T, data])
+
+    # split the indexes to the treatment and time indexes
+    data.index = data.index.str.split('_', expand=True)
+    data = data.sort_index(level=1) # sort with respect to the treatments
+    data = data.loc[:, data.dtypes == float]
+    data.iloc[:, :] = scale(data)
+
+    xdf = data.to_xarray().to_array()
+    xadf = xdf.rename({"level_0": "treatment", "level_1": "time", "variable": "measurements"})
+    return xadf
