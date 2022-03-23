@@ -138,6 +138,7 @@ def import_LINCS_CycIF():
     data.drop(columns='ctrl_0', inplace=True)
     data = data.T
     datacopy = data.copy()
+
     # to add the control at the start of each treatment
     datacopy.index = datacopy.index.str.split('_', expand=True) # split the treatment name and the time index
     for tr in list(datacopy.index.levels[0]):
