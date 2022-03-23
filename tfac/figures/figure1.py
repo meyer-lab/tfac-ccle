@@ -3,6 +3,7 @@ This creates Figure 1:
 """
 import numpy as np
 from .common import subplotLabel, getSetup
+from tensorly.decomposition import parafac
 from tensorpack import Decomposition, perform_CP
 from tensorpack.plot import tfacr2x, reduction
 from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA, import_LINCS_CycIF
@@ -28,9 +29,11 @@ def makeFigure():
     reduction(ax[1], tc)
     ax[1].set_xlim((400, 4096))
 
+    ppfac = lambda x, r: parafac(x, rank=r, n_iter_max=100, tol=1e-9, linesearch=True)
+
     # mema MCF10A
     MCF10A = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
-    tm = Decomposition(MCF10A.to_numpy(), max_rr=7)
+    tm = Decomposition(MCF10A.to_numpy(), max_rr=7, method=ppfac)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=2)
 
@@ -41,7 +44,7 @@ def makeFigure():
 
     # mema HMEC240L
     HMEC240 = import_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
-    th = Decomposition(HMEC240.to_numpy(), max_rr=7)
+    th = Decomposition(HMEC240.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
 
@@ -52,7 +55,7 @@ def makeFigure():
 
     # mema HMEC122L
     HMEC122 = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
-    th = Decomposition(HMEC122.to_numpy(), max_rr=7)
+    th = Decomposition(HMEC122.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
 
@@ -63,7 +66,7 @@ def makeFigure():
 
     # mema CycIF
     CycIF = import_LINCS_CycIF()
-    th = Decomposition(CycIF.to_numpy(), max_rr=7)
+    th = Decomposition(CycIF.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
 
