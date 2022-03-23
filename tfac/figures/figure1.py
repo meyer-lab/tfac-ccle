@@ -48,7 +48,7 @@ def makeFigure():
     tfacr2x(ax[6], th)
     reduction(ax[7], th)
     ax[7].set_xlim((200, 8592))
-    ax[7].set_xticks([256, 512, 1024, 2048, 4096, 8192])
+    ax[7].set_xticks([256, 1024, 2048, 8192, 32768])
 
     # mema HMEC122L
     HMEC122 = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
@@ -59,7 +59,7 @@ def makeFigure():
     tfacr2x(ax[9], th)
     reduction(ax[10], th)
     ax[10].set_xlim((200, 8592))
-    ax[10].set_xticks([256, 512, 1024, 2048, 4096, 8192])
+    ax[10].set_xticks([256, 1024, 2048, 8192, 32768])
 
     # mema CycIF
     CycIF = import_LINCS_CycIF()
@@ -70,7 +70,7 @@ def makeFigure():
     tfacr2x(ax[12], th)
     reduction(ax[13], th)
     ax[13].set_xlim((200, 8592))
-    ax[13].set_xticks([256, 512, 1024, 2048, 4096, 8192])
+    ax[13].set_xticks([256, 1024, 2048, 8192, 32768])
 
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)
