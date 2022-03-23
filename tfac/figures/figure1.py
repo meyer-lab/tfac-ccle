@@ -68,7 +68,7 @@ def makeFigure():
     CycIF = import_LINCS_CycIF()
     th = Decomposition(CycIF.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
-    th.perform_PCA(flattenon=2)
+    th.perform_PCA(flattenon=0)
 
     tfacr2x(ax[12], th)
     reduction(ax[13], th)
