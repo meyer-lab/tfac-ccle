@@ -1,9 +1,9 @@
 """
-Figure to show each components largest weights for MEMA Data
+Figure to show each components largest weights for HMEC240L MEMA Data
 """
 from .common import getSetup
+from ..plotHelpers import plot_components
 from ..dataHelpers import import_LINCS_MEMA
-from .figureS3 import plot_components
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
