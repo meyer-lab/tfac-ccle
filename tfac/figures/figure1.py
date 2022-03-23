@@ -1,23 +1,22 @@
 """
 This creates Figure 1:
-(a) tensor factorization cartoon
-(b) tensor_svg.svg from the data folder
-(c) R2X of the whole data, including gene expressions and protein levels.
 """
 import numpy as np
 from .common import subplotLabel, getSetup
+from tensorly.decomposition import parafac
 from tensorpack import Decomposition, perform_CP
 from tensorpack.plot import tfacr2x, reduction
-from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA
+from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA, import_LINCS_CycIF
 
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((9, 12), (4, 3))
+    ax, f = getSetup((9, 12), (5, 3))
     ax[5].axis("off")
     ax[8].axis("off")
     ax[11].axis("off")
+    ax[14].axis("off")
 
     # ccle
     ccle, _, _ = import_LINCS_CCLE()
@@ -30,9 +29,11 @@ def makeFigure():
     reduction(ax[1], tc)
     ax[1].set_xlim((400, 4096))
 
+    ppfac = lambda x, r: parafac(x, rank=r, n_iter_max=100, tol=1e-9, linesearch=True)
+
     # mema MCF10A
     MCF10A = import_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
-    tm = Decomposition(MCF10A.to_numpy(), max_rr=7)
+    tm = Decomposition(MCF10A.to_numpy(), max_rr=7, method=ppfac)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=2)
 
@@ -43,25 +44,36 @@ def makeFigure():
 
     # mema HMEC240L
     HMEC240 = import_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
-    th = Decomposition(HMEC240.to_numpy(), max_rr=7)
+    th = Decomposition(HMEC240.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
 
     tfacr2x(ax[6], th)
     reduction(ax[7], th)
     ax[7].set_xlim((200, 8592))
-    ax[7].set_xticks([256, 512, 1024, 2048, 4096, 8192])
+    ax[7].set_xticks([256, 1024, 2048, 8192, 32768])
 
     # mema HMEC122L
     HMEC122 = import_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
-    th = Decomposition(HMEC122.to_numpy(), max_rr=7)
+    th = Decomposition(HMEC122.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=2)
 
     tfacr2x(ax[9], th)
     reduction(ax[10], th)
     ax[10].set_xlim((200, 8592))
-    ax[10].set_xticks([256, 512, 1024, 2048, 4096, 8192])
+    ax[10].set_xticks([256, 1024, 2048, 8192, 32768])
+
+    # mema CycIF
+    CycIF = import_LINCS_CycIF()
+    th = Decomposition(CycIF.to_numpy(), max_rr=7, method=ppfac)
+    th.perform_tfac()
+    th.perform_PCA(flattenon=0)
+
+    tfacr2x(ax[12], th)
+    reduction(ax[13], th)
+    ax[13].set_xlim((200, 8592))
+    ax[13].set_xticks([256, 1024, 2048, 8192, 32768])
 
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)
@@ -93,6 +105,7 @@ def makeFigure():
     ax[3].set_title("Variance Explained by Tensor, MEMA, MCF10A")
     ax[6].set_title("Variance Explained by Tensor, MEMA, HMEC240L")
     ax[9].set_title("Variance Explained by Tensor, MEMA, HMEC122L")
+    ax[12].set_title("Variance Explained by Tensor, MEMA, CycIF")
 
     return f
 
