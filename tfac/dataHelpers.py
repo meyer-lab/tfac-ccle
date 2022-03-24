@@ -59,6 +59,8 @@ def reorder_table(df):
 def import_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
     Returns both the protein and RNAseq tensors in aligned format. """
+
+    # import proteins and pre-process
     df = importLINCSprotein()
     df.drop(columns=["Sample description", "File"], inplace=True)
     times = pd.unique(df["Time"])
@@ -72,12 +74,16 @@ def import_LINCS_CCLE():
     df.drop('Control', inplace=True, level=0)
     df = df.sort_index()
 
-    dfArray = df.to_numpy()
-    tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
+    # subtract the control
+    row1 = df.iloc[[0]].values[0] #control row
+    df = df.apply(lambda row: row - row1, axis=1)
 
-    # Subtract off control
-    tensor -= tensor[0, 0, :]
+    # scale
+    dft = df.T
+    dft = dft.apply(scale)
+    df = dft.T
 
+    # import the RNAseq data and pre-process
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), sep=',')
     RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
@@ -92,24 +98,16 @@ def import_LINCS_CCLE():
     RNAseq.drop('ctrl', inplace=True, level=0)
     RNAseq = RNAseq.reindex(index=df.index)
 
-    rArray = RNAseq.to_numpy()
-    rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
+    # scale
+    RNAseqt = RNAseq.T
+    RNAseqt = RNAseqt.apply(scale)
+    RNAseq = RNAseqt.T
 
-    # Normalize the data
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)  # proteins
-    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True)  # genes
+    # concatenate proteins and RNAseq data
+    fullDF = pd.concat([df, RNAseq], axis=1)
+    return fullDF.to_xarray().to_array()
 
-    # Match variance of both datasets
-    tensor /= np.nansum(np.square(tensor))
-    rTensor /= np.nansum(np.square(rTensor))
-
-    # scale the proteins based on analysis
-    tensor = tensor * 4**-1
-
-    assert rTensor.shape[0] == tensor.shape[0]
-    assert rTensor.shape[1] == tensor.shape[1]
-
-    return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
+    # return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
 
 def import_LINCS_MEMA(datafile):
