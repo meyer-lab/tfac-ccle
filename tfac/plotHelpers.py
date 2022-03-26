@@ -12,7 +12,7 @@ from .dataHelpers import reorder_table
 
 def plot_heatmaps(tensor, ax):
     """ Plots all the components across all factors for the MEMA datasets. """
-    fac = parafac(tensor.to_numpy(), 5, n_iter_max=2000, linesearch=True, tol=1e-9)
+    fac = parafac(tensor.to_numpy(), 5, n_iter_max=2000, linesearch=True, tol=1e-9) # tensor is xarray type
     fac = cp_flip_sign(fac, 2)
     fac = cp_normalize(fac)
 
@@ -26,7 +26,7 @@ def plot_heatmaps(tensor, ax):
 
 def plot_components(tensor, ax):
     """ Plots most significant components separately in the supplementary figures. """
-    tFac = parafac(tensor.to_numpy(), 5, n_iter_max=2000, linesearch=True, tol=1e-9)
+    tFac = parafac(tensor.to_numpy(), 5, n_iter_max=2000, linesearch=True, tol=1e-9) # tensor is xarray type
     tFac = cp_flip_sign(tFac, 2)
     tFac = cp_normalize(tFac)
 

@@ -32,13 +32,13 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getsetup((50, 10))
 
-    tensor, drugs, times = import_LINCS_CCLE()
+    tensor = import_LINCS_CCLE()
 
-    tFac = perform_CP(tensor, r=5, maxiter=2000, progress=True)
+    tFac = perform_CP(tensor.to_numpy(), r=5, maxiter=2000, progress=True)
     tFac = cp_normalize(tFac)
 
-    treatment = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=drugs)
-    tm = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=times)
+    treatment = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=tensor.coords[tensor.dims[1]])
+    tm = pd.DataFrame(tFac.factors[2], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=tensor.coords[tensor.dims[2]])
 
     g1 = sns.heatmap(treatment, cmap="PRGn", center=0, yticklabels=True, cbar=True, ax=ax[0])
     g1.set_yticklabels(g1.get_yticklabels(), rotation=0)
@@ -48,9 +48,9 @@ def makeFigure():
     g2.set_yticklabels(g2.get_yticklabels(), rotation=0)
     g2.set_title("times")
 
-    facTwo1 = pd.DataFrame(tFac.factors[2][:295], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=proteinNames())  # proteins
+    facTwo1 = pd.DataFrame(tFac.factors[0][:295], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=proteinNames())  # proteins
     RNAseq = pd.read_csv("tfac/data/ohsu/module_expression.csv", delimiter=",")
-    facTwo2 = pd.DataFrame(tFac.factors[2][295:], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=list(RNAseq["Unnamed: 0"]))  # gene modules
+    facTwo2 = pd.DataFrame(tFac.factors[0][295:], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)], index=list(RNAseq["Unnamed: 0"]))  # gene modules
 
     facTwo1 = reorder_table(facTwo1)
     facTwo2 = reorder_table(facTwo2)
