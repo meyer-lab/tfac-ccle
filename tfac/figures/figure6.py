@@ -8,7 +8,7 @@ from tensorly.decomposition import parafac
 from tensorpack.cmtf import cp_normalize
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ..dataHelpers import Tensor_LINCS_CycIF, reorder_table
+from ..dataHelpers import import_LINCS_CycIF, reorder_table
 from ..plotHelpers import plot_heatmaps
 from .common import getSetup, subplotLabel
 
@@ -29,7 +29,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getsetup((30, 8))
 
-    tensor = Tensor_LINCS_CycIF()
+    tensor = import_LINCS_CycIF()
     fac = parafac(tensor.to_numpy(), 5, n_iter_max=2000, linesearch=True, tol=1e-9)
     fac = cp_flip_sign(fac, 2)
     fac = cp_normalize(fac)

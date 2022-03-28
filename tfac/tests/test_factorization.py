@@ -1,6 +1,6 @@
 import tensorly as tl
 from tensorpack import perform_CMTF
-from ..dataHelpers import Tensor_LINCS_CCLE
+from ..dataHelpers import import_LINCS_CCLE
 
 
 def test_CMTF():
