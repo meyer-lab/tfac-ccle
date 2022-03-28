@@ -117,7 +117,7 @@ def import_LINCS_CCLE():
 
     return fullDF.to_xarray().to_array(dim='Measurements')
 
-def import_LINCS_CycIF(datafile):
+def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
     data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
 
