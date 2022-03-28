@@ -130,7 +130,7 @@ def import_LINCS_MEMA(datafile):
     xdf = data.to_xarray().to_array(dim="Measurement")
     return xdf
 
-def import_LINCS_CycIF():
+def Tensor_LINCS_CycIF():
     """ Imports the cyclic immunofluorescence data from LINCS. """
     data = pd.read_csv(join(path_here, "tfac/data/CycIF/MDD_cycIF_Level4.csv"), delimiter=",", index_col=0)
 
@@ -150,6 +150,10 @@ def import_LINCS_CycIF():
     data = data.loc[:, data.dtypes == float]
     data.iloc[:, :] = scale(data)
 
-    xdf = data.to_xarray().to_array()
-    xadf = xdf.rename({"level_0": "treatment", "level_1": "time", "variable": "measurements"})
-    return xadf
+    datat = data.T
+    datat.index = datat.index.str.split('_', expand=True)
+    datat = datat.sort_index(level=0)
+    # xdf = data.to_xarray().to_array()
+    # xadf = xdf.rename({"level_0": "treatment", "level_1": "time", "variable": "measurements"})
+    # return xadf
+    return data
