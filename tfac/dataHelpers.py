@@ -165,6 +165,6 @@ def Tensor_LINCS_CycIF():
     data.columns = pd.MultiIndex.from_tuples(new_cols, names=["stains", "measures"])
 
     data = data.T.unstack(level=0)
-    xdf = data.T.to_xarray().to_array(dim='measures')
+    xdf = data.T.to_xarray().to_array('measures')
 
     return xdf
