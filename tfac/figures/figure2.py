@@ -12,7 +12,7 @@ import seaborn as sns
 from .common import subplotLabel
 from tensorpack import perform_CP
 from tensorpack.cmtf import cp_normalize
-from ..dataHelpers import import_LINCS_CCLE, proteinNames, reorder_table
+from ..dataHelpers import Tensor_LINCS_CCLE, proteinNames, reorder_table
 
 
 def getsetup(figsize):
@@ -32,7 +32,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getsetup((50, 10))
 
-    tensor, drugs, times = import_LINCS_CCLE()
+    tensor, drugs, times = Tensor_LINCS_CCLE()
 
     tFac = perform_CP(tensor, r=5, maxiter=2000, progress=True)
     tFac = cp_normalize(tFac)

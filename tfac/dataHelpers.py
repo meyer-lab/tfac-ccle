@@ -56,7 +56,7 @@ def reorder_table(df):
     return df.iloc[index, :]
 
 
-def import_LINCS_CCLE():
+def Tensor_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
     Returns both the protein and RNAseq tensors in aligned format. """
     df = importLINCSprotein()
@@ -112,7 +112,7 @@ def import_LINCS_CCLE():
     return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
 
 
-def import_LINCS_MEMA(datafile):
+def Tensor_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
     data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
 
@@ -130,7 +130,7 @@ def import_LINCS_MEMA(datafile):
     xdf = data.to_xarray().to_array(dim="Measurement")
     return xdf
 
-def import_LINCS_CycIF():
+def Tensor_LINCS_CycIF():
     """ Imports the cyclic immunofluorescence data from LINCS. """
     data = pd.read_csv(join(path_here, "tfac/data/CycIF/MDD_cycIF_Level4.csv"), delimiter=",", index_col=0)
 
