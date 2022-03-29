@@ -130,9 +130,9 @@ def import_LINCS_MEMA(datafile):
     xdf = data.to_xarray().to_array(dim="Measurement")
     return xdf
 
-def import_LINCS_CycIF():
+def Tensor_LINCS_CycIF():
     """ Imports the cyclic immunofluorescence data from LINCS. """
-    data = pd.read_csv(join(path_here, "tfac/data/CycIF/MDD_cycIF_Level4.csv"), delimiter=",", index_col=0)
+    data = pd.read_csv(join(path_here, "tfac/data/CycIF/MDD_cycIF_Level4.csv"), delimiter=",", index_col=0) # data size: 660 x 36
 
     ctrl = data['ctrl_0']
     data.drop(columns='ctrl_0', inplace=True)
@@ -150,6 +150,21 @@ def import_LINCS_CycIF():
     data = data.loc[:, data.dtypes == float]
     data.iloc[:, :] = scale(data)
 
-    xdf = data.to_xarray().to_array()
-    xadf = xdf.rename({"level_0": "treatment", "level_1": "time", "variable": "measurements"})
-    return xadf
+    data.index = pd.MultiIndex.from_tuples(data.index, names=["treatment", "time"]) # 42 x 660
+
+    # a function to only split a string at a specific underscore; in this case we split at the third underscore
+    def split_at(string, n):
+        words = string.split('_')
+        return '_'.join(words[:n]), '_'.join(words[n:])
+
+    # split the data by staining and measurements
+
+    new_cols = []
+    for col in data.columns:
+        new_cols.append(split_at(col, 3))
+    data.columns = pd.MultiIndex.from_tuples(new_cols, names=["stains", "measures"])
+
+    data = data.T.unstack(level=0)
+    xdf = data.T.to_xarray().to_array('measures')
+
+    return xdf

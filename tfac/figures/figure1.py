@@ -6,7 +6,7 @@ from .common import subplotLabel, getSetup
 from tensorly.decomposition import parafac
 from tensorpack import Decomposition, perform_CP
 from tensorpack.plot import tfacr2x, reduction
-from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA, import_LINCS_CycIF
+from ..dataHelpers import import_LINCS_CCLE, import_LINCS_MEMA, Tensor_LINCS_CycIF
 
 
 def makeFigure():
@@ -65,7 +65,7 @@ def makeFigure():
     ax[10].set_xticks([256, 1024, 2048, 8192, 32768])
 
     # mema CycIF
-    CycIF = import_LINCS_CycIF()
+    CycIF = Tensor_LINCS_CycIF()
     th = Decomposition(CycIF.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
