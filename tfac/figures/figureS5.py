@@ -14,4 +14,4 @@ def makeFigure():
 
     plot_components(HMEC122, ax)    
 
-    return f 
+    return f

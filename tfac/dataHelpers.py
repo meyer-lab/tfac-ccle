@@ -21,9 +21,34 @@ def importLINCSprotein():
 
     return pd.concat([dataA, dataB, dataC])
 
+def proteinNames():
+    """Return protein names (data columns)"""
+    data = importLINCSprotein()
+    data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
+    return data.columns.values.tolist()
 
-def ohsu_data(export=False):
-    """ Import OHSU data for PARAFAC2"""
+def process_proteins():
+    """ import, group, and scale proteins into a dataframe, ready to be merge with RNAseq into a tensor. """
+
+    # import proteins and pre-process
+    df = importLINCSprotein()
+    df.drop(columns=["Sample description", "File"], inplace=True)
+    times = pd.unique(df["Time"])
+
+    # Group replicates and average
+    df = df.groupby(["Treatment", "Time"]).mean()
+
+    for treatment in df.index.unique(level=0):
+        df.loc[(treatment, 0), :] = df.loc[('Control', 0)].values
+
+    df.drop('Control', inplace=True, level=0)
+    df = df.sort_index()
+
+    return df.apply(scale, axis=1, raw=True)
+
+def importLINCSRNAseq(export=False):
+    """ Import RNAseq data of MCF10A cells for growthfactor treatments from OHSU LINCS data. This function is only used in gene module analysis. """
+
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"), delimiter=",", index_col=0)
 
     row_avg = RNAseq.mean(axis=1)
@@ -40,44 +65,11 @@ def ohsu_data(export=False):
 
     return RNAseq
 
+def process_RNAseq(df):
+    """ Import gene modules, group, and scale into a dataframe, ready to be merged with the proteins data.
+    Takes the dataframe of proteins as input for treatment labels. """
 
-def proteinNames():
-    """Return protein names (data columns)"""
-    data = importLINCSprotein()
-    data = data.drop(columns=["Treatment", "Sample description", "File", "Time"], axis=1)
-    return data.columns.values.tolist()
-
-
-def reorder_table(df):
-    """ Reorder a table's rows using heirarchical clustering. """
-    # Reorder measurements based on similarity
-    Y = sch.linkage(df.to_numpy(), method='centroid')
-    index = sch.dendrogram(Y, orientation='right')['leaves']
-    return df.iloc[index, :]
-
-
-def import_LINCS_CCLE():
-    """ Creates tensor in numpy array form and returns tensor, treatments, and time.
-    Returns both the protein and RNAseq tensors in aligned format. """
-    df = importLINCSprotein()
-    df.drop(columns=["Sample description", "File"], inplace=True)
-    times = pd.unique(df["Time"])
-
-    # Group replicates and average
-    df = df.groupby(["Treatment", "Time"]).mean()
-
-    for treatment in df.index.unique(level=0):
-        df.loc[(treatment, 0), :] = df.loc[('Control', 0)].values
-
-    df.drop('Control', inplace=True, level=0)
-    df = df.sort_index()
-
-    dfArray = df.to_numpy()
-    tensor = np.reshape(dfArray, (-1, len(times), dfArray.shape[1]))
-
-    # Subtract off control
-    tensor -= tensor[0, 0, :]
-
+    # import the RNAseq data and pre-process
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), sep=',')
     RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
@@ -92,25 +84,24 @@ def import_LINCS_CCLE():
     RNAseq.drop('ctrl', inplace=True, level=0)
     RNAseq = RNAseq.reindex(index=df.index)
 
-    rArray = RNAseq.to_numpy()
-    rTensor = np.reshape(rArray, (-1, len(times), rArray.shape[1]))
+    return RNAseq.apply(scale, axis=1, raw=True)
 
-    # Normalize the data
-    tensor -= np.mean(tensor, axis=(0, 1), keepdims=True)  # proteins
-    rTensor -= np.nanmean(rTensor, axis=(0, 1), keepdims=True)  # genes
+def import_LINCS_CCLE():
+    """ Creates tensor in numpy array form and returns tensor, treatments, and time.
+    Returns both the protein and RNAseq tensors in aligned format. """
 
-    # Match variance of both datasets
-    tensor /= np.nansum(np.square(tensor))
-    rTensor /= np.nansum(np.square(rTensor))
+    # import the proteins
+    df = process_proteins()
 
-    # scale the proteins based on analysis
-    tensor = tensor * 4**-1
+    # import the RNAseq data
+    RNAseq = process_RNAseq(df)
 
-    assert rTensor.shape[0] == tensor.shape[0]
-    assert rTensor.shape[1] == tensor.shape[1]
+    # concatenate proteins and RNAseq data
+    fullDF = pd.concat([df, RNAseq], axis=1)
 
-    return np.append(tensor, rTensor, axis=2), df.index.unique(level=0), times
+    xdf = fullDF.to_xarray().transpose()
 
+    return xdf.to_array().transpose()
 
 def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
@@ -168,3 +159,10 @@ def Tensor_LINCS_CycIF():
     xdf = data.T.to_xarray().to_array('measures')
 
     return xdf
+
+def reorder_table(df):
+    """ Reorder a table's rows using heirarchical clustering. """
+    # Reorder measurements based on similarity
+    Y = sch.linkage(df.to_numpy(), method='centroid')
+    index = sch.dendrogram(Y, orientation='right')['leaves']
+    return df.iloc[index, :]
