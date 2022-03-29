@@ -48,12 +48,7 @@ def process_proteins():
     row1 = df.iloc[[0]].values[0] #control row
     df = df.apply(lambda row: row - row1, axis=1)
 
-    # scale
-    dft = df.T
-    dft = dft.apply(scale)
-    df = dft.T
-
-    return df
+    return df.apply(scale, axis=1, raw=True)
 
 def importLINCSRNAseq(export=False):
     """ Import RNAseq data of MCF10A cells for growthfactor treatments from OHSU LINCS data. This then is used in gene module analysis. """
@@ -95,12 +90,7 @@ def process_RNAseq(df):
     RNAseq.drop('ctrl', inplace=True, level=0)
     RNAseq = RNAseq.reindex(index=df.index)
 
-    # scale
-    RNAseqt = RNAseq.T
-    RNAseqt = RNAseqt.apply(scale)
-    RNAseq = RNAseqt.T
-
-    return RNAseq
+    return RNAseq.apply(scale, axis=1, raw=True)
 
 def import_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
