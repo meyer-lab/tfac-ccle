@@ -44,10 +44,6 @@ def process_proteins():
     df.drop('Control', inplace=True, level=0)
     df = df.sort_index()
 
-    # subtract the control
-    row1 = df.iloc[[0]].values[0] #control row
-    df = df.apply(lambda row: row - row1, axis=1)
-
     return df.apply(scale, axis=1, raw=True)
 
 def importLINCSRNAseq(export=False):
