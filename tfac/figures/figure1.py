@@ -23,7 +23,7 @@ def makeFigure():
     # perform tensor decomposition from tensorpack with 8 components
     tc = Decomposition(ccle.to_numpy(), max_rr=7)
     tc.perform_tfac()
-    tc.perform_PCA(flattenon=0)
+    tc.perform_PCA(flattenon=2)
 
     tfacr2x(ax[0], tc)
     reduction(ax[1], tc)

@@ -99,7 +99,9 @@ def import_LINCS_CCLE():
     # concatenate proteins and RNAseq data
     fullDF = pd.concat([df, RNAseq], axis=1)
 
-    return fullDF.to_xarray().to_array(dim='Measurements')
+    xdf = fullDF.to_xarray().transpose()
+
+    return xdf.to_array()
 
 def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
