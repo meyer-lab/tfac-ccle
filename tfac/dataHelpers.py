@@ -101,7 +101,7 @@ def import_LINCS_CCLE():
 
     xdf = fullDF.to_xarray().transpose()
 
-    return xdf.to_array()
+    return xdf.to_array().transpose()
 
 def import_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
