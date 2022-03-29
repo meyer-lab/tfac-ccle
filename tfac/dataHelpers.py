@@ -76,9 +76,6 @@ def process_RNAseq(df):
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/module_expression.csv"), sep=',')
     RNAseq.rename(columns={"Unnamed: 0": "gene_modules"}, inplace=True)
 
-    # change IFNG and TGFB to IFNg and TGFb to be consistent with the protein indexes
-    RNAseq.rename(columns={'IFNG_24':'IFNg_24', 'IFNG_48':'IFNg_48', 'TGFB_24':'TGFb_24', 'TGFB_48':'TGFb_48'}, inplace=True)
-
     # Copy over control
     for treatment in df.index.unique(level=0):
         RNAseq[treatment + "_0"] = RNAseq["ctrl_0"]
