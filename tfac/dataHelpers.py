@@ -51,7 +51,8 @@ def process_proteins():
     return df.apply(scale, axis=1, raw=True)
 
 def importLINCSRNAseq(export=False):
-    """ Import RNAseq data of MCF10A cells for growthfactor treatments from OHSU LINCS data. This then is used in gene module analysis. """
+    """ Import RNAseq data of MCF10A cells for growthfactor treatments from OHSU LINCS data. This function is only used in gene module analysis. """
+
     RNAseq = pd.read_csv(join(path_here, "tfac/data/ohsu/MDD_RNAseq_Level4.csv"), delimiter=",", index_col=0)
 
     row_avg = RNAseq.mean(axis=1)
