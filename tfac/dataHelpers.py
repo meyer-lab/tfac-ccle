@@ -84,7 +84,7 @@ def process_RNAseq(df):
 
     return RNAseq.apply(scale, axis=1, raw=True)
 
-def import_LINCS_CCLE():
+def Tensor_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
     Returns both the protein and RNAseq tensors in aligned format. """
 
