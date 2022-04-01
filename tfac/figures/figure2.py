@@ -32,7 +32,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getsetup((50, 10))
 
-    tensor = import_LINCS_CCLE()
+    tensor = Tensor_LINCS_CCLE()
 
     tFac = perform_CP(tensor.to_numpy(), r=5, maxiter=2000, progress=True)
     tFac = cp_normalize(tFac)
