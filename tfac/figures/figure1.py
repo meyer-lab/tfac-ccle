@@ -19,7 +19,7 @@ def makeFigure():
     ax[14].axis("off")
 
     # ccle
-    ccle = import_LINCS_CCLE()
+    ccle = Tensor_LINCS_CCLE()
     # perform tensor decomposition from tensorpack with 8 components
     tc = Decomposition(ccle.to_numpy(), max_rr=7)
     tc.perform_tfac()
