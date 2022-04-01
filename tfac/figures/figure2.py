@@ -32,13 +32,13 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getsetup((50, 10))
 
-    tensor, drugs, times = Tensor_LINCS_CCLE()
+    tensor = import_LINCS_CCLE()
 
-    tFac = perform_CP(tensor, r=5, maxiter=2000, progress=True)
+    tFac = perform_CP(tensor.to_numpy(), r=5, maxiter=2000, progress=True)
     tFac = cp_normalize(tFac)
 
-    treatment = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=drugs)
-    tm = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=times)
+    treatment = pd.DataFrame(tFac.factors[0], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=tensor.coords[tensor.dims[0]])
+    tm = pd.DataFrame(tFac.factors[1], columns=[f"Cmp. {i}" for i in np.arange(1, tFac.rank + 1)], index=tensor.coords[tensor.dims[1]])
 
     g1 = sns.heatmap(treatment, cmap="PRGn", center=0, yticklabels=True, cbar=True, ax=ax[0])
     g1.set_yticklabels(g1.get_yticklabels(), rotation=0)
