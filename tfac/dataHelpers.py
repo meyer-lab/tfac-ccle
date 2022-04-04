@@ -29,8 +29,6 @@ def proteinNames():
 
 def process_proteins():
     """ import, group, and scale proteins into a dataframe, ready to be merge with RNAseq into a tensor. """
-
-    # import proteins and pre-process
     df = importLINCSprotein()
     df.drop(columns=["Sample description", "File"], inplace=True)
     times = pd.unique(df["Time"])
@@ -86,7 +84,7 @@ def process_RNAseq(df):
 
     return RNAseq.apply(scale, axis=1, raw=True)
 
-def import_LINCS_CCLE():
+def Tensor_LINCS_CCLE():
     """ Creates tensor in numpy array form and returns tensor, treatments, and time.
     Returns both the protein and RNAseq tensors in aligned format. """
 
@@ -103,7 +101,7 @@ def import_LINCS_CCLE():
 
     return xdf.to_array().transpose()
 
-def import_LINCS_MEMA(datafile):
+def Tensor_LINCS_MEMA(datafile):
     """ Ligand, ECM, and phenotypic measurements of cells from LINCS MEMA dataset. """
     data = pd.read_csv(join(path_here, "tfac/data/ohsu/", datafile), index_col=["Ligand", "ECMp"], delimiter="\t", low_memory=False)
 
