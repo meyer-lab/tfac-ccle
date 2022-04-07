@@ -8,7 +8,7 @@ import matplotlib
 from tensorly.decomposition import parafac
 from .common import subplotLabel
 from tensorpack import Decomposition
-from tensorpack.plot import tfacr2x
+from tensorpack.plot import reduction
 from tensorly.cp_tensor import cp_flip_sign
 from tensorpack.cmtf import cp_normalize
 from ..dataHelpers import Tensor_LINCS_MEMA, reorder_table
@@ -28,7 +28,7 @@ def getsetup(figsize):
 
     gs = fig.add_gridspec(2, 10)
     ax1 = fig.add_subplot(gs[0, :6]) # off
-    ax2 = fig.add_subplot(gs[0, 6:]) # r2x
+    ax2 = fig.add_subplot(gs[0, 6:]) # reduction
     ax3 = fig.add_subplot(gs[1, :2]) # comp1
     ax4 = fig.add_subplot(gs[1, 4:6]) # comp2
     ax5 = fig.add_subplot(gs[1, 8:]) # comp3
@@ -38,25 +38,25 @@ def getsetup(figsize):
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getsetup((10, 9))
+    ax, f = getsetup((10, 7))
 
     ax[0].axis('off')
 
     MCF10A = Tensor_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
     tm = Decomposition(MCF10A.to_numpy(), max_rr=5, method=ppfac)
     tm.perform_tfac()
-    tm.perform_PCA(flattenon=2)
+    tm.perform_PCA(flattenon=0)
 
-    tfacr2x(ax[1], tm)
-    ax[1].set_title("")
-    for i in range(5):
+
+    reduction(ax[1], tm)
+    for i in range(len(ax[1].get_xticklabels())):
         ax[1].get_xticklabels()[i].set_fontsize(15)
+    for i in range(len(ax[1].get_yticklabels())):
         ax[1].get_yticklabels()[i].set_fontsize(15)
-
-    ax[1].get_yticklabels()[5].set_fontsize(15)
-    ax[1].set_title("R2X", fontsize=15)
-    ax[1].set_ylabel("Variance Explained", fontsize=15)
-    ax[1].set_xlabel("Components #", fontsize=15)
+    ax[1].set_title("TFac vs. PCA", fontsize=15)
+    ax[1].set_ylabel("Normalized Unexplained Variance", fontsize=15)
+    ax[1].set_xlabel("Size of Reduced Data", fontsize=15)
+    ax[1].set_ylim((0.0, 1.0))
 
     components_MEMA(MCF10A, [ax[2], ax[3], ax[4]])
 
@@ -65,7 +65,7 @@ def makeFigure():
 def components_MEMA(tensor, ax):
     """ Plots most significant components separately in the supplementary figures. """
     tFac = parafac(tensor.to_numpy(), 4, n_iter_max=2000, linesearch=True, tol=1e-9) # tensor is xarray type
-    # tFac = cp_flip_sign(tFac, 2)
+    tFac = cp_flip_sign(tFac, 0)
     tFac = cp_normalize(tFac)
     labels = [f"{i}" for i in np.arange(1, tFac.factors[0].shape[1] + 1)]
 
@@ -76,13 +76,13 @@ def components_MEMA(tensor, ax):
     'Cytoplasm_CP_Intensity_MedianIntensity_Dapi', 'Cytoplasm_CP_Intensity_MedianIntensity_Actin',
     'Cells_CP_AreaShape_Extent', 'Cells_CP_AreaShape_FormFactor', 'Cells_CP_AreaShape_Solidity']
 
-    new_mea = ['Cytoplasm_Solidity', 'Cytoplasm_Area', 'Cytoplasm_FormFactor', 'Cytoplasm_AreaExtent',
-    'Nuclei_IntegratedIntensity_KRT5', 'Nuclei_MedianIntensity_KRT5',
-    'Cytoplasm_Intensity_Dapi', 'Cytoplasm_Intensity_Actin',
-    'Cells_AreaExtent', 'Cells_FormFactor', 'Cells_Solidity']
+    new_mea = ['Cytoplasm Solidity', 'Cytoplasm Area', 'Cytoplasm Shape', 'Cytoplasm Area Extent',
+    'Nuclei Total Intensity (KRT5)', 'Nuclei Median Intensity (KRT5)',
+    'Cytoplasm Intensity (Dapi)', 'Cytoplasm Intensity (Actin)',
+    'Cell Area Extent', 'Cell Shape', 'Cell Solidity']
     new_fac0 = facZero.loc[meas_list]
     new_fac0.index = new_mea
-    g0 = sns.heatmap(new_fac0 * -1, ax=ax[ii], cmap="PiYG", cbar=0, center=0, vmin=-1, vmax=1)
+    g0 = sns.heatmap(new_fac0, ax=ax[ii], cmap="PiYG", cbar=0, center=0, vmin=-1, vmax=1)
     g0.set_title(str(tensor.dims[ii]))
 
     ii = 1
@@ -100,7 +100,7 @@ def components_MEMA(tensor, ax):
     new_ecm = ['Elastin', 'Nidogen', 'Collagen5A', 'HA<500kDa', 'HA>500kDa', 'Collagen1', 'CD44', 'Lumican', 'Osteonectin/BM40', 'CDH8', 'IntegrinA2B1']
     new_fac0 = facZero.loc[ecm_list]
     new_fac0.index = new_ecm
-    g0 = sns.heatmap(new_fac0 * -1, ax=ax[ii], cmap="PiYG", cbar=0, center=0, vmin=-1, vmax=1)
+    g0 = sns.heatmap(new_fac0, ax=ax[ii], cmap="PiYG", cbar=0, center=0, vmin=-1, vmax=1)
     g0.set_title(str(tensor.dims[ii]))
 
     for i in range(4):

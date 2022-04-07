@@ -35,7 +35,7 @@ def makeFigure():
     MCF10A = Tensor_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
     tm = Decomposition(MCF10A.to_numpy(), max_rr=7, method=ppfac)
     tm.perform_tfac()
-    tm.perform_PCA(flattenon=2)
+    tm.perform_PCA(flattenon=0)
 
     tfacr2x(ax[3], tm)
     reduction(ax[4], tm)
@@ -46,7 +46,7 @@ def makeFigure():
     HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
     th = Decomposition(HMEC240.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
-    th.perform_PCA(flattenon=2)
+    th.perform_PCA(flattenon=0)
 
     tfacr2x(ax[6], th)
     reduction(ax[7], th)
@@ -57,7 +57,7 @@ def makeFigure():
     HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
     th = Decomposition(HMEC122.to_numpy(), max_rr=7, method=ppfac)
     th.perform_tfac()
-    th.perform_PCA(flattenon=2)
+    th.perform_PCA(flattenon=0)
 
     tfacr2x(ax[9], th)
     reduction(ax[10], th)
