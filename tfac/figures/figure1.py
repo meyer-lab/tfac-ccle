@@ -7,21 +7,19 @@ from tensorly.decomposition import parafac
 from tensorpack import Decomposition, perform_CP
 from tensorpack.plot import tfacr2x, reduction
 from ..dataHelpers import Tensor_LINCS_CCLE, Tensor_LINCS_MEMA, Tensor_LINCS_CycIF
-
+from ..tucker import tucker_decomp
 
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
     ax, f = getSetup((9, 12), (5, 3))
-    ax[5].axis("off")
-    ax[8].axis("off")
-    ax[11].axis("off")
+
     ax[14].axis("off")
 
     # ccle
     ccle = Tensor_LINCS_CCLE()
     # perform parafac
-    tc = Decomposition(ccle.to_numpy(), max_rr=7)
+    tc = Decomposition(ccle.to_numpy(), max_rr=8)
     tc.perform_tfac()
     tc.perform_PCA(flattenon=2)
 
@@ -33,18 +31,26 @@ def makeFigure():
 
     # mema MCF10A
     MCF10A = Tensor_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
-    tm = Decomposition(MCF10A.to_numpy(), max_rr=7, method=ppfac)
+    tm = Decomposition(MCF10A.to_numpy(), max_rr=8, method=ppfac)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=0)
 
     tfacr2x(ax[3], tm)
     reduction(ax[4], tm)
     ax[4].set_xlim((200, 8592))
-    ax[4].set_xticks([256, 512, 1024, 2048, 4096, 8192])
+    ax[4].set_xticks([256, 512, 1024, 2048, 4096, 32768])
+
+    # tucker
+    r2xs = tucker_decomp(MCF10A, 8)
+    ax[5].scatter(np.arange(3, 9), r2xs)
+    ax[5].set_ylim((0.0, 1.0))
+    ax[5].set_title('Tucker Decomp, MCF10A')
+    ax[5].set_ylabel('Explained Variance')
+    ax[5].set_xlabel('# Total Components')
 
     # mema HMEC240L
     HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
-    th = Decomposition(HMEC240.to_numpy(), max_rr=7, method=ppfac)
+    th = Decomposition(HMEC240.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
 
@@ -53,9 +59,17 @@ def makeFigure():
     ax[7].set_xlim((200, 8592))
     ax[7].set_xticks([256, 1024, 2048, 8192, 32768])
 
+    # tucker
+    r2xs = tucker_decomp(HMEC240, 8)
+    ax[8].scatter(np.arange(3, 9), r2xs)
+    ax[8].set_ylim((0.0, 1.0))
+    ax[8].set_title('Tucker Decomp, HMEC240L')
+    ax[8].set_ylabel('Explained Variance')
+    ax[8].set_xlabel('# Total Components')
+
     # mema HMEC122L
     HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
-    th = Decomposition(HMEC122.to_numpy(), max_rr=7, method=ppfac)
+    th = Decomposition(HMEC122.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
 
@@ -64,9 +78,17 @@ def makeFigure():
     ax[10].set_xlim((200, 8592))
     ax[10].set_xticks([256, 1024, 2048, 8192, 32768])
 
+    # tucker
+    r2xs = tucker_decomp(HMEC122, 8)
+    ax[11].scatter(np.arange(3, 9), r2xs)
+    ax[11].set_ylim((0.0, 1.0))
+    ax[11].set_title('Tucker Decomp, HMEC122L')
+    ax[11].set_ylabel('Explained Variance')
+    ax[11].set_xlabel('# Total Components')
+
     # mema CycIF
     CycIF = Tensor_LINCS_CycIF()
-    th = Decomposition(CycIF.to_numpy(), max_rr=7, method=ppfac)
+    th = Decomposition(CycIF.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
 
@@ -74,6 +96,7 @@ def makeFigure():
     reduction(ax[13], th)
     ax[13].set_xlim((200, 8592))
     ax[13].set_xticks([256, 1024, 2048, 8192, 32768])
+
 
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)

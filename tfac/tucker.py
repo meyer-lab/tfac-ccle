@@ -1,6 +1,7 @@
 """ This file includes functions to perform tucker decomposition. """
 from tensorly.decomposition import tucker
 import numpy as np
+import pandas as pd
 import itertools as it
 import tensorly as tl
 
@@ -11,14 +12,16 @@ def tucker_decomp(tensor, num_comps):
     ranks = tucker_rank(tensor.ndim, num_comps+1)
 
     total_r2x = []
+    rank = []
     for total_rank in ranks:
         r2x = []
         for eachCP_rank in total_rank:
             fac = tucker(tensor.to_numpy(), rank=eachCP_rank, svd='randomized_svd')
-            r2x.append(1 - ((tl.norm(tl.tucker_to_tensor(fac_p) - tensor.to_numpy()) ** 2) / tl.norm(tensor.to_numpy()) ** 2))
-        total_r2x.append(r2x)
+            r2x.append(1 - ((tl.norm(tl.tucker_to_tensor(fac) - tensor.to_numpy()) ** 2) / tl.norm(tensor.to_numpy()) ** 2))
+        total_r2x.append(max(r2x))
+        rank.append(str(total_rank[r2x.index(max(r2x))]))
 
-    return total_r2x
+    return pd.DataFrame({"R2X": total_r2x}, index=rank)
 
 
 def tucker_rank(first: int, last: int):
