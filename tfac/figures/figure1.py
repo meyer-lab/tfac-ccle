@@ -14,6 +14,8 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((9, 12), (5, 3))
 
+    ax[8].axis("off")
+    ax[11].axis("off")
     ax[14].axis("off")
 
     # ccle
@@ -40,11 +42,12 @@ def makeFigure():
     ax[4].set_xlim((200, 8592))
     ax[4].set_xticks([256, 512, 1024, 2048, 4096, 32768])
 
-    # tucker
+    # tucker decomposition R2X plots
+    # MCF10A
     r2xs = tucker_decomp(MCF10A, 8)
     ax[5].scatter(np.arange(3, 9), r2xs)
     ax[5].set_ylim((0.0, 1.0))
-    ax[5].set_title('Tucker Decomp, MCF10A')
+    ax[5].set_title('Tucker Decomp')
     ax[5].set_ylabel('Explained Variance')
     ax[5].set_xlabel('# Total Components')
 
@@ -61,11 +64,7 @@ def makeFigure():
 
     # tucker
     r2xs = tucker_decomp(HMEC240, 8)
-    ax[8].scatter(np.arange(3, 9), r2xs)
-    ax[8].set_ylim((0.0, 1.0))
-    ax[8].set_title('Tucker Decomp, HMEC240L')
-    ax[8].set_ylabel('Explained Variance')
-    ax[8].set_xlabel('# Total Components')
+    ax[5].scatter(np.arange(3, 9), r2xs)
 
     # mema HMEC122L
     HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
@@ -77,14 +76,10 @@ def makeFigure():
     reduction(ax[10], th)
     ax[10].set_xlim((200, 8592))
     ax[10].set_xticks([256, 1024, 2048, 8192, 32768])
-
     # tucker
     r2xs = tucker_decomp(HMEC122, 8)
-    ax[11].scatter(np.arange(3, 9), r2xs)
-    ax[11].set_ylim((0.0, 1.0))
-    ax[11].set_title('Tucker Decomp, HMEC122L')
-    ax[11].set_ylabel('Explained Variance')
-    ax[11].set_xlabel('# Total Components')
+    ax[5].scatter(np.arange(3, 9), r2xs)
+    ax[5].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
 
     # mema CycIF
     CycIF = Tensor_LINCS_CycIF()
