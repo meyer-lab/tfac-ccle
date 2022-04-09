@@ -2,6 +2,7 @@
 This creates Figure 1:
 """
 import numpy as np
+from matplotlib.ticker import ScalarFormatter
 from .common import subplotLabel, getSetup
 from tensorly.decomposition import parafac
 from tensorpack import Decomposition, perform_CP
@@ -9,14 +10,11 @@ from tensorpack.plot import tfacr2x, reduction
 from ..dataHelpers import Tensor_LINCS_CCLE, Tensor_LINCS_MEMA, Tensor_LINCS_CycIF
 from ..tucker import tucker_decomp
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
-    ax, f = getSetup((9, 12), (5, 3))
-
-    ax[8].axis("off")
-    ax[11].axis("off")
-    ax[14].axis("off")
+    ax, f = getSetup((10, 8), (3, 3))
 
     # ccle
     ccle = Tensor_LINCS_CCLE()
@@ -31,19 +29,35 @@ def makeFigure():
 
     ppfac = lambda x, r: parafac(x, rank=r, n_iter_max=100, tol=1e-9, linesearch=True)
 
-    # mema MCF10A
+    ### MEMA MCF10A
     MCF10A = Tensor_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
     tm = Decomposition(MCF10A.to_numpy(), max_rr=8, method=ppfac)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=0)
 
-    tfacr2x(ax[3], tm)
-    reduction(ax[4], tm)
-    ax[4].set_xlim((200, 8592))
-    ax[4].set_xticks([256, 512, 1024, 2048, 4096, 32768])
+    # R2X plot
+    comps = tm.rrs
+    ax[3].scatter(comps, tm.TR2X)
+    ax[3].set_ylabel("Explained Variance")
+    ax[3].set_xlabel("Number of Components")
+    ax[3].set_title("R2X Tensor Decomp")
+    ax[3].set_xticks([x for x in comps])
+    ax[3].set_xticklabels([x for x in comps])
+    ax[3].set_ylim(0, 1)
+    ax[3].set_xlim(0.5, np.amax(comps) + 0.5)
 
-    # tucker decomposition R2X plots
-    # MCF10A
+    # reduction plot
+    CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(tm.TR2X), np.asarray(tm.PCAR2X), tm.sizeT, tm.sizePCA
+    ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", alpha=0.8, color='C0')
+    ax[4].plot(sizePCA, 1.0 - PCAR2X, "*", alpha=0.8, color='C0')
+    ax[4].set_xscale("log", base=2)
+    ax[4].set_ylabel("Normalized Unexplained Variance")
+    ax[4].set_xlabel("Size of Reduced Data")
+    ax[4].set_title("Data reduction, TFac vs. PCA")
+    ax[4].set_ylim(bottom=0.0)
+    ax[4].xaxis.set_major_formatter(ScalarFormatter())
+
+    # tucker
     r2xs = tucker_decomp(MCF10A, 8)
     ax[5].scatter(np.arange(3, 9), r2xs)
     ax[5].set_ylim((0.0, 1.0))
@@ -51,47 +65,53 @@ def makeFigure():
     ax[5].set_ylabel('Explained Variance')
     ax[5].set_xlabel('# Total Components')
 
-    # mema HMEC240L
+    ### MEMA HMEC240L
     HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
     th = Decomposition(HMEC240.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
 
-    tfacr2x(ax[6], th)
-    reduction(ax[7], th)
-    ax[7].set_xlim((200, 8592))
-    ax[7].set_xticks([256, 1024, 2048, 8192, 32768])
+    # R2X
+    ax[3].scatter(th.rrs, th.TR2X)
+
+    # Data Reduction
+    CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(th.TR2X), np.asarray(th.PCAR2X), th.sizeT, th.sizePCA
+    ax[4].plot(sizeTfac, 1.0 - CPR2X, "o", label="TFac", alpha=0.8, color='C1')
+    ax[4].plot(sizePCA, 1.0 - PCAR2X, "o", label="PCA", alpha=0.8, color='C1')
 
     # tucker
     r2xs = tucker_decomp(HMEC240, 8)
     ax[5].scatter(np.arange(3, 9), r2xs)
 
-    # mema HMEC122L
+    ### MEMA HMEC122L
     HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
     th = Decomposition(HMEC122.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
 
-    tfacr2x(ax[9], th)
-    reduction(ax[10], th)
-    ax[10].set_xlim((200, 8592))
-    ax[10].set_xticks([256, 1024, 2048, 8192, 32768])
+    # R2X
+    ax[3].scatter(th.rrs, th.TR2X)
+    ax[3].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
+
+    # Data Reduction
+    CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(th.TR2X), np.asarray(th.PCAR2X), th.sizeT, th.sizePCA
+    ax[4].plot(sizeTfac, 1.0 - CPR2X, "^", label="TFac", alpha=0.8, color='C2')
+    ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C2')
+    ax[4].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
+
     # tucker
     r2xs = tucker_decomp(HMEC122, 8)
     ax[5].scatter(np.arange(3, 9), r2xs)
     ax[5].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
 
-    # mema CycIF
+    ### MEMA CycIF
     CycIF = Tensor_LINCS_CycIF()
     th = Decomposition(CycIF.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
 
-    tfacr2x(ax[12], th)
-    reduction(ax[13], th)
-    ax[13].set_xlim((200, 8592))
-    ax[13].set_xticks([256, 1024, 2048, 8192, 32768])
-
+    tfacr2x(ax[6], th)
+    reduction(ax[7], th)
 
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)
@@ -120,10 +140,6 @@ def makeFigure():
     # Add subplot labels
     subplotLabel(ax)
     ax[0].set_title("Variance Explained by Tensor, CCLE")
-    ax[3].set_title("Variance Explained by Tensor, MEMA, MCF10A")
-    ax[6].set_title("Variance Explained by Tensor, MEMA, HMEC240L")
-    ax[9].set_title("Variance Explained by Tensor, MEMA, HMEC122L")
-    ax[12].set_title("Variance Explained by Tensor, MEMA, CycIF")
 
     return f
 
