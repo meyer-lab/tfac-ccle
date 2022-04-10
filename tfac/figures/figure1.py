@@ -25,7 +25,8 @@ def makeFigure():
 
     tfacr2x(ax[0], tc)
     reduction(ax[1], tc)
-    ax[1].set_xlim((400, 4096))
+    ax[1].set_xscale("log", base=2)
+    ax[8].axis('off')
 
     ppfac = lambda x, r: parafac(x, rank=r, n_iter_max=100, tol=1e-9, linesearch=True)
 
@@ -48,8 +49,8 @@ def makeFigure():
 
     # reduction plot
     CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(tm.TR2X), np.asarray(tm.PCAR2X), tm.sizeT, tm.sizePCA
-    ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", alpha=0.8, color='C0')
-    ax[4].plot(sizePCA, 1.0 - PCAR2X, "*", alpha=0.8, color='C0')
+    lin1, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", alpha=0.8, color='C0')
+    lin2, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", alpha=0.8, color='C0')
     ax[4].set_xscale("log", base=2)
     ax[4].set_ylabel("Normalized Unexplained Variance")
     ax[4].set_xlabel("Size of Reduced Data")
@@ -61,9 +62,9 @@ def makeFigure():
     r2xs = tucker_decomp(MCF10A, 8)
     ax[5].scatter(np.arange(3, 9), r2xs)
     ax[5].set_ylim((0.0, 1.0))
-    ax[5].set_title('Tucker Decomp')
+    ax[5].set_title('R2X Tucker Decomp')
     ax[5].set_ylabel('Explained Variance')
-    ax[5].set_xlabel('# Total Components')
+    ax[5].set_xlabel('Total Number of Components')
 
     ### MEMA HMEC240L
     HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
@@ -76,8 +77,8 @@ def makeFigure():
 
     # Data Reduction
     CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(th.TR2X), np.asarray(th.PCAR2X), th.sizeT, th.sizePCA
-    ax[4].plot(sizeTfac, 1.0 - CPR2X, "o", label="TFac", alpha=0.8, color='C1')
-    ax[4].plot(sizePCA, 1.0 - PCAR2X, "o", label="PCA", alpha=0.8, color='C1')
+    lin3, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", label="TFac", alpha=0.8, color='C1')
+    lin4, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C1')
 
     # tucker
     r2xs = tucker_decomp(HMEC240, 8)
@@ -95,9 +96,12 @@ def makeFigure():
 
     # Data Reduction
     CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(th.TR2X), np.asarray(th.PCAR2X), th.sizeT, th.sizePCA
-    ax[4].plot(sizeTfac, 1.0 - CPR2X, "^", label="TFac", alpha=0.8, color='C2')
-    ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C2')
-    ax[4].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
+    lin5, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", label="TFac", alpha=0.8, color='C2')
+    lin6, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C2')
+    line1, = ax[4].plot([],[],marker='*', color='k', ls="none")
+    line2, = ax[4].plot([],[],marker='^', color='k', ls="none")
+    ax[4].legend([lin1, lin3, lin5, line1, line2], ['MCF10A', 'HMEC240L', 'HMEC122L', 'TFac', 'PCA'])
+    ax[4].set_xscale("log", base=2)
 
     # tucker
     r2xs = tucker_decomp(HMEC122, 8)
@@ -112,6 +116,7 @@ def makeFigure():
 
     tfacr2x(ax[6], th)
     reduction(ax[7], th)
+    ax[7].set_xscale("log", base=2)
 
     # Scaling factors for protein dataset
     scales, R2Xs = scaling(ccle, comps=5)
