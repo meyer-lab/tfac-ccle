@@ -11,6 +11,7 @@ from ..dataHelpers import Tensor_LINCS_CCLE, Tensor_LINCS_MEMA, Tensor_LINCS_Cyc
 from ..tucker import tucker_decomp, error_vs_size
 
 
+
 def makeFigure():
     """ Get a list of the axis objects and create a figure. """
     # Get list of axis objects
@@ -66,6 +67,7 @@ def makeFigure():
     ax[5].set_title('Data reduction, Tucker')
     ax[5].set_ylabel('Normalized Unexplained Variance')
     ax[5].set_xlabel('Size of Reduced Data')
+
 
     ### MEMA HMEC240L
     HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
