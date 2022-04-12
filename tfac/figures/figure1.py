@@ -8,7 +8,7 @@ from tensorly.decomposition import parafac
 from tensorpack import Decomposition, perform_CP
 from tensorpack.plot import tfacr2x, reduction
 from ..dataHelpers import Tensor_LINCS_CCLE, Tensor_LINCS_MEMA, Tensor_LINCS_CycIF
-from ..tucker import tucker_decomp
+from ..tucker import tucker_decomp, error_vs_size
 
 
 def makeFigure():
@@ -59,12 +59,13 @@ def makeFigure():
     ax[4].xaxis.set_major_formatter(ScalarFormatter())
 
     # tucker
-    r2xs = tucker_decomp(MCF10A, 8)
-    ax[5].scatter(np.arange(3, 9), r2xs)
+    errors, ranks = tucker_decomp(MCF10A, 25)
+    sizes = error_vs_size(MCF10A, ranks)
+    ax[5].scatter(sizes, errors)
     ax[5].set_ylim((0.0, 1.0))
-    ax[5].set_title('R2X Tucker Decomp')
-    ax[5].set_ylabel('Explained Variance')
-    ax[5].set_xlabel('Total Number of Components')
+    ax[5].set_title('Data reduction, Tucker')
+    ax[5].set_ylabel('Normalized Unexplained Variance')
+    ax[5].set_xlabel('Size of Reduced Data')
 
     ### MEMA HMEC240L
     HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
@@ -81,8 +82,9 @@ def makeFigure():
     lin4, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C1')
 
     # tucker
-    r2xs = tucker_decomp(HMEC240, 8)
-    ax[5].scatter(np.arange(3, 9), r2xs)
+    errors, ranks = tucker_decomp(HMEC240, 25)
+    sizes = error_vs_size(HMEC240, ranks)
+    ax[5].scatter(sizes, errors)
 
     ### MEMA HMEC122L
     HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
@@ -104,9 +106,11 @@ def makeFigure():
     ax[4].set_xscale("log", base=2)
 
     # tucker
-    r2xs = tucker_decomp(HMEC122, 8)
-    ax[5].scatter(np.arange(3, 9), r2xs)
+    errors, ranks = tucker_decomp(HMEC122, 25)
+    sizes = error_vs_size(HMEC122, ranks)
+    ax[5].scatter(sizes, errors)
     ax[5].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
+    ax[5].set_xscale("log", base=2)
 
     ### MEMA CycIF
     CycIF = Tensor_LINCS_CycIF()
