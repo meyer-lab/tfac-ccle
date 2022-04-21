@@ -175,15 +175,17 @@ donorDict = {"1869": "RA",
 
 def process_RA_Tensor():
     """Structures all Rheumatoid Arthritis Synovial Fibroblast data into a usable tensor"""
-    donor_list = ["1869", "1931", "2159", "2586", "2645", "2708", "2759"]
+    donor_list = ["2759", "1869", "1931", "2159", "2586", "2645", "2708", "2759"]
     rep_list = [1, 2]
     for donor in donor_list:
         for rep in rep_list:
             file_name = "tfac/data/RA_SF/SF_Donor_" + donor + "_" + donorDict[donor] + "_Rep" + str(rep) + ".csv"
+            print("Hi")
+            a = pd.DataFrame()
+            print(a)
+            print(join(path_here, file_name))
+
             raw_data = pd.read_csv(join(path_here, file_name))
             print(raw_data)
-            avg_data = df.groupby(['Sample_Name']).mean().reset_index()
+            avg_data = raw_data.groupby(['Sample_Name']).mean().reset_index()
             print(avg_data)
-
-
-
