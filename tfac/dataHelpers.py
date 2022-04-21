@@ -164,3 +164,26 @@ def reorder_table(df):
     Y = sch.linkage(df.to_numpy(), method='centroid')
     index = sch.dendrogram(Y, orientation='right')['leaves']
     return df.iloc[index, :]
+
+donorDict = {"1869": "RA",
+            "1931": "RA",
+            "2159": "RA",
+            "2586": "N", 
+            "2645": "N", 
+            "2708": "RA", 
+            "2759": "N"}
+
+def process_RA_Tensor():
+    """Structures all Rheumatoid Arthritis Synovial Fibroblast data into a usable tensor"""
+    donor_list = ["1869", "1931", "2159", "2586", "2645", "2708", "2759"]
+    rep_list = [1, 2]
+    for donor in donor_list:
+        for rep in rep_list:
+            file_name = "tfac/data/RA_SF/SF_Donor_" + donor + "_" + donorDict[donor] + "_Rep" + str(rep) + ".csv"
+            raw_data = pd.read_csv(join(path_here, file_name))
+            print(raw_data)
+            avg_data = df.groupby(['Sample_Name']).mean().reset_index()
+            print(avg_data)
+
+
+
