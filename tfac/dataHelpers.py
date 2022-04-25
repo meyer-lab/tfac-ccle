@@ -218,8 +218,36 @@ def process_RA_Tensor():
             avg_data["Replicate"] = rep
             avg_data["Status"] = donorDict[donor]
             avg_data = pd.melt(avg_data, id_vars=["Stimulant", "Inhibitor", "Donor", "Status", "Replicate"], value_vars=cytokines).rename({"variable": "Cytokine", "value": "Log MFI"}, axis=1)
+            avg_data = avg_data.loc[(avg_data.Stimulant != "Buffer") & (avg_data.Inhibitor != "Spike")]
             RA_df = pd.concat([RA_df, avg_data], axis=0)
 
     # Average Over Replicates
     RA_df = RA_df.groupby(["Stimulant", "Inhibitor", "Donor", "Status", "Cytokine"])["Log MFI"].mean().reset_index()
+    RA_df.to_csv("RA_DataFrame.csv")
     return RA_df
+
+
+def make_RA_Tensor():
+    """Processes RA DataFrame into Xarray Tensor"""
+    RA_df = pd.read_csv("RA_DataFrame.csv")
+    stimulants = RA_df.Stimulant.unique()
+    inhibitors = RA_df.Inhibitor.unique()
+    cytokines = RA_df.Cytokine.unique()
+    donors = RA_df.Donor.unique()
+
+    tensor = np.empty((len(stimulants), len(inhibitors), len(cytokines), len(donors)))
+    tensor[:] = np.nan
+    for i, stim in enumerate(stimulants):
+        for j, inh in enumerate(inhibitors):
+            for k, cyto in enumerate(cytokines):
+                for ii, donor in enumerate(donors):
+                    if stim != inh:
+                        entry = RA_df.loc[(RA_df.Stimulant == stim) & (RA_df.Inhibitor == inh) & (RA_df.Cytokine == cyto) & (RA_df.Donor == donor)]["Log MFI"].values
+                        tensor[i, j, k, ii] = np.mean(entry)
+    # Normalize
+    for i, _ in enumerate(cytokines):
+        tensor[:, :, i, :][~np.isnan(tensor[:, :, i, :])] /= np.nanmax(tensor[:, :, i, :])
+
+    RA_xarray = xa.DataArray(tensor, dims=("Stimulant", "Inhibitor", "Cytokine", "Donor"), coords={"Stimulant": stimulants, "Inhibitor": inhibitors, "Cytokine": cytokines, "Donor": donors})
+    RA_xarray.to_netcdf("RA Tensor DataSet.nc")
+    return tensor
