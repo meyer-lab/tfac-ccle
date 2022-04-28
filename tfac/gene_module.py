@@ -3,7 +3,7 @@
 from argparse import Namespace
 import os
 from os.path import abspath, dirname
-from .dataHelpers import ohsu_data
+from .dataHelpers import importLINCSRNAseq
 import gseapy as gp
 from iterativeWGCNA.iterativeWGCNA import IterativeWGCNA
 import matplotlib.pyplot as plt
@@ -88,7 +88,7 @@ def ns_RNAseq_data():
     # your data as a .txt file and make sure it is tab-delimited.
     os.makedirs(working_dir, exist_ok=True)
 
-    data = ohsu_data(export=True)
+    data = importLINCSRNAseq(export=True)
 
     input_data = f'{PATH_HERE}/data/ohsu/RNAseq.txt'  # Path to the input file
 
