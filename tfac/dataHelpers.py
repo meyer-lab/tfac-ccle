@@ -5,6 +5,10 @@ from sklearn.preprocessing import scale
 import pandas as pd
 import scipy.cluster.hierarchy as sch
 import xarray as xa
+import warnings
+
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 path_here = dirname(dirname(__file__))
 
