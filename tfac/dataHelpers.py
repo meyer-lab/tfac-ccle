@@ -130,6 +130,7 @@ def integrate_MEMA():
     hmec240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz") # (154, 57, 48)
     hmec122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz") # (151, 57, 48)
 
+    # the union of measurements has 189 elements.
     return xa.concat([mcf10a, hmec240, hmec122], pd.Index(["mcf10a", "hmec240", "hmec122"], name="cellLine"), fill_value=np.nan)
 
 
