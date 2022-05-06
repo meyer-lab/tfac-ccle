@@ -45,6 +45,3 @@ def makeFigure():
 
 def find_iqr(x):
     return np.subtract(*np.percentile(x, [75, 25]))
-
-f = makeFigure()
-f.savefig('t.png')
