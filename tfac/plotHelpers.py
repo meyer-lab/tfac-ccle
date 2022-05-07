@@ -10,9 +10,9 @@ import seaborn as sns
 from .dataHelpers import reorder_table
 
 
-def plot_heatmaps(tensor, ax):
+def plot_heatmaps(tensor, ax, comps=5):
     """ Plots all the components across all factors for the MEMA datasets. """
-    fac = parafac(tensor.to_numpy(), 5, n_iter_max=2000, linesearch=True, tol=1e-9) # tensor is xarray type
+    fac = parafac(tensor.to_numpy(), comps, n_iter_max=2000, linesearch=True, tol=1e-9) # tensor is xarray type
     fac = cp_flip_sign(fac, 0)
     fac = cp_normalize(fac)
 
