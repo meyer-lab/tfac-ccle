@@ -1,40 +1,23 @@
-""" Imputation error """
+""" Plot the R2X, reduction, and heatmaps for the integrated MEMA dataset. """
 
-import pandas as pd
+import xarray as xa
 import numpy as np
-from tensorpack import Decomposition
-from ..dataHelpers import Tensor_LINCS_MEMA
-from .common import getSetup
+import tensorly as tl
+from tensorpack import Decomposition, perform_CP
+from .common import subplotLabel, getSetup
+from tensorpack.plot import tfacr2x, reduction
+from ..dataHelpers import integrate_MEMA
+
 
 def makeFigure():
+    # Get list of axis objects
+    ax, f = getSetup((6, 3), (1, 2))
 
-    ax, f = getSetup((15, 5), (1, 3))
-    MCF10A = Tensor_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz")
-    HMEC240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz")
-    HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
+    MEMA = integrate_MEMA()
+    tc = Decomposition(MEMA.to_numpy(), max_rr=12)
+    tc.perform_tfac()
+    tc.perform_PCA(flattenon=-3)
+    tfacr2x(ax[0], tc)
+    reduction(ax[1], tc)
 
-    imputation(MCF10A, ax=ax[0])
-
-    return f 
-
-def find_iqr(x):
-    return np.subtract(*np.percentile(x, [75, 25]))
-
-def imputation(dataset, ax):
-    for m in np.arange(0,3):
-        tensor = dataset.to_numpy()
-        Decomp = Decomposition(tensor, max_rr=10)
-        comps = np.arange(1,11)
-        Decomp.Q2X_chord(drop=100, repeat=10, mode=m)
-
-        Q2X = Decomp.chordQ2X
-        Q2Xmed = np.array(pd.DataFrame(Q2X).median())
-        Q2Xiqr = np.array(pd.DataFrame(Q2X).apply(find_iqr))
-
-        ax.errorbar(x = comps, y = Q2Xmed, yerr = Q2Xiqr, label=f'Mode: {m}', capsize=5)
-        ax.set_ylim(0,1)
-        ax.set_xticks([x for x in comps])
-        ax.set_xlabel("Number of components")
-        ax.set_ylabel("Imputation accuracy")
-        ax.set_title(f"{dataset}")
-        ax.legend()
+    return f

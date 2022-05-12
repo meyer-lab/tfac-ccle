@@ -5,10 +5,10 @@ import numpy as np
 from matplotlib.ticker import ScalarFormatter
 from .common import subplotLabel, getSetup
 from tensorly.decomposition import parafac
-from tensorpack import Decomposition, perform_CP
-from tensorpack.plot import tfacr2x, reduction
+from tensorpack import Decomposition, perform_CP 
+from tensorpack.tucker import tucker_decomp
+from tensorpack.plot import tfacr2x, reduction, tucker_reduced_Dsize
 from ..dataHelpers import Tensor_LINCS_CCLE, Tensor_LINCS_MEMA, Tensor_LINCS_CycIF
-from ..tucker import tucker_decomp, error_vs_size
 
 
 
@@ -28,6 +28,7 @@ def makeFigure():
     reduction(ax[1], tc)
     ax[1].set_xscale("log", base=2)
     ax[8].axis('off')
+    ax[5].axis('off')
 
     ppfac = lambda x, r: parafac(x, rank=r, n_iter_max=100, tol=1e-9, linesearch=True)
 
@@ -36,6 +37,10 @@ def makeFigure():
     tm = Decomposition(MCF10A.to_numpy(), max_rr=8, method=ppfac)
     tm.perform_tfac()
     tm.perform_PCA(flattenon=0)
+    # tucker
+    tuck1 = Decomposition(MCF10A.to_numpy(), max_rr=8, method=tucker_decomp)
+    tuck1.perform_tucker()
+    size_tuck1 = tucker_reduced_Dsize(MCF10A, tuck1.TuckRank)
 
     # R2X plot
     comps = tm.rrs
@@ -50,23 +55,17 @@ def makeFigure():
 
     # reduction plot
     CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(tm.TR2X), np.asarray(tm.PCAR2X), tm.sizeT, tm.sizePCA
+
     lin1, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", alpha=0.8, color='C0')
     lin2, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", alpha=0.8, color='C0')
+    lin3,  = ax[4].plot(size_tuck1, tuck1.TuckErr, alpha=0.8, color="C0")
+
     ax[4].set_xscale("log", base=2)
     ax[4].set_ylabel("Normalized Unexplained Variance")
     ax[4].set_xlabel("Size of Reduced Data")
-    ax[4].set_title("Data reduction, TFac vs. PCA")
+    ax[4].set_title("Data reduction, Parafac vs. PCA")
     ax[4].set_ylim(bottom=0.0)
     ax[4].xaxis.set_major_formatter(ScalarFormatter())
-
-    # tucker
-    errors, ranks = tucker_decomp(MCF10A, 25)
-    sizes = error_vs_size(MCF10A, ranks)
-    ax[5].scatter(sizes, errors)
-    ax[5].set_ylim((0.0, 1.0))
-    ax[5].set_title('Data reduction, Tucker')
-    ax[5].set_ylabel('Normalized Unexplained Variance')
-    ax[5].set_xlabel('Size of Reduced Data')
 
 
     ### MEMA HMEC240L
@@ -74,25 +73,30 @@ def makeFigure():
     th = Decomposition(HMEC240.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
+    # tucker
+    tuck2 = Decomposition(HMEC240.to_numpy(), max_rr=8, method=tucker_decomp)
+    tuck2.perform_tucker()
+    size_tuck2 = tucker_reduced_Dsize(HMEC240, tuck2.TuckRank)
 
     # R2X
     ax[3].scatter(th.rrs, th.TR2X)
 
     # Data Reduction
     CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(th.TR2X), np.asarray(th.PCAR2X), th.sizeT, th.sizePCA
-    lin3, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", label="TFac", alpha=0.8, color='C1')
-    lin4, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C1')
+    lin4, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", label="Parafac", alpha=0.8, color='C1')
+    lin5, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C1')
+    lin6, = ax[4].plot(size_tuck2, tuck2.TuckErr, label="Tucker", alpha=0.8, color='C1')
 
-    # tucker
-    errors, ranks = tucker_decomp(HMEC240, 25)
-    sizes = error_vs_size(HMEC240, ranks)
-    ax[5].scatter(sizes, errors)
 
     ### MEMA HMEC122L
     HMEC122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz")
     th = Decomposition(HMEC122.to_numpy(), max_rr=8, method=ppfac)
     th.perform_tfac()
     th.perform_PCA(flattenon=0)
+    # tucker
+    tuck3 = Decomposition(HMEC122.to_numpy(), max_rr=8, method=tucker_decomp)
+    tuck3.perform_tucker()
+    size_tuck3 = tucker_reduced_Dsize(HMEC122, tuck3.TuckRank)
 
     # R2X
     ax[3].scatter(th.rrs, th.TR2X)
@@ -100,19 +104,20 @@ def makeFigure():
 
     # Data Reduction
     CPR2X, PCAR2X, sizeTfac, sizePCA = np.asarray(th.TR2X), np.asarray(th.PCAR2X), th.sizeT, th.sizePCA
-    lin5, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", label="TFac", alpha=0.8, color='C2')
-    lin6, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C2')
+    lin7, = ax[4].plot(sizeTfac, 1.0 - CPR2X, "*", label="Parafac", alpha=0.8, color='C2')
+    lin8, = ax[4].plot(sizePCA, 1.0 - PCAR2X, "^", label="PCA", alpha=0.8, color='C2')
+    lin9, = ax[4].plot(size_tuck3, tuck3.TuckErr, label="Tucker", alpha=0.8, color='C2')
+
     line1, = ax[4].plot([],[],marker='*', color='k', ls="none")
     line2, = ax[4].plot([],[],marker='^', color='k', ls="none")
-    ax[4].legend([lin1, lin3, lin5, line1, line2], ['MCF10A', 'HMEC240L', 'HMEC122L', 'TFac', 'PCA'])
+    line3, = ax[4].plot([],[], color='k')
+    line01, = ax[4].plot([], [], marker="o", color="C0")
+    line02, = ax[4].plot([], [], marker="o", color="C1")
+    line03, = ax[4].plot([], [], marker="o", color="C2")
+
+    ax[4].legend([line01, line02, line03, line1, line2, line3], ['MCF10A', 'HMEC240L', 'HMEC122L', 'Parafac', 'PCA', 'Tucker'])
     ax[4].set_xscale("log", base=2)
 
-    # tucker
-    errors, ranks = tucker_decomp(HMEC122, 25)
-    sizes = error_vs_size(HMEC122, ranks)
-    ax[5].scatter(sizes, errors)
-    ax[5].legend(['MCF10A', 'HMEC240L', 'HMEC122L'])
-    ax[5].set_xscale("log", base=2)
 
     ### MEMA CycIF
     CycIF = Tensor_LINCS_CycIF()

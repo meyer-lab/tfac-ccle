@@ -5,6 +5,10 @@ from sklearn.preprocessing import scale
 import pandas as pd
 import scipy.cluster.hierarchy as sch
 import xarray as xa
+import warnings
+
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 path_here = dirname(dirname(__file__))
 
@@ -118,6 +122,17 @@ def Tensor_LINCS_MEMA(datafile):
 
     xdf = data.to_xarray().to_array(dim="Measurement")
     return xdf
+
+def integrate_MEMA():
+    """ This function integrates the three cell lines of the MEMA dataset and makes a 4-mode tensor."""
+    # import the three cell lines
+    mcf10a = Tensor_LINCS_MEMA("mcf10a_ssc_Level4.tsv.xz") # (182, 57, 48)
+    hmec240 = Tensor_LINCS_MEMA("hmec240l_ssc_Level4.tsv.xz") # (154, 57, 48)
+    hmec122 = Tensor_LINCS_MEMA("hmec122l_ssc_Level4.tsv.xz") # (151, 57, 48)
+
+    # the union of measurements has 189 elements.
+    return xa.concat([mcf10a, hmec240, hmec122], pd.Index(["mcf10a", "hmec240", "hmec122"], name="cellLine"), fill_value=np.nan)
+
 
 def Tensor_LINCS_CycIF():
     """ Imports the cyclic immunofluorescence data from LINCS. """
