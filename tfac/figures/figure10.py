@@ -25,7 +25,8 @@ def imputation(dataset, ax):
         tensor = dataset.to_numpy()
         Decomp = Decomposition(tensor, max_rr=10)
         comps = np.arange(1,11)
-        Decomp.Q2X_chord(drop=100, repeat=10, mode=m)
+        drop_ = 100
+        Decomp.Q2X_chord(drop=drop_, repeat=10, mode=m)
 
         Q2X = Decomp.chordQ2X
         Q2Xmed = np.array(pd.DataFrame(Q2X).median())
