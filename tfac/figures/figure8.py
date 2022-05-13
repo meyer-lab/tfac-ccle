@@ -21,7 +21,7 @@ def makeFigure():
     tfacr2x(ax[0], tc)
     reduction(ax[1], tc)
 
-    fac = tc.tfac[-1]
+    fac = tc.tfac[-2]
     fac = cp_flip_sign(fac, 2)
     labels = [str(i) for i in np.arange(1, fac.factors[0].shape[1] + 1)]
 
